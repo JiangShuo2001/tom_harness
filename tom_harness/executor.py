@@ -68,6 +68,26 @@ class Executor:
 
     def finalize_answer(self, question: str, options: dict[str, str], accumulated: dict[str, Any]) -> str:
         self.hooks.fire("before_finalize", accumulated_results=accumulated)
+
+        # ── Short-circuit: honour skill recommendations.
+        # Procedural skills (S02, S04, S_evidence_scorer, ...) produce a
+        # `recommendation` or `answer_letter` field. In v0.3 we observed
+        # that finalize-LLM systematically overrode these and got worse
+        # answers on Persuasion (4/4 regressions). If skills agree on an
+        # in-option letter, use it directly. Only fall through to the
+        # LLM finalize when skills disagree or produced nothing.
+        votes = self._collect_skill_votes(accumulated, options)
+        if votes:
+            tally: dict[str, int] = {}
+            for v in votes:
+                tally[v] = tally.get(v, 0) + 1
+            top_letter, top_count = max(tally.items(), key=lambda kv: kv[1])
+            second = sorted(tally.values(), reverse=True)[1] if len(tally) > 1 else 0
+            # Trust if unanimous, or a strict majority (>= 2 and leads by 1+)
+            if len(tally) == 1 or top_count > second:
+                logger.debug(f"finalize short-circuit: votes={tally} -> {top_letter}")
+                return top_letter
+
         user = (
             f"## Question\n{question}\n\n"
             f"## Options\n" + "\n".join(f"{k}. {v}" for k, v in options.items() if v) + "\n\n"
@@ -82,6 +102,31 @@ class Executor:
         except Exception as e:  # noqa: BLE001
             logger.warning(f"Finalize JSON parse failed: {e}")
         return ""
+
+    @staticmethod
+    def _collect_skill_votes(accumulated: dict[str, Any], options: dict[str, str]) -> list[str]:
+        """Scan accumulated results for skill-level letter recommendations.
+
+        Handlers canonically emit `recommendation` or `answer_letter` with a
+        single-letter value. Only letters that appear in the actual option
+        set are honoured; anything else (e.g. a stale default) is ignored.
+        """
+        valid = set(options.keys())
+        votes: list[str] = []
+        def _scan(v: Any) -> None:
+            if isinstance(v, dict):
+                for key in ("answer_letter", "recommendation"):
+                    val = v.get(key)
+                    if isinstance(val, str) and val.upper() in valid:
+                        votes.append(val.upper())
+                for vv in v.values():
+                    _scan(vv)
+            elif isinstance(v, list):
+                for vv in v:
+                    _scan(vv)
+        for v in accumulated.values():
+            _scan(v)
+        return votes
 
     # ── internals ──────────────────────────────────────────────────────────
     def _execute_one(
