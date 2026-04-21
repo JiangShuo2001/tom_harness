@@ -3,6 +3,8 @@
 > A lightweight, skill-based agent harness for Theory-of-Mind (ToM) benchmarks.
 > Plan-then-Execute architecture with ReAct inner loop; generic core + pluggable ToM specialization.
 
+中文版: [README_zh.md](README_zh.md)
+
 ---
 
 ## What is this?
