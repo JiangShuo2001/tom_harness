@@ -1,19 +1,22 @@
 """Procedural handlers for skills that benefit from deterministic code.
 
-These are registered into SkillLib via `register_handler`; the markdown
-skill file still exists (so the declarative fallback and documentation are
-intact), but if the handler is present SkillLib runs it instead of calling
-the LLM.
+v0.3 design principle: every skill that needs to track state uses a
+Python-maintained data structure (the StoryModel), not LLM prose. The
+LLM is still invoked for structured parsing/scoring, but never for
+state bookkeeping.
 
-Design rule: handlers accept `input_context: dict` and return a dict. They
-raise on invariant violations so the executor can surface a clean failure.
+Handlers accept `input_context: dict` and return a dict. They raise on
+invariant violations so the executor can surface a clean failure.
 """
 
 from __future__ import annotations
 
+import json
 import logging
 import re
-from typing import Any
+from typing import Any, Callable
+
+from ..story_model import StoryModel, PARSER_SCHEMA_HINT
 
 logger = logging.getLogger(__name__)
 
@@ -160,11 +163,216 @@ def quantifier_solve(
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# S_build_story_model — LLM parse → Pydantic-validated StoryModel
+# ─────────────────────────────────────────────────────────────────────────────
+
+_PARSER_SYSTEM = (
+    "You are a story-structure parser for a Theory-of-Mind agent. "
+    "Produce a precise, conservative StoryModel JSON from the input story. "
+    "Be rigorous about who observes each event — the absence of a character "
+    "from a scene is load-bearing. " + PARSER_SCHEMA_HINT
+)
+
+
+def build_story_model(
+    *,
+    story: str,
+    llm_fn: Callable[[str, str], str] | None = None,
+    **_: Any,
+) -> dict[str, Any]:
+    """Parse `story` into a StoryModel; Pydantic validates structural integrity."""
+    if llm_fn is None:
+        raise RuntimeError("S_build_story_model requires llm_fn")
+    raw = llm_fn(_PARSER_SYSTEM, f"## Story\n{story}\n\n## Parse")
+    raw = re.sub(r"<think>[\s\S]*?</think>", "", raw).strip()
+    # Extract the first balanced JSON object
+    m = re.search(r"\{[\s\S]*\}", raw)
+    if not m:
+        raise ValueError(f"no JSON object in parser response: {raw[:200]!r}")
+    try:
+        payload = json.loads(m.group(0))
+    except json.JSONDecodeError as e:
+        raise ValueError(f"parser produced malformed JSON: {e}") from e
+    model = StoryModel.model_validate(payload)
+    return {"story_model": model.model_dump(), "n_events": len(model.events),
+            "n_characters": len(model.characters)}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# S_belief_query — pure Python over StoryModel (zero LLM)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def belief_query(
+    *,
+    story_model: dict[str, Any],
+    character: str,
+    object: str,
+    **_: Any,
+) -> dict[str, Any]:
+    """Return what `character` believes about `object`'s location.
+
+    Semantics:
+      - If `character` observed `object` being placed/moved → believe new location.
+      - If `character` missed the move → believe the pre-move location.
+      - If `character` never observed `object` → return None.
+    """
+    sm = StoryModel.model_validate(story_model)
+    believed = sm.latest_known_location(character, object)
+    actual = sm.actual_location(object)
+    return {
+        "character": character,
+        "object": object,
+        "believed_location": believed,
+        "actual_location": actual,
+        "has_false_belief": (believed is not None and believed != actual),
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# S_knowledge_query — pure Python: does char know fact?
+# ─────────────────────────────────────────────────────────────────────────────
+
+def knowledge_query(
+    *,
+    story_model: dict[str, Any],
+    character: str,
+    subject: str,
+    predicate: str,
+    **_: Any,
+) -> dict[str, Any]:
+    """Does `character` know that `subject` has `predicate`?
+
+    Returns 'yes' | 'no' | 'unknown' based on the StoryModel's declarations.
+    """
+    sm = StoryModel.model_validate(story_model)
+    verdict = sm.character_knows(character, subject, predicate)
+    return {
+        "character": character,
+        "subject": subject,
+        "predicate": predicate,
+        "verdict": verdict,
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# S_evidence_scorer — sentence-level structured scoring
+# ─────────────────────────────────────────────────────────────────────────────
+
+_SENTENCE_SPLIT = re.compile(r"(?<=[.!?。！？\n])\s+")
+
+
+def evidence_score(
+    *,
+    story: str,
+    question: str,
+    options: dict[str, str],
+    llm_fn: Callable[[str, str], str] | None = None,
+    **_: Any,
+) -> dict[str, Any]:
+    """Score each option by textual support.
+
+    Rather than asking the LLM to produce a free-form evidence argument,
+    we:
+      1. Split the story deterministically into sentences.
+      2. Present the story + options to the LLM with a strict JSON
+         scoring rubric: {-1, 0, 1, 2} per option.
+      3. Parse and pick the highest-scoring option.
+    """
+    if llm_fn is None:
+        raise RuntimeError("S_evidence_scorer requires llm_fn")
+    sentences = [s.strip() for s in _SENTENCE_SPLIT.split(story) if s.strip()]
+    numbered = "\n".join(f"[s{i}] {s}" for i, s in enumerate(sentences))
+    opts_block = "\n".join(f"{k}. {v}" for k, v in options.items() if v)
+    system = (
+        "You are an evidence judge. Score each option by how strongly the "
+        "story text supports it:\n"
+        "  2 = directly stated by some sentence\n"
+        "  1 = implied by a single causal step from some sentence\n"
+        "  0 = requires adding unstated facts\n"
+        " -1 = contradicted by the story\n"
+        "Output ONLY a JSON object: "
+        '{\"scores\": {\"A\": 2, \"B\": 0, ...}, \"support\": {\"A\": [\"s3\"], ...}}'
+    )
+    user = (
+        f"## Numbered sentences\n{numbered}\n\n"
+        f"## Question\n{question}\n\n"
+        f"## Options\n{opts_block}\n\n"
+        "## Task\nScore every option."
+    )
+    raw = llm_fn(system, user)
+    raw = re.sub(r"<think>[\s\S]*?</think>", "", raw).strip()
+    m = re.search(r"\{[\s\S]*\}", raw)
+    if not m:
+        raise ValueError("evidence scorer produced no JSON")
+    payload = json.loads(m.group(0))
+    scores: dict[str, int] = {k: int(v) for k, v in payload.get("scores", {}).items()}
+    if not scores:
+        raise ValueError("evidence scorer produced empty scores")
+    best_letter = max(scores, key=lambda k: (scores[k], -list(scores.keys()).index(k)))
+    return {
+        "n_sentences": len(sentences),
+        "scores": scores,
+        "support": payload.get("support", {}),
+        "recommendation": best_letter,
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# S_minimal_intervention — structured rubric + Python aggregation
+# ─────────────────────────────────────────────────────────────────────────────
+
+def minimal_intervention(
+    *,
+    concern: str,
+    options: dict[str, str],
+    llm_fn: Callable[[str, str], str] | None = None,
+    **_: Any,
+) -> dict[str, Any]:
+    """Rubric-scored ranking for persuasion/advice questions.
+
+    LLM scores each option along three dimensions on small integer scales;
+    Python computes the aggregate and picks. Minimises free-form reasoning
+    so the LLM cannot "argue itself into" a worse option.
+    """
+    if llm_fn is None:
+        raise RuntimeError("S_minimal_intervention requires llm_fn")
+    opts_block = "\n".join(f"{k}. {v}" for k, v in options.items() if v)
+    system = (
+        "Score each option on three dimensions:\n"
+        "  directness [0-3]: how closely does this option address the exact concern?\n"
+        "  minimality [0-3]: how little extra structure does it add?\n"
+        "  politeness [0-2]: is it non-confrontational?\n"
+        "Output ONLY JSON: "
+        '{\"scores\": {\"A\": {\"direct\": 3, \"minimal\": 3, \"polite\": 2}, ...}}'
+    )
+    user = f"## Concern\n{concern}\n\n## Options\n{opts_block}\n\n## Task\nScore."
+    raw = llm_fn(system, user)
+    raw = re.sub(r"<think>[\s\S]*?</think>", "", raw).strip()
+    m = re.search(r"\{[\s\S]*\}", raw)
+    if not m:
+        raise ValueError("minimal_intervention produced no JSON")
+    payload = json.loads(m.group(0))
+    scored = {
+        k: (2 * v.get("direct", 0) + 2 * v.get("minimal", 0) + v.get("polite", 0))
+        for k, v in payload.get("scores", {}).items()
+    }
+    if not scored:
+        raise ValueError("minimal_intervention produced empty scores")
+    best = max(scored, key=lambda k: (scored[k], -list(scored.keys()).index(k)))
+    return {"totals": scored, "breakdown": payload.get("scores", {}), "recommendation": best}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Handler registration
 # ─────────────────────────────────────────────────────────────────────────────
 
 PROCEDURAL_HANDLERS: dict[str, Any] = {
-    "S02_quantifier_solve": quantifier_solve,
+    "S02_quantifier_solve":   quantifier_solve,
+    "S_build_story_model":    build_story_model,
+    "S_belief_query":         belief_query,
+    "S_knowledge_query":      knowledge_query,
+    "S_evidence_scorer":      evidence_score,
+    "S_minimal_intervention": minimal_intervention,
 }
 
 
