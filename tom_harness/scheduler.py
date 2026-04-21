@@ -60,13 +60,16 @@ class Scheduler:
         dataset: str = "",
     ) -> FinalResult:
         t_start = time.time()
+        logger.info("=" * 60)
+        logger.info("[Scheduler] ══ Task start ══ id=%s", task_id)
+        logger.info("[Scheduler] Question: %s", question[:200])
         self.context.begin_task(question=question, options=options)
 
         # 1. Plan
         try:
             plan = self.planner.plan(task_id=task_id, question=question, options=options)
         except Exception as e:  # noqa: BLE001
-            logger.exception("Planning phase failed")
+            logger.exception("[Scheduler] Planning phase FAILED")
             return FinalResult(
                 task_id=task_id, answer="", success=False,
                 plan=_empty_plan(task_id), traces=[],
@@ -82,6 +85,7 @@ class Scheduler:
         while True:
             failed = False
             for phase in plan.phases:
+                logger.info("[Scheduler] ── Phase %d: %s ──", phase.phase_order, phase.phase_name)
                 for step in phase.steps:
                     exec_order += 1
                     ctx = ExecutionContext(
@@ -96,7 +100,7 @@ class Scheduler:
                         directive = self._gather_recovery_directive(step, trace, ctx)
                         if directive and directive.action == "replan" and replans < self.config.max_replans:
                             replans += 1
-                            logger.info(f"Replanning (attempt {replans}) due to {directive.failure_type}")
+                            logger.info("[Scheduler] Replanning (attempt %d) due to %s", replans, directive.failure_type)
                             plan = self._replan(
                                 question=question,
                                 options=options,
@@ -139,13 +143,18 @@ class Scheduler:
                     memory = em
             self.memory.insert(memory)
 
+        elapsed = time.time() - t_start
+        logger.info("[Scheduler] ══ Task done ══ id=%s answer=%s success=%s elapsed=%.2fs",
+                     task_id, answer, success, elapsed)
+        logger.info("=" * 60)
+
         return FinalResult(
             task_id=task_id,
             answer=answer,
             success=success,
             plan=plan,
             traces=traces,
-            elapsed_sec=time.time() - t_start,
+            elapsed_sec=elapsed,
             error=None if success else "finalize produced no answer",
             metadata={"replans": replans, "num_steps": exec_order},
         )

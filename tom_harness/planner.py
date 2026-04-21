@@ -116,6 +116,9 @@ class Planner:
     task_id_prefix: str = "task"
 
     def plan(self, *, task_id: str, question: str, options: dict[str, str] | None = None) -> Plan:
+        logger.info("[Planner] ── Planning start ── task_id=%s", task_id)
+        logger.debug("[Planner] Question: %s", question[:200])
+
         # 1. Pre-plan hooks (plugins may inject preamble text, etc.)
         self.hooks.fire("before_plan", question=question)
 
@@ -137,6 +140,7 @@ class Planner:
                 plan_summary=hit["plan_summary"],
             ))
         self.context.attach_memories(retrieved_memories)
+        logger.info("[Planner] Memory warm-start: %d hits retrieved", len(memory_refs))
 
         # 3. LLM plan generation
         memory_block = _format_memory_block(memory_refs, retrieved_memories)
@@ -152,8 +156,18 @@ class Planner:
             options_block=options_block,
         )
 
+        logger.info("[Planner] Calling LLM for plan generation...")
         plan_dict = self._generate_plan_json(user)
         plan = self._assemble_plan(task_id=task_id, plan_dict=plan_dict, memory_refs=memory_refs)
+
+        logger.info("[Planner] Plan generated: task_type=%s, %d phases, %d total steps",
+                     plan.task_type, len(plan.phases),
+                     sum(len(p.steps) for p in plan.phases))
+        for p in plan.phases:
+            logger.info("[Planner]   Phase %d: %s (%d steps)", p.phase_order, p.phase_name, len(p.steps))
+            for s in p.steps:
+                tool_info = f"{s.tool.tool_type.value}:{s.tool.tool_name}" if s.tool else "none"
+                logger.info("[Planner]     Step %d: %s [tool=%s]", s.step_order, s.description[:80], tool_info)
 
         # 4. Post-plan hooks (plugins may amend the plan)
         amendments = self.hooks.fire("after_plan", plan=plan)
@@ -161,6 +175,7 @@ class Planner:
             if isinstance(amended, Plan):
                 plan = amended
 
+        logger.info("[Planner] ── Planning done ──")
         return plan
 
     # ── internals ──────────────────────────────────────────────────────────

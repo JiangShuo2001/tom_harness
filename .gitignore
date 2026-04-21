@@ -10,6 +10,7 @@ dist/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.claude/
 
 # Virtual environments
 venv/
@@ -30,8 +31,10 @@ Thumbs.db
 
 # Run artifacts — do NOT commit
 results/
+benchmark/
 logs/
 *.jsonl.tmp
+docs/
 
 # Local secrets — NEVER commit
 secrets.yaml

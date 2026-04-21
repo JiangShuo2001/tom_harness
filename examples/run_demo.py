@@ -22,6 +22,8 @@ from tom_harness.tools import MemoryStore, RAGEngine, SkillLib
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
+from dotenv import load_dotenv
+load_dotenv()  # load env vars from .env file in project root
 
 def main() -> None:
     api_base = os.environ.get("TOM_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1")

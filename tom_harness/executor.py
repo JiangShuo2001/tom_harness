@@ -60,13 +60,17 @@ class Executor:
 
     # ── public API ─────────────────────────────────────────────────────────
     def execute_step(self, ctx: ExecutionContext, execution_order: int) -> ExecutionTrace:
+        step = ctx.current_step
+        logger.info("[Executor] ── Step %d start ── %s", execution_order, step.description[:100])
         self.hooks.fire("before_step", step=ctx.current_step, context=ctx)
         trace = self._execute_one(ctx, execution_order, depth=0)
         self.hooks.fire("after_step", step=ctx.current_step, trace=trace, context=ctx)
         self.context.clear_transient()
+        logger.info("[Executor] ── Step %d done ── status=%s", execution_order, trace.step_result.status)
         return trace
 
     def finalize_answer(self, question: str, options: dict[str, str], accumulated: dict[str, Any]) -> str:
+        logger.info("[Executor] ── Finalize ── synthesizing answer from %d accumulated results", len(accumulated))
         self.hooks.fire("before_finalize", accumulated_results=accumulated)
         user = (
             f"## Question\n{question}\n\n"
@@ -78,9 +82,11 @@ class Executor:
             out = self.llm.chat_json(FINALIZE_SYSTEM, user, max_tokens=256)
             ans = str(out.get("answer", "")).strip().upper()
             if ans in {"A", "B", "C", "D"}:
+                logger.info("[Executor] ── Finalize ── answer=%s", ans)
                 return ans
+            logger.warning("[Executor] Finalize returned invalid answer: %s", out)
         except Exception as e:  # noqa: BLE001
-            logger.warning(f"Finalize JSON parse failed: {e}")
+            logger.warning("[Executor] Finalize JSON parse failed: %s", e)
         return ""
 
     # ── internals ──────────────────────────────────────────────────────────
@@ -95,12 +101,21 @@ class Executor:
 
         # 1) Reason — ask LLM to produce a reasoning trio
         reasoning = self._reason_about(ctx)
+        logger.info("[Executor]   Reasoning: %s", reasoning.thought[:150])
 
         # 2) Act — dispatch the step's tool if any
         tool_call_trace: ToolCallTrace | None = None
         observation: Observation | None = None
         if step.tool is not None and step.tool.tool_type != ToolType.NONE:
+            logger.info("[Executor]   Acting: tool=%s:%s", step.tool.tool_type.value, step.tool.tool_name)
             tool_call_trace, observation = self._act(step.tool)
+            if observation.success:
+                logger.info("[Executor]   Observation: success, output=%s",
+                             repr(observation.structured_output or observation.raw_output)[:200])
+            else:
+                logger.warning("[Executor]   Observation: FAILED — %s", observation.error)
+        else:
+            logger.info("[Executor]   Acting: pure reasoning (no tool)")
 
         # 3) Observe & store
         if observation is not None and observation.success and step.tool is not None:
