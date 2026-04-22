@@ -35,10 +35,12 @@ logger = logging.getLogger(__name__)
 REASON_SYSTEM = """You are the Executor of a Theory-of-Mind agent harness. \
 You are given one step from a plan. Produce a brief JSON object:
 {
-  "thought": "<one-sentence analysis>",
-  "state_analysis": "<what prior context matters for this step>",
-  "action_rationale": "<why the chosen tool/params will help, or why none>"
+  "thought": "<one-sentence analysis of what this step should do now>",
+  "state_analysis": "<which accumulated_step_results or prior reasoning_of_step_N matter for this step; cite keys>",
+  "action_rationale": "<why the chosen tool/params will help, or why tool=none>"
 }
+If prior reasoning_of_step_N entries are present in the accumulated results, \
+BUILD ON THEM — do not restart the chain of thought.
 Output ONLY that JSON object."""
 
 
@@ -141,11 +143,21 @@ class Executor:
         # 1) Reason — ask LLM to produce a reasoning trio
         reasoning = self._reason_about(ctx)
 
-        # 2) Act — dispatch the step's tool if any
+        # 1b) Persist this step's thought into accumulated_results so the
+        # NEXT step's render_dynamic_state (and thus next step's Reason
+        # LLM prompt) can see it. Key is sortable by step_order.
+        self.context.record_step_result(
+            f"reasoning_of_step_{step.step_order:02d}",
+            reasoning.thought or "",
+        )
+
+        # 2) Act — dispatch the step's tool if any. Pass reasoning so the
+        # current step's Act can incorporate it (e.g. declarative skills
+        # receive action_rationale/state_analysis via input_context).
         tool_call_trace: ToolCallTrace | None = None
         observation: Observation | None = None
         if step.tool is not None and step.tool.tool_type != ToolType.NONE:
-            tool_call_trace, observation = self._act(step.tool)
+            tool_call_trace, observation = self._act(step.tool, reasoning=reasoning)
 
         # 3) Observe & store
         if observation is not None and observation.success and step.tool is not None:
@@ -204,11 +216,27 @@ class Executor:
             logger.warning(f"Reasoning JSON parse failed: {e}")
             return Reasoning(thought="(reasoning failed to parse)", state_analysis="", action_rationale="")
 
-    def _act(self, call: ToolCall) -> tuple[ToolCallTrace, Observation]:
+    def _act(self, call: ToolCall, reasoning: Reasoning | None = None) -> tuple[ToolCallTrace, Observation]:
         # Inject an llm callback for declarative skills
         effective_params = dict(call.tool_params)
-        if call.tool_type == ToolType.SKILL and "llm_fn" not in effective_params:
-            effective_params["llm_fn"] = self.llm.chat
+        if call.tool_type == ToolType.SKILL:
+            if "llm_fn" not in effective_params:
+                effective_params["llm_fn"] = self.llm.chat
+            # Inject the current step's reasoning into input_context so
+            # declarative skills can see action_rationale / state_analysis.
+            # Procedural handlers accept **_ and will ignore this silently.
+            if reasoning is not None:
+                ic = effective_params.get("input_context") or {}
+                if isinstance(ic, dict) and "step_reasoning" not in ic:
+                    ic = {
+                        **ic,
+                        "step_reasoning": {
+                            "thought": reasoning.thought,
+                            "state_analysis": reasoning.state_analysis,
+                            "action_rationale": reasoning.action_rationale,
+                        },
+                    }
+                    effective_params["input_context"] = ic
         effective_call = call.model_copy(update={"tool_params": effective_params})
 
         t0 = time.time()
