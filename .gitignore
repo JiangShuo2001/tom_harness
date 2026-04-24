@@ -31,10 +31,11 @@ Thumbs.db
 
 # Run artifacts — do NOT commit
 results/
-benchmark/
+*.jsonl
 logs/
 *.jsonl.tmp
 docs/
+model/
 
 # Local secrets — NEVER commit
 secrets.yaml

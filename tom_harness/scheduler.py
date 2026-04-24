@@ -63,6 +63,7 @@ class Scheduler:
         logger.info("=" * 60)
         logger.info("[Scheduler] ══ Task start ══ id=%s", task_id)
         logger.info("[Scheduler] Question: %s", question[:200])
+        self.planner.llm.reset_cache()
         self.context.begin_task(question=question, options=options)
 
         # 1. Plan

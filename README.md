@@ -113,8 +113,14 @@ cd tom_harness
 pip install -r requirements.txt
 ```
 
-Dependencies are intentionally minimal: **only `pydantic>=2` and
-`requests`**. No LangChain / AutoGen / LangGraph.
+**Additional dependencies for RAG mode:**
+
+```bash
+pip install langchain-core langchain-community faiss-cpu sentence-transformers
+```
+
+Dependencies are intentionally minimal: core only needs **`pydantic>=2` and `requests`**.
+The RAG tool layer requires the extra langchain ecosystem + bge-m3 embedding model.
 
 ---
 
@@ -158,11 +164,38 @@ elapsed: ~9s
 
 ```bash
 # 20 samples per task × 8 main ToMBench tasks = 160 samples total
-python examples/run_tombench_harness.py --per_task 20 --workers 6 --tag notools
+python examples/run_tombench_harness.py --limit 20 --workers 8 --tag notools
 ```
 
-Results land in `results/harness_notools_results.jsonl` +
-`results/harness_notools_stats.json`.
+Results land in `results/<tag>/results.jsonl` and `results/<tag>/stats.json`.
+
+### Run the ToMBench benchmark (with RAG retrieval)
+
+**Build the index once before first run** (one-time, then loads from disk in seconds):
+
+```bash
+# Full index — ~577k social-norm entries, CPU ~30-60 min
+python -c "from tom_harness.tools import RAGEngine; r = RAGEngine(); r.build_index()"
+
+# Or test with a small sample first (100 per source, ~a few minutes)
+python -c "from tom_harness.tools import RAGEngine; r = RAGEngine(); r.build_index(num_samples=100); print(f'Done: {r.size()} docs')"
+```
+
+After the index is built, enable with `--rag`:
+
+```bash
+# 8 main tasks with RAG retrieval
+python examples/run_tombench_harness.py --rag --limit 20 --workers 8 --tag with_rag
+```
+
+**RAG flags:**
+
+| Flag | Default | Description |
+|:---|:---|:---|
+| `--rag` | off | Enable RAG retrieval (default is pure plan+execute) |
+| `--rag_data_dir` | `tom_harness/tools/tomrag/data` | JSONL knowledge corpus directory |
+| `--rag_index_dir` | `tom_harness/tools/tomrag/index` | FAISS index directory |
+| `--rag_model` | `model/bge-m3` | Embedding model path |
 
 ### Use as a library
 
@@ -171,13 +204,20 @@ from tom_harness import (
     LLMClient, ToolRegistry, ContextManager, Planner, Executor, Scheduler,
 )
 from tom_harness.hooks import HookRegistry
-from tom_harness.tools import MemoryStore
+from tom_harness.tools import MemoryStore, RAGEngine, SkillLib
 
 llm = LLMClient(api_base="...", api_key="...", model="qwen3-32b")
 registry = ToolRegistry()
 ctx = ContextManager()
 hooks = HookRegistry()
 memory = MemoryStore()
+skill_lib = SkillLib()
+
+# RAG: build once, share globally
+rag = RAGEngine()            # defaults: tomrag/data + tomrag/index + model/bge-m3
+rag.build_index()            # run once before first use; subsequent runs skip this
+if rag.size() > 0:
+    registry.register(rag)  # RAG registered → Planner sees rag_retrieve in AVAILABLE TOOLS
 
 ctx.install_fixed(
     system_identity="A ToM-focused reasoning agent.",
@@ -186,7 +226,7 @@ ctx.install_fixed(
 
 scheduler = Scheduler(
     planner=Planner(llm=llm, registry=registry, context=ctx, hooks=hooks, memory=memory),
-    executor=Executor(llm=llm, registry=registry, context=ctx, hooks=hooks),
+    executor=Executor(llm=llm, registry=registry, context=ctx, hooks=hooks, skill_lib=skill_lib),
     registry=registry, context=ctx, hooks=hooks, memory=memory,
 )
 
@@ -205,6 +245,7 @@ print(result.answer, result.plan.task_type)
 ```
 tom_harness/
 ├── README.md                           ← you are here
+├── README_zh.md                      ← Chinese version
 ├── requirements.txt
 ├── .env.example
 │
@@ -223,7 +264,18 @@ tom_harness/
 │   │   ├── base.py                      ← Tool ABC
 │   │   ├── memory.py                    ← MemoryStore (task-plan pairs)
 │   │   ├── skills.py                    ← SkillLib (SKILL.md loader)
-│   │   └── rag.py                       ← RAGEngine (corpus retrieval)
+│   │   ├── rag.py                       ← RAGEngine (adapter wrapping ToMRAG)
+│   │   └── tomrag/                     ← ToMRAG sub-package (FAISS retrieval)
+│   │       ├── __init__.py
+│   │       ├── rag.py                  ← ToMRAG core (LangChain + FAISS)
+│   │       ├── data/                   ← Knowledge corpus (577k entries)
+│   │       │   ├── atomic.jsonl        ← ATOMIC commonsense因果 (81k)
+│   │       │   ├── social_chem.jsonl   ← Social Chemistry 社会规范 (340k)
+│   │       │   └── normbank.jsonl     ← NormBank 行为准则 (155k)
+│   │       └── index/                  ← FAISS vector index (built at runtime)
+│   │           ├── atomic/
+│   │           ├── social_chem/
+│   │           └── normbank/
 │   │
 │   └── plugins/
 │       └── tom/                         ← ToM-specific plugin (pluggable)
@@ -232,6 +284,14 @@ tom_harness/
 │           ├── memory_index.py          ← ToM metadata enrichment
 │           ├── validators.py            ← consistency checks
 │           └── plan_templates/          ← markdown plan skeletons
+│
+├── examples/
+│   ├── run_demo.py                    ← single-question walkthrough
+│   └── run_tombench_harness.py        ← benchmark runner
+│
+└── docs/
+    └── agent_execution_flow.md         ← Agent execution flow walkthrough
+```
 │               ├── false_belief.md
 │               ├── knowledge_gate.md
 │               └── aware_of_reader.md
@@ -276,12 +336,12 @@ tom_harness/
 
 | | |
 |---|---|
-| Version | 0.1.0 |
+| Version | **1.1** |
 | Core code | ~2.4 K lines of Python |
-| No-tools baseline | **70.6%** on 160 ToMBench samples (qwen3-32b) |
-| Known limitations | Memory/Skill/RAG not yet wired into the ToolRegistry by default; Planner tends to over-classify as `pragmatic_inference` |
-
-See `REPORT_HARNESS_NOTOOLS.md` for the full v0.1 benchmark report.
+| No-tools baseline | **66.9%** on 160 ToMBench samples (qwen3-32b) |
+| RAG mode | **Integrated** — ToMRAG 577k social-norm entries + bge-m3 FAISS index |
+| RAG activation | `--rag` flag (off by default; pure plan+execute otherwise) |
+| Memory/Skill tool wiring | Not enabled by default yet (interface ready) |
 
 ---
 

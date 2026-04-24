@@ -1,21 +1,18 @@
-"""Run the harness on ToMBench — no-tools mode (plan + execute only).
+"""Run the harness on CogToM.
 
 Usage examples:
-  # Run 10 samples per task from the main-8
-  python examples/run_tombench_harness.py --limit 10
+  # Run 10 samples per category
+  python examples/run_cogtom_harness.py --limit 10
 
-  # Run only "False Belief Task", 5 samples starting from the 20th
-  python examples/run_tombench_harness.py --tasks "False Belief Task" --limit 5 --offset 20
+  # Run only "Belief" category, 5 samples starting from the 20th
+  python examples/run_cogtom_harness.py --category "Belief" --limit 5 --offset 20
 
-  # Run ALL samples across all 20 tasks
-  python examples/run_tombench_harness.py --all_tasks --limit 0
-
-  # Specify a custom data directory
-  python examples/run_tombench_harness.py --data_dir /path/to/ToMBench
+  # Run all samples
+  python examples/run_cogtom_harness.py --limit 0
 
 Outputs (saved to results/<tag>/):
   - results.jsonl        per-sample records
-  - stats.json           per-task + overall accuracy
+  - stats.json           per-category + overall accuracy
 """
 
 from __future__ import annotations
@@ -34,7 +31,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from benchmark.load_tombench import load_tombench  # noqa: E402
+from benchmark.load_cogtom import load_cogtom  # noqa: E402
 
 from tom_harness import (  # noqa: E402
     ContextManager, Executor, LLMClient, Planner, Scheduler, ToolRegistry,
@@ -45,7 +42,6 @@ from tom_harness.tools import MemoryStore, RAGEngine, SkillLib, MemoryPlaybook  
 
 
 class _FrameworkConsoleFilter(logging.Filter):
-    """Block tom_harness.* messages on console unless --verbose removes this filter."""
     def filter(self, record: logging.LogRecord) -> bool:
         return not record.name.startswith("tom_harness")
 
@@ -53,8 +49,6 @@ class _FrameworkConsoleFilter(logging.Filter):
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger("harness_bench")
 
-# Framework logger: level=DEBUG so file handler captures everything.
-# Console suppression via filter (removed by --verbose).
 _framework_logger = logging.getLogger("tom_harness")
 _framework_logger.setLevel(logging.DEBUG)
 _console_handler = logging.getLogger().handlers[0] if logging.getLogger().handlers else None
@@ -63,8 +57,7 @@ if _console_handler:
     _console_handler.addFilter(_console_filter)
 
 from dotenv import load_dotenv
-load_dotenv()  # load env vars from .env file in project root
-
+load_dotenv()
 
 
 def build_harness(shared_rag: RAGEngine | None = None, shared_playbook: MemoryPlaybook | None = None, cache_dir: str | None = None):
@@ -111,29 +104,20 @@ def build_harness(shared_rag: RAGEngine | None = None, shared_playbook: MemoryPl
 def select_samples(
     samples: list[dict],
     *,
-    tasks: set[str] | None,
+    categories: set[str] | None,
     offset: int,
     limit: int,
 ) -> list[dict]:
-    """Filter by task, then take up to `limit` samples per task starting from `offset`.
+    if categories:
+        samples = [s for s in samples if s["metadata"].get("category", "") in categories]
 
-    Args:
-        tasks: Set of task names to include. None = all tasks.
-        offset: Skip the first N samples within each task.
-        limit: Max samples per task after offset (0 = no limit).
-    """
-    # 1) Filter by task name
-    if tasks:
-        samples = [s for s in samples if s["metadata"].get("task", "") in tasks]
-
-    # 2) Group by task, apply offset + limit per task
     buckets: dict[str, list[dict]] = defaultdict(list)
     for s in samples:
-        buckets[s["metadata"].get("task", "")].append(s)
+        buckets[s["metadata"].get("category", "")].append(s)
 
     pool: list[dict] = []
-    for t in sorted(buckets):
-        bucket = buckets[t]
+    for cat in sorted(buckets):
+        bucket = buckets[cat]
         sliced = bucket[offset:]
         if limit > 0:
             sliced = sliced[:limit]
@@ -143,7 +127,6 @@ def select_samples(
 
 
 def process_one(scheduler_factory, sample, timeout_sec: float = 180.0):
-    # Capture all framework logs for this task into a buffer
     buf_handler = logging.handlers.MemoryHandler(capacity=10000, flushLevel=logging.CRITICAL + 1)
     buf_handler.setLevel(logging.DEBUG)
     fmt = logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -154,7 +137,8 @@ def process_one(scheduler_factory, sample, timeout_sec: float = 180.0):
     t0 = time.time()
     rec = {
         "id": sample["id"],
-        "task": sample["metadata"].get("task"),
+        "category": sample["metadata"].get("category"),
+        "subcategory": sample["metadata"].get("subcategory"),
         "answer": sample["answer"],
         "predicted": "",
         "correct": False,
@@ -172,7 +156,7 @@ def process_one(scheduler_factory, sample, timeout_sec: float = 180.0):
             task_id=sample["id"],
             question=f"{sample['story']}\n\nQuestion: {sample['question']}",
             options=sample["options"],
-            dataset="ToMBench",
+            dataset="CogToM",
         )
         rec["predicted"] = result.answer
         rec["correct"] = (result.answer == sample["answer"])
@@ -186,7 +170,6 @@ def process_one(scheduler_factory, sample, timeout_sec: float = 180.0):
         rec["error"] = f"{type(e).__name__}: {e}"
     rec["elapsed_sec"] = round(time.time() - t0, 2)
 
-    # Collect buffered log lines
     log_lines = []
     for log_record in buf_handler.buffer:
         log_lines.append(fmt.format(log_record))
@@ -198,7 +181,7 @@ def process_one(scheduler_factory, sample, timeout_sec: float = 180.0):
 
 def main():
     ap = argparse.ArgumentParser(
-        description="Run ToM harness on ToMBench (no-tools baseline).",
+        description="Run ToM harness on CogToM.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
@@ -206,20 +189,21 @@ def main():
     data_grp = ap.add_argument_group("data selection")
     data_grp.add_argument(
         "--data_dir", type=str, default=None,
-        help="Path to ToMBench JSONL directory (default: benchmark/ToMBench/).",
+        help="Path to CogToM data directory (default: benchmark/cogtom/).",
     )
     data_grp.add_argument(
-        "--tasks", type=str, default=None,
-        help='Comma-separated task names, e.g. "False Belief Task,Hinting Task Test". '
-             "Default: all tasks.",
+        "--category", type=str, default=None,
+        help='Comma-separated category names, e.g. "Belief,Emotion". '
+             "Default: all categories. "
+             "Available: Belief, Comprehensive, Desire, Emotion, Intention, Knowledge, Non-literal, Percept.",
     )
     data_grp.add_argument(
         "--limit", type=int, default=20,
-        help="Max samples PER TASK (default: 20, 0 = no limit).",
+        help="Max samples PER CATEGORY (default: 20, 0 = no limit).",
     )
     data_grp.add_argument(
         "--offset", type=int, default=0,
-        help="Skip the first N samples within each task (default: 0).",
+        help="Skip the first N samples within each category (default: 0).",
     )
 
     # ── execution ─────────────────────────────────────────────────────────
@@ -231,11 +215,11 @@ def main():
     # ── output ────────────────────────────────────────────────────────────
     out_grp = ap.add_argument_group("output")
     out_grp.add_argument("--out_dir", default="results", help="Root output directory (default: results/).")
-    out_grp.add_argument("--tag", default="notools", help="Run tag — results saved under <out_dir>/<tag>/ (default: notools).")
+    out_grp.add_argument("--tag", default="cogtom", help="Run tag — results saved under <out_dir>/<tag>/ (default: cogtom).")
 
     # ── RAG ───────────────────────────────────────────────────────────────
     rag_grp = ap.add_argument_group("RAG retrieval")
-    rag_grp.add_argument("--rag", action="store_true", help="Enable RAG retrieval (default: off, pure plan+execute mode).")
+    rag_grp.add_argument("--rag", action="store_true", help="Enable RAG retrieval (default: off).")
     rag_grp.add_argument("--rag_data_dir", type=str, default=None,
                          help="Path to ToMRAG JSONL data directory (default: tom_harness/tools/tomrag/data).")
     rag_grp.add_argument("--rag_index_dir", type=str, default=None,
@@ -258,46 +242,45 @@ def main():
     stats_path   = out_dir / "stats.json"
     log_path     = out_dir / "run.log"
 
-    # ── logging setup ─────────────────────────────────────────────────────
+    # ── logging setup ───────────────────────────────���─────────────────────
     if args.verbose and _console_handler:
         _console_handler.removeFilter(_console_filter)
 
     _log_file_lock = threading.Lock()
-    # Overwrite the log file at start
     log_path.write_text("", encoding="utf-8")
 
     if results_path.exists():
         results_path.unlink()
 
     # ── load & select samples ─────────────────────────────────────────────
-    samples = load_tombench(data_dir=args.data_dir)
-    logger.info(f"Loaded {len(samples)} total ToMBench samples")
+    samples = load_cogtom(data_dir=args.data_dir, lang="en")
+    logger.info(f"Loaded {len(samples)} total CogToM samples")
 
-    if args.tasks:
-        task_filter = {t.strip() for t in args.tasks.split(",")}
+    if args.category:
+        cat_filter = {c.strip() for c in args.category.split(",")}
     else:
-        task_filter = None
+        cat_filter = None
 
     pool = select_samples(
         samples,
-        tasks=task_filter,
+        categories=cat_filter,
         offset=args.offset,
         limit=args.limit,
     )
 
-    task_counts = defaultdict(int)
+    cat_counts = defaultdict(int)
     for s in pool:
-        task_counts[s["metadata"]["task"]] += 1
-    logger.info(f"Selected {len(pool)} samples across {len(task_counts)} tasks "
-                f"(offset={args.offset}, limit={args.limit or 'all'} per task)")
-    for t in sorted(task_counts):
-        logger.info(f"  {t:<40} {task_counts[t]:>4}")
+        cat_counts[s["metadata"]["category"]] += 1
+    logger.info(f"Selected {len(pool)} samples across {len(cat_counts)} categories "
+                f"(offset={args.offset}, limit={args.limit or 'all'} per category)")
+    for c in sorted(cat_counts):
+        logger.info(f"  {c:<40} {cat_counts[c]:>4}")
 
     if not pool:
         logger.info("Nothing to run.")
         return
 
-    # ── RAG setup (shared across all workers) ─────────────────────────────
+    # ── RAG setup ─────────────────────────────────────────────────────────
     shared_rag: RAGEngine | None = None
     if args.rag:
         rag_kwargs: dict = {"model_name": args.rag_model}
@@ -313,7 +296,7 @@ def main():
             logger.info("RAG data not found — running without RAG")
             shared_rag = None
 
-    # ── Memory Playbook setup ──────────────────────────────────────────
+    # ── Memory Playbook setup ─────────────────────────────────────────────
     shared_playbook: MemoryPlaybook | None = None
     if args.memory:
         pb_kwargs: dict = {}
@@ -339,7 +322,9 @@ def main():
             try:
                 rec, log_lines = fut.result(timeout=360)
             except Exception as e:  # noqa: BLE001
-                rec = {"id": s["id"], "task": s["metadata"].get("task"), "answer": s["answer"],
+                rec = {"id": s["id"], "category": s["metadata"].get("category"),
+                       "subcategory": s["metadata"].get("subcategory"),
+                       "answer": s["answer"],
                        "predicted": "", "correct": False, "error": f"outer: {e}",
                        "num_phases": 0, "num_steps": 0, "replans": 0,
                        "elapsed_sec": 0.0, "plan_task_type": "", "phase_names": []}
@@ -365,27 +350,33 @@ def _print_and_save_stats(results_path: Path, stats_path: Path, pool: list, tag:
     if not all_records:
         logger.info("No results to summarize.")
         return
-    stats = _compute_stats(all_records, pool)
+    stats = _compute_stats(all_records)
     with open(stats_path, "w", encoding="utf-8") as f:
         json.dump(stats, f, indent=2, ensure_ascii=False)
 
-    sep = "=" * 60
+    sep = "=" * 70
     logger.info(f"\n{sep}\nHarness [{tag}] results  →  {stats_path}\n{sep}")
     logger.info(f"Overall: {stats['overall']['correct']}/{stats['overall']['total']} "
                 f"= {stats['overall']['accuracy']:.1%}  (errors: {stats['overall']['errors']})")
-    logger.info(f"{'Task':<40} {'N':>4} {'Acc':>7}  {'Err':>4}")
-    logger.info("-" * 60)
-    for t in sorted(stats["per_task"]):
-        ts = stats["per_task"][t]
-        logger.info(f"  {t:<38} {ts['total']:>4} {ts['accuracy']:>7.1%}  {ts['errors']:>4}")
+    logger.info(f"{'Category':<30} {'N':>4} {'Acc':>7}  {'Err':>4}")
+    logger.info("-" * 50)
+    for c in sorted(stats["per_category"]):
+        cs = stats["per_category"][c]
+        logger.info(f"  {c:<28} {cs['total']:>4} {cs['accuracy']:>7.1%}  {cs['errors']:>4}")
+    if stats.get("per_subcategory"):
+        logger.info("")
+        logger.info(f"{'Subcategory':<55} {'N':>4} {'Acc':>7}  {'Err':>4}")
+        logger.info("-" * 75)
+        for sc in sorted(stats["per_subcategory"]):
+            scs = stats["per_subcategory"][sc]
+            logger.info(f"  {sc:<53} {scs['total']:>4} {scs['accuracy']:>7.1%}  {scs['errors']:>4}")
     logger.info(f"\nResults saved to: {results_path}")
     logger.info(f"Stats   saved to: {stats_path}")
     logger.info(f"Log     saved to: {results_path.parent / 'run.log'}")
 
 
 def _live_accuracy(path: Path) -> float:
-    n = 0
-    c = 0
+    n = c = 0
     with open(path, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
@@ -414,37 +405,35 @@ def _load_all(path: Path):
     return out
 
 
-def _compute_stats(records, pool):
+def _compute_stats(records):
     total = len(records)
     correct = sum(1 for r in records if r.get("correct"))
     errors = sum(1 for r in records if r.get("error"))
-    per_task = defaultdict(lambda: {"total": 0, "correct": 0, "errors": 0,
-                                    "avg_phases": 0.0, "avg_steps": 0.0,
-                                    "avg_elapsed": 0.0, "task_type_dist": {}})
-    phases_sum = defaultdict(int); steps_sum = defaultdict(int); elapsed_sum = defaultdict(float)
+
+    per_cat = defaultdict(lambda: {"total": 0, "correct": 0, "errors": 0})
+    per_subcat = defaultdict(lambda: {"total": 0, "correct": 0, "errors": 0})
+
     for r in records:
-        t = r.get("task", "unknown")
-        per_task[t]["total"] += 1
-        per_task[t]["correct"] += int(bool(r.get("correct")))
-        per_task[t]["errors"] += int(bool(r.get("error")))
-        phases_sum[t] += int(r.get("num_phases", 0) or 0)
-        steps_sum[t]  += int(r.get("num_steps", 0) or 0)
-        elapsed_sum[t] += float(r.get("elapsed_sec", 0.0) or 0.0)
-        tt = r.get("plan_task_type", "") or "unknown"
-        per_task[t]["task_type_dist"][tt] = per_task[t]["task_type_dist"].get(tt, 0) + 1
-    for t, d in per_task.items():
+        cat = r.get("category", "unknown")
+        subcat = r.get("subcategory", "unknown")
+        per_cat[cat]["total"] += 1
+        per_cat[cat]["correct"] += int(bool(r.get("correct")))
+        per_cat[cat]["errors"] += int(bool(r.get("error")))
+        per_subcat[subcat]["total"] += 1
+        per_subcat[subcat]["correct"] += int(bool(r.get("correct")))
+        per_subcat[subcat]["errors"] += int(bool(r.get("error")))
+
+    for d in list(per_cat.values()) + list(per_subcat.values()):
         n = d["total"] or 1
         d["accuracy"] = d["correct"] / n
-        d["avg_phases"]  = round(phases_sum[t]  / n, 2)
-        d["avg_steps"]   = round(steps_sum[t]   / n, 2)
-        d["avg_elapsed"] = round(elapsed_sum[t] / n, 2)
+
     return {
         "overall": {
             "total": total, "correct": correct, "errors": errors,
             "accuracy": round(correct / total, 4) if total else 0,
         },
-        "per_task": dict(per_task),
-        "mode": "no_tools",
+        "per_category": dict(per_cat),
+        "per_subcategory": dict(per_subcat),
     }
 
 

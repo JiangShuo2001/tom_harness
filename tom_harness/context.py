@@ -26,11 +26,17 @@ class ContextManager:
     tool_schema_summary: str = ""
     safety_policy: str = ""
 
+    # Tier 1.5 — playbook (static memory, loaded once)
+    playbook_content: str = ""
+
     # Tier 2 — dynamic (per-task, mutated during run)
     global_context: GlobalContext | None = None
 
     # Tier 3 — transient (per-step, cleared after each step)
     transient: dict[str, Any] = field(default_factory=dict)
+
+    def install_playbook(self, content: str) -> None:
+        self.playbook_content = content
 
     def install_fixed(
         self,

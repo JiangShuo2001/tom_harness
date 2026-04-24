@@ -49,6 +49,9 @@ step is pure reasoning.
 - Every tool name you mention MUST be one of those listed in AVAILABLE TOOLS.
 - When retrieved memories are provided, prefer matching their plan structure \
 if task_type aligns.
+- If a Memory Playbook is provided, read it carefully and apply relevant \
+strategies and insights when designing the plan. Pay special attention to \
+the COMMON MISTAKES TO AVOID section and ensure the plan guards against them.
 - `task_type` should be a short snake_case label describing the ToM \
 reasoning category (e.g. false_belief, second_order_belief, \
 knowledge_gate, aware_of_reader, faux_pas, scalar_implicature, hidden_emotion, \
@@ -59,7 +62,7 @@ pragmatic_inference, perspective_taking, or general_tom).
 PLANNER_USER_TEMPLATE = """## Context
 {fixed_preamble}
 
-## Retrieved Memories (from warm-start Memory Store query)
+{playbook_block}## Retrieved Memories (from warm-start Memory Store query)
 {memory_block}
 
 ## Current Question
@@ -149,8 +152,13 @@ class Planner:
             opts = "\n".join(f"{k}. {v}" for k, v in options.items() if v)
             options_block = f"## Options\n{opts}\n"
 
+        playbook_block = ""
+        if self.context.playbook_content:
+            playbook_block = f"## Memory Playbook\n{self.context.playbook_content}\n\n"
+
         user = PLANNER_USER_TEMPLATE.format(
             fixed_preamble=self.context.render_fixed_preamble(),
+            playbook_block=playbook_block,
             memory_block=memory_block,
             question=question,
             options_block=options_block,

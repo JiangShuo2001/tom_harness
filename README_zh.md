@@ -111,8 +111,14 @@ cd tom_harness
 pip install -r requirements.txt
 ```
 
-依赖刻意保持最小：**只有 `pydantic>=2` 和 `requests`**。
-没有 LangChain / AutoGen / LangGraph。
+**额外依赖（RAG 模式）**：
+
+```bash
+pip install langchain-core langchain-community faiss-cpu sentence-transformers
+```
+
+依赖刻意保持最小：内核只需 **`pydantic>=2` 和 `requests`**。
+RAG 工具层需要额外的 langchain 生态和 bge-m3 embedding 模型。
 
 ---
 
@@ -155,11 +161,38 @@ elapsed: ~9s
 
 ```bash
 # 8 大任务 × 20 样本/任务 = 共 160 样本
-python examples/run_tombench_harness.py --per_task 20 --workers 6 --tag notools
+python examples/run_tombench_harness.py --limit 20 --workers 8 --tag notools
 ```
 
-结果会写入 `results/harness_notools_results.jsonl` 和
-`results/harness_notools_stats.json`。
+结果会写入 `results/<tag>/results.jsonl` 和 `results/<tag>/stats.json`。
+
+### 跑 ToMBench 基准测试（启用 RAG 检索）
+
+**首次运行前需要构建索引**（一次性，之后从磁盘秒加载）：
+
+```bash
+# 构建全量索引（约 57.7 万条社会规范知识，CPU ~30-60 分钟）
+python -c "from tom_harness.tools import RAGEngine; r = RAGEngine(); r.build_index()"
+
+# 或先用少量数据测试流程（每知识源 100 条，约几分钟）
+python -c "from tom_harness.tools import RAGEngine; r = RAGEngine(); r.build_index(num_samples=100); print(f'Done: {r.size()} docs')"
+```
+
+索引构建完成后，用 `--rag` 启用 RAG：
+
+```bash
+# 8 大任务启用 RAG 检索
+python examples/run_tombench_harness.py --rag --limit 20 --workers 8 --tag with_rag
+```
+
+**相关参数说明**：
+
+| 参数 | 默认 | 说明 |
+|:---|:---|:---|
+| `--rag` | 关闭 | 启用 RAG 检索（默认纯 plan+execute） |
+| `--rag_data_dir` | `tom_harness/tools/tomrag/data` | JSONL 知识库目录 |
+| `--rag_index_dir` | `tom_harness/tools/tomrag/index` | FAISS 索引目录 |
+| `--rag_model` | `model/bge-m3` | Embedding 模型路径 |
 
 ### 作为库调用
 
@@ -168,13 +201,20 @@ from tom_harness import (
     LLMClient, ToolRegistry, ContextManager, Planner, Executor, Scheduler,
 )
 from tom_harness.hooks import HookRegistry
-from tom_harness.tools import MemoryStore
+from tom_harness.tools import MemoryStore, RAGEngine, SkillLib
 
 llm = LLMClient(api_base="...", api_key="...", model="qwen3-32b")
 registry = ToolRegistry()
 ctx = ContextManager()
 hooks = HookRegistry()
 memory = MemoryStore()
+skill_lib = SkillLib()
+
+# RAG：构建一次，全局共享
+rag = RAGEngine()            # 默认路径：tomrag/data + tomrag/index + model/bge-m3
+rag.build_index()            # 首次运行前执行一次，之后跳过
+if rag.size() > 0:
+    registry.register(rag)  # RAG 注册后 Planner 在 AVAILABLE TOOLS 中看到 rag_retrieve
 
 ctx.install_fixed(
     system_identity="A ToM-focused reasoning agent.",
@@ -183,7 +223,7 @@ ctx.install_fixed(
 
 scheduler = Scheduler(
     planner=Planner(llm=llm, registry=registry, context=ctx, hooks=hooks, memory=memory),
-    executor=Executor(llm=llm, registry=registry, context=ctx, hooks=hooks),
+    executor=Executor(llm=llm, registry=registry, context=ctx, hooks=hooks, skill_lib=skill_lib),
     registry=registry, context=ctx, hooks=hooks, memory=memory,
 )
 
@@ -221,7 +261,18 @@ tom_harness/
 │   │   ├── base.py                       ← Tool 抽象基类
 │   │   ├── memory.py                     ← MemoryStore (任务-计划对)
 │   │   ├── skills.py                     ← SkillLib (SKILL.md 加载器)
-│   │   └── rag.py                        ← RAGEngine (语料检索)
+│   │   ├── rag.py                        ← RAGEngine（适配器，包装 ToMRAG）
+│   │   └── tomrag/                       ← ToMRAG 子包（含 FAISS 检索引擎）
+│   │       ├── __init__.py
+│   │       ├── rag.py                    ← ToMRAG 核心（LangChain + FAISS）
+│   │       ├── data/                     ← 知识语料（57.7 万条）
+│   │       │   ├── atomic.jsonl          ← ATOMIC 常识因果（8.1 万条）
+│   │       │   ├── social_chem.jsonl     ← Social Chemistry 社会规范（34 万条）
+│   │       │   └── normbank.jsonl       ← NormBank 行为准则（15.5 万条）
+│   │       └── index/                   ← FAISS 向量索引（构建后产生）
+│   │           ├── atomic/
+│   │           ├── social_chem/
+│   │           └── normbank/
 │   │
 │   └── plugins/
 │       └── tom/                          ← ToM 专属插件 (可插拔)
@@ -229,16 +280,14 @@ tom_harness/
 │           ├── failure_handlers.py       ← 12 种 ToM 失败类型 → skill 映射
 │           ├── memory_index.py           ← ToM 元数据富化
 │           ├── validators.py             ← 一致性校验
-│           └── plan_templates/           ← 计划骨架 SKILL.md
-│               ├── false_belief.md
-│               ├── knowledge_gate.md
-│               └── aware_of_reader.md
+│           └── plan_templates/          ← 计划骨架 SKILL.md
 │
 ├── examples/
 │   ├── run_demo.py                       ← 单题演示
 │   └── run_tombench_harness.py           ← 基准测试 runner
 │
-└── tests/
+└── docs/
+    └── agent_execution_flow.md           ← Agent 执行流程详解
 ```
 
 ---
@@ -270,12 +319,12 @@ tom_harness/
 
 | | |
 |---|---|
-| 版本 | 0.1.0 |
+| 版本 | **1.1** |
 | 核心代码量 | ~2.4K 行 Python |
-| 无工具模式基线 | ToMBench 160 样本，**70.6%** (qwen3-32b) |
-| 已知限制 | Memory/Skill/RAG 尚未默认注册到 ToolRegistry；Planner 把过多题判为 `pragmatic_inference` |
-
-完整 v0.1 基准测试报告见 `REPORT_HARNESS_NOTOOLS.md`。
+| 无工具模式基线 | ToMBench 160 样本，**66.9%** (qwen3-32b) |
+| RAG 模式 | **已集成** — ToMRAG 57.7 万条社会规范语料 + bge-m3 FAISS 向量索引 |
+| RAG 启用方式 | `--rag` 参数显式开启（默认关闭，纯 plan+execute） |
+| Memory/Skill 工具注册 | 尚未默认开启（框架接口已就绪） |
 
 ---
 
