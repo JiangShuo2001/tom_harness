@@ -43,6 +43,7 @@ from tom_harness.plugins.tom.router import select_skills  # noqa: E402
 from tom_harness.plugins.external_skill_pack import SkillPackAdapter  # noqa: E402
 from tom_harness.plugins.external_skill_pack.set1_adapter import Set1Adapter  # noqa: E402
 from tom_harness.plugins.external_skill_pack.set2_adapter import Set2Adapter  # noqa: E402
+from tom_harness.plugins.external_skill_pack.selective_router import SelectiveRouter  # noqa: E402
 
 logging.basicConfig(level=logging.WARNING, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger("compare")
@@ -91,6 +92,10 @@ def build_state(config: str, llm: LLMClient):
         info = adapter.metadata()
     elif config == "set2_signature":
         adapter = Set2Adapter(routing_mode="signature")
+        adapter.load_into(skill_lib)
+        info = adapter.metadata()
+    elif config == "selective_v04":
+        adapter = SelectiveRouter()
         adapter.load_into(skill_lib)
         info = adapter.metadata()
     else:
