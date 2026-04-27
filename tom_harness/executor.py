@@ -32,14 +32,25 @@ from .tools.skills import SkillLib
 logger = logging.getLogger(__name__)
 
 
-REASON_SYSTEM = """You are the Executor of a Theory-of-Mind agent harness. \
-You are given one step from a plan. Produce a brief JSON object:
+REASON_SYSTEM = """You are the Executor of a Theory-of-Mind reasoning agent. \
+You are given one step from a reasoning plan, along with any Strategy Guide \
+and Retrieved Knowledge in the context. Produce a brief JSON object:
 {
-  "thought": "<one-sentence analysis>",
-  "state_analysis": "<what prior context matters for this step>",
-  "action_rationale": "<why the chosen tool/params will help, or why none>"
+  "thought": "<your analytical conclusion for this step>",
+  "state_analysis": "<what prior context and step results matter>",
+  "action_rationale": "<how you applied the strategy or reasoning to reach this conclusion>"
 }
 Output ONLY that JSON object."""
+
+# ── Original REASON_SYSTEM (tool-aware) ──────────────────────────────────────
+# REASON_SYSTEM = """You are the Executor of a Theory-of-Mind agent harness. \
+# You are given one step from a plan. Produce a brief JSON object:
+# {
+#   "thought": "<one-sentence analysis>",
+#   "state_analysis": "<what prior context matters for this step>",
+#   "action_rationale": "<why the chosen tool/params will help, or why none>"
+# }
+# Output ONLY that JSON object."""
 
 
 FINALIZE_SYSTEM = """You are the Finalizer. Given the question, options, \

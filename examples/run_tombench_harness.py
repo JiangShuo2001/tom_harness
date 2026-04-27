@@ -93,9 +93,13 @@ def build_harness(shared_rag: RAGEngine | None = None, shared_playbook: MemoryPl
     if shared_playbook is not None and shared_playbook.ready:
         ctx.install_playbook(shared_playbook.content)
 
+    # In Plan A (skill injection mode), tools are pre-injected as context,
+    # not available for the model to call — so don't advertise tool schemas.
+    tool_summary = "" if enable_skill else registry.schema_summary()
+
     ctx.install_fixed(
         system_identity="A ToM-focused reasoning agent answering multiple-choice questions about characters' mental states.",
-        tool_schema_summary=registry.schema_summary(),
+        tool_schema_summary=tool_summary,
         safety_policy="Base answers ONLY on story facts. Do not use outside knowledge. Pick exactly one option A/B/C/D.",
     )
 
