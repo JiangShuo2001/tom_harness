@@ -36,9 +36,10 @@ logs/
 *.jsonl.tmp
 docs/
 model/
-index/
 skills/
 skill_v2/
+*.faiss
+*.pkl
 
 # Local secrets — NEVER commit
 secrets.yaml
