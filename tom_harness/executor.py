@@ -43,7 +43,14 @@ Output ONLY that JSON object."""
 
 
 FINALIZE_SYSTEM = """You are the Finalizer. Given the question, options, \
-and all accumulated step results, pick the single best answer letter. \
+and all accumulated step results, pick the single best answer letter.
+
+CRITICAL: Accumulated Step Results contains the upstream reasoning, \
+tool outputs, and skill recommendations. You MUST base your answer \
+on those results unless the story explicitly contradicts them. If any \
+accumulated entry has an 'answer_letter' or 'recommendation' field with \
+a valid letter, prefer it.
+
 Reply with ONLY a JSON object: {"answer": "A" | "B" | "C" | "D"}"""
 
 
@@ -66,16 +73,34 @@ class Executor:
         self.context.clear_transient()
         return trace
 
+
+def _render_accumulated(accumulated, max_per_value=1500):
+    """JSON-aware renderer. Replaces repr(v)[:400] which destroyed structured outputs."""
+    import json as _json
+    parts = []
+    for k, v in accumulated.items():
+        if isinstance(v, (dict, list)):
+            try: rendered = _json.dumps(v, ensure_ascii=False, default=str)
+            except Exception: rendered = repr(v)
+        else:
+            rendered = str(v)
+        if len(rendered) > max_per_value:
+            rendered = rendered[:max_per_value] + " [...truncated]"
+        parts.append(f"- {k}: {rendered}")
+    return "
+".join(parts) if parts else "(empty — no upstream results)"
+
+
     def finalize_answer(self, question: str, options: dict[str, str], accumulated: dict[str, Any]) -> str:
         self.hooks.fire("before_finalize", accumulated_results=accumulated)
         user = (
             f"## Question\n{question}\n\n"
             f"## Options\n" + "\n".join(f"{k}. {v}" for k, v in options.items() if v) + "\n\n"
             f"## Accumulated Step Results\n"
-            + "\n".join(f"- {k}: {repr(v)[:400]}" for k, v in accumulated.items())
+            + _render_accumulated(accumulated)
         )
         try:
-            out = self.llm.chat_json(FINALIZE_SYSTEM, user, max_tokens=256)
+            out = self.llm.chat_json(FINALIZE_SYSTEM, user, max_tokens=1024)
             ans = str(out.get("answer", "")).strip().upper()
             if ans in {"A", "B", "C", "D"}:
                 return ans
