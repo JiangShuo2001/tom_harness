@@ -136,6 +136,11 @@ class Executor:
                 else f"{step.step_id[:8]}_result"
             )
             self.context.record_step_result(store_to, observation.structured_output or observation.raw_output)
+        elif observation is None:
+            # Pure reasoning step — store the reasoning conclusion so
+            # subsequent steps and the Finalizer can see it.
+            store_key = f"step_{execution_order}_reasoning"
+            self.context.record_step_result(store_key, reasoning.thought)
 
         # 4) Recurse into sub_steps
         if step.sub_steps and depth < self.max_substep_depth:
@@ -167,11 +172,15 @@ class Executor:
 
     def _reason_about(self, ctx: ExecutionContext) -> Reasoning:
         step = ctx.current_step
+
+        # Render the full plan overview so the executor sees the big picture
+        plan_overview = self._render_plan_overview(ctx)
+
         user = (
-            f"## Plan Context\n{self.context.render_dynamic_state(include_accumulated=True)}\n\n"
+            f"## Plan Overview\n{plan_overview}\n\n"
+            f"## Task Context\n{self.context.render_dynamic_state(include_accumulated=True)}\n\n"
             f"## Current Step\n"
             f"description: {step.description}\n"
-            f"tool: {step.tool.model_dump() if step.tool else 'none'}\n"
             f"expected_output: {step.expected_output_schema or '(unspecified)'}\n"
         )
         try:
@@ -184,6 +193,17 @@ class Executor:
         except Exception as e:  # noqa: BLE001
             logger.warning(f"Reasoning JSON parse failed: {e}")
             return Reasoning(thought="(reasoning failed to parse)", state_analysis="", action_rationale="")
+
+    @staticmethod
+    def _render_plan_overview(ctx: ExecutionContext) -> str:
+        """Render a compact plan overview marking the current step with >>>."""
+        lines = [f"task_type: {ctx.plan.task_type}"]
+        for phase in ctx.plan.phases:
+            lines.append(f"Phase {phase.phase_order}: {phase.phase_name}")
+            for step in phase.steps:
+                marker = ">>>" if step.step_id == ctx.current_step.step_id else "   "
+                lines.append(f"  {marker} Step {step.step_order}: {step.description[:120]}")
+        return "\n".join(lines)
 
     def _act(self, call: ToolCall) -> tuple[ToolCallTrace, Observation]:
         # Inject an llm callback for declarative skills
