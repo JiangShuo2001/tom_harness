@@ -10,7 +10,7 @@ Usage examples:
   # Run all samples
   python examples/run_cogtom_harness.py --limit 0
 
-Outputs (saved to results/<tag>/):
+Outputs (saved to <out_dir>/):
   - results.jsonl        per-sample records
   - stats.json           per-category + overall accuracy
 """
@@ -214,8 +214,7 @@ def main():
 
     # ── output ────────────────────────────────────────────────────────────
     out_grp = ap.add_argument_group("output")
-    out_grp.add_argument("--out_dir", default="results", help="Root output directory (default: results/).")
-    out_grp.add_argument("--tag", default="cogtom", help="Run tag — results saved under <out_dir>/<tag>/ (default: cogtom).")
+    out_grp.add_argument("--out_dir", default="results", help="Output directory (default: results/).")
 
     # ── RAG ───────────────────────────────────────────────────────────────
     rag_grp = ap.add_argument_group("RAG retrieval")
@@ -236,7 +235,7 @@ def main():
     args = ap.parse_args()
 
     # ── resolve output paths ──────────────────────────────────────────────
-    out_dir = Path(args.out_dir) / args.tag
+    out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     results_path = out_dir / "results.jsonl"
     stats_path   = out_dir / "stats.json"
@@ -342,10 +341,10 @@ def main():
                 logger.info(f"progress={completed}/{len(pool)} elapsed={elapsed:.1f}min running_acc={acc_so_far:.3f}")
 
     # ── stats ──────────────────────────────────────────────────────────────
-    _print_and_save_stats(results_path, stats_path, pool, args.tag)
+    _print_and_save_stats(results_path, stats_path, pool)
 
 
-def _print_and_save_stats(results_path: Path, stats_path: Path, pool: list, tag: str) -> None:
+def _print_and_save_stats(results_path: Path, stats_path: Path, pool: list) -> None:
     all_records = _load_all(results_path)
     if not all_records:
         logger.info("No results to summarize.")
@@ -355,7 +354,7 @@ def _print_and_save_stats(results_path: Path, stats_path: Path, pool: list, tag:
         json.dump(stats, f, indent=2, ensure_ascii=False)
 
     sep = "=" * 70
-    logger.info(f"\n{sep}\nHarness [{tag}] results  →  {stats_path}\n{sep}")
+    logger.info(f"\n{sep}\nHarness results  →  {stats_path}\n{sep}")
     logger.info(f"Overall: {stats['overall']['correct']}/{stats['overall']['total']} "
                 f"= {stats['overall']['accuracy']:.1%}  (errors: {stats['overall']['errors']})")
     logger.info(f"{'Category':<30} {'N':>4} {'Acc':>7}  {'Err':>4}")
