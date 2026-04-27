@@ -54,7 +54,15 @@ Output ONLY that JSON object."""
 
 
 FINALIZE_SYSTEM = """You are the Finalizer. Given the question, options, \
-and all accumulated step results, pick the single best answer letter. \
+and all accumulated step results, pick the single best answer letter.
+
+CRITICAL: The Accumulated Step Results section contains the upstream \
+reasoning, tool outputs, and any skill recommendations from earlier \
+steps. You MUST base your answer on those results unless the story \
+explicitly contradicts them. If any accumulated entry contains an \
+'answer_letter' or 'recommendation' field with a valid letter, prefer \
+it.
+
 Reply with ONLY a JSON object: {"answer": "A" | "B" | "C" | "D"}"""
 
 
@@ -80,6 +88,24 @@ class Executor:
         logger.info("[Executor] ── Step %d done ── status=%s", execution_order, trace.step_result.status)
         return trace
 
+
+def _render_accumulated(accumulated, max_per_value=1500):
+    """JSON-aware renderer. Replaces repr(v)[:400] which destroyed structured outputs."""
+    import json as _json
+    parts = []
+    for k, v in accumulated.items():
+        if isinstance(v, (dict, list)):
+            try: rendered = _json.dumps(v, ensure_ascii=False, default=str)
+            except Exception: rendered = repr(v)
+        else:
+            rendered = str(v)
+        if len(rendered) > max_per_value:
+            rendered = rendered[:max_per_value] + " [...truncated]"
+        parts.append(f"- {k}: {rendered}")
+    return "
+".join(parts) if parts else "(empty — no upstream results)"
+
+
     def finalize_answer(self, question: str, options: dict[str, str], accumulated: dict[str, Any]) -> str:
         logger.info("[Executor] ── Finalize ── synthesizing answer from %d accumulated results", len(accumulated))
         self.hooks.fire("before_finalize", accumulated_results=accumulated)
@@ -87,10 +113,10 @@ class Executor:
             f"## Question\n{question}\n\n"
             f"## Options\n" + "\n".join(f"{k}. {v}" for k, v in options.items() if v) + "\n\n"
             f"## Accumulated Step Results\n"
-            + "\n".join(f"- {k}: {repr(v)[:400]}" for k, v in accumulated.items())
+            + _render_accumulated(accumulated)
         )
         try:
-            out = self.llm.chat_json(FINALIZE_SYSTEM, user, max_tokens=256)
+            out = self.llm.chat_json(FINALIZE_SYSTEM, user, max_tokens=1024)
             ans = str(out.get("answer", "")).strip().upper()
             if ans in {"A", "B", "C", "D"}:
                 logger.info("[Executor] ── Finalize ── answer=%s", ans)
