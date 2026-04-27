@@ -29,7 +29,9 @@ from .schemas import (
     ExecutionContext, ExecutionTrace, FinalResult, Memory, Plan,
     Step, TaskDescriptor,
 )
+from .skill_router import SkillRouter
 from .tools.memory import MemoryStore
+from .tools.rag import RAGEngine
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +52,8 @@ class Scheduler:
     hooks: HookRegistry
     memory: MemoryStore
     config: SchedulerConfig = field(default_factory=SchedulerConfig)
+    skill_router: SkillRouter | None = None
+    rag_engine: RAGEngine | None = None
 
     def run(
         self,
@@ -65,6 +69,27 @@ class Scheduler:
         logger.info("[Scheduler] Question: %s", question[:200])
         self.planner.llm.reset_cache()
         self.context.begin_task(question=question, options=options)
+
+        # 0.5  Hardcoded skill / RAG injection (Plan A experiment)
+        if self.skill_router is not None:
+            skill_id = self.skill_router.route(question, options or {})
+            if skill_id:
+                prompt = self.skill_router.get_skill_prompt(skill_id)
+                if prompt:
+                    self.context.install_skill(prompt)
+                    logger.info("[Scheduler] Skill injected: %s", skill_id)
+
+        if self.rag_engine is not None:
+            try:
+                rag_result = self.rag_engine.run(query=question, top_k=3)
+                passages = rag_result.get("passages", [])
+                if passages:
+                    formatted = self.rag_engine.format_context(passages, max_length=1500)
+                    if formatted:
+                        self.context.install_rag_context(formatted)
+                        logger.info("[Scheduler] RAG injected: %d passages", len(passages))
+            except Exception as e:  # noqa: BLE001
+                logger.warning("[Scheduler] RAG retrieval failed: %s", e)
 
         # 1. Plan
         try:

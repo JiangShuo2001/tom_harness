@@ -13,7 +13,7 @@ Usage examples:
   # Specify a custom data directory
   python examples/run_tombench_harness.py --data_dir /path/to/ToMBench
 
-Outputs (saved to results/<tag>/):
+Outputs (saved to <out_dir>/):
   - results.jsonl        per-sample records
   - stats.json           per-task + overall accuracy
 """
@@ -42,6 +42,7 @@ from tom_harness import (  # noqa: E402
 from tom_harness.hooks import HookRegistry  # noqa: E402
 from tom_harness.scheduler import SchedulerConfig  # noqa: E402
 from tom_harness.tools import MemoryStore, RAGEngine, SkillLib, MemoryPlaybook  # noqa: E402
+from tom_harness.skill_router import SkillRouter  # noqa: E402
 
 
 class _FrameworkConsoleFilter(logging.Filter):
@@ -67,7 +68,7 @@ load_dotenv()  # load env vars from .env file in project root
 
 
 
-def build_harness(shared_rag: RAGEngine | None = None, shared_playbook: MemoryPlaybook | None = None, cache_dir: str | None = None):
+def build_harness(shared_rag: RAGEngine | None = None, shared_playbook: MemoryPlaybook | None = None, cache_dir: str | None = None, enable_skill: bool = False):
     api_base = os.environ.get("TOM_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1")
     api_key  = os.environ.get("TOM_API_KEY")
     model    = os.environ.get("TOM_MODEL",    "qwen3-32b")
@@ -100,10 +101,16 @@ def build_harness(shared_rag: RAGEngine | None = None, shared_playbook: MemoryPl
 
     planner = Planner(llm=llm, registry=registry, context=ctx, hooks=hooks, memory=memory)
     executor = Executor(llm=llm, registry=registry, context=ctx, hooks=hooks, skill_lib=skill_lib)
+
+    skill_router = SkillRouter(llm=llm) if enable_skill else None
+    rag_for_inject = shared_rag if (shared_rag is not None and shared_rag.size() > 0) else None
+
     scheduler = Scheduler(
         planner=planner, executor=executor, registry=registry, context=ctx,
         hooks=hooks, memory=memory,
         config=SchedulerConfig(max_replans=1, persist_memories_on_success=False),
+        skill_router=skill_router,
+        rag_engine=rag_for_inject,
     )
     return scheduler
 
@@ -230,15 +237,14 @@ def main():
 
     # ── output ────────────────────────────────────────────────────────────
     out_grp = ap.add_argument_group("output")
-    out_grp.add_argument("--out_dir", default="results", help="Root output directory (default: results/).")
-    out_grp.add_argument("--tag", default="notools", help="Run tag — results saved under <out_dir>/<tag>/ (default: notools).")
+    out_grp.add_argument("--out_dir", default="results", help="Output directory (default: results/).")
 
     # ── RAG ───────────────────────────────────────────────────────────────
     rag_grp = ap.add_argument_group("RAG retrieval")
     rag_grp.add_argument("--rag", action="store_true", help="Enable RAG retrieval (default: off, pure plan+execute mode).")
-    rag_grp.add_argument("--rag_data_dir", type=str, default=None,
+    rag_grp.add_argument("--rag_data_dir", type=str, default="tom_harness/tools/tomrag/data",
                          help="Path to ToMRAG JSONL data directory (default: tom_harness/tools/tomrag/data).")
-    rag_grp.add_argument("--rag_index_dir", type=str, default=None,
+    rag_grp.add_argument("--rag_index_dir", type=str, default="tom_harness/tools/tomrag/index",
                          help="Path to FAISS index cache directory (default: tom_harness/tools/tomrag/index).")
     rag_grp.add_argument("--rag_model", type=str, default="model/bge-m3",
                          help="Embedding model path or HuggingFace name (default: model/bge-m3).")
@@ -249,10 +255,15 @@ def main():
     mem_grp.add_argument("--memory_dir", type=str, default="memory_playbook/",
                          help="Path to playbook directory (default: memory_playbook/).")
 
+    # ── Skill injection (Plan A) ────────────────────────────────────────
+    skill_grp = ap.add_argument_group("Skill injection (Plan A)")
+    skill_grp.add_argument("--skill", action="store_true",
+                           help="Enable LLM-routed skill injection into planner/executor context (default: off).")
+
     args = ap.parse_args()
 
     # ── resolve output paths ──────────────────────────────────────────────
-    out_dir = Path(args.out_dir) / args.tag
+    out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     results_path = out_dir / "results.jsonl"
     stats_path   = out_dir / "stats.json"
@@ -327,9 +338,12 @@ def main():
             logger.info("Memory playbook data not found — running without playbook")
             shared_playbook = None
 
+    if args.skill:
+        logger.info("Skill injection enabled (Plan A: LLM-routed skill → context)")
+
     # ── run ────────────────────────────────────────────────────────────────
     llm_cache_dir = str(out_dir / "llm_cache")
-    scheduler_factory = lambda: build_harness(shared_rag, shared_playbook, llm_cache_dir)  # noqa: E731
+    scheduler_factory = lambda: build_harness(shared_rag, shared_playbook, llm_cache_dir, args.skill)  # noqa: E731
     t_start = time.time()
     completed = 0
     with ThreadPoolExecutor(max_workers=args.workers) as exe:
@@ -357,10 +371,10 @@ def main():
                 logger.info(f"progress={completed}/{len(pool)} elapsed={elapsed:.1f}min running_acc={acc_so_far:.3f}")
 
     # ── stats ──────────────────────────────────────────────────────────────
-    _print_and_save_stats(results_path, stats_path, pool, args.tag)
+    _print_and_save_stats(results_path, stats_path, pool)
 
 
-def _print_and_save_stats(results_path: Path, stats_path: Path, pool: list, tag: str) -> None:
+def _print_and_save_stats(results_path: Path, stats_path: Path, pool: list) -> None:
     all_records = _load_all(results_path)
     if not all_records:
         logger.info("No results to summarize.")
@@ -370,7 +384,7 @@ def _print_and_save_stats(results_path: Path, stats_path: Path, pool: list, tag:
         json.dump(stats, f, indent=2, ensure_ascii=False)
 
     sep = "=" * 60
-    logger.info(f"\n{sep}\nHarness [{tag}] results  →  {stats_path}\n{sep}")
+    logger.info(f"\n{sep}\nHarness results  →  {stats_path}\n{sep}")
     logger.info(f"Overall: {stats['overall']['correct']}/{stats['overall']['total']} "
                 f"= {stats['overall']['accuracy']:.1%}  (errors: {stats['overall']['errors']})")
     logger.info(f"{'Task':<40} {'N':>4} {'Acc':>7}  {'Err':>4}")

@@ -29,6 +29,10 @@ class ContextManager:
     # Tier 1.5 — playbook (static memory, loaded once)
     playbook_content: str = ""
 
+    # Tier 1.6 — injected skill / RAG context (per-task, set by Scheduler)
+    skill_content: str = ""
+    rag_context: str = ""
+
     # Tier 2 — dynamic (per-task, mutated during run)
     global_context: GlobalContext | None = None
 
@@ -37,6 +41,12 @@ class ContextManager:
 
     def install_playbook(self, content: str) -> None:
         self.playbook_content = content
+
+    def install_skill(self, content: str) -> None:
+        self.skill_content = content
+
+    def install_rag_context(self, content: str) -> None:
+        self.rag_context = content
 
     def install_fixed(
         self,
@@ -55,6 +65,8 @@ class ContextManager:
             original_options=options or {},
         )
         self.transient.clear()
+        self.skill_content = ""
+        self.rag_context = ""
         return self.global_context
 
     def attach_memories(self, memories: list[Memory]) -> None:
@@ -107,4 +119,8 @@ class ContextManager:
                 for k, v in self.global_context.accumulated_results.items()
             ]
             parts.append("## Accumulated Step Results\n" + "\n".join(acc_lines))
+        if self.skill_content:
+            parts.append(f"## Strategy Guide\n{self.skill_content}")
+        if self.rag_context:
+            parts.append(f"## Retrieved Knowledge\n{self.rag_context}")
         return "\n\n".join(parts)
