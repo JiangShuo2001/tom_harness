@@ -38,6 +38,7 @@ docs/
 model/
 skills/
 skill_v2/
+tom_harness/tools/tomrag/index
 *.faiss
 *.pkl
 
