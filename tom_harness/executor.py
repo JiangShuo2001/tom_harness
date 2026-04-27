@@ -45,8 +45,42 @@ Output ONLY that JSON object."""
 
 
 FINALIZE_SYSTEM = """You are the Finalizer. Given the question, options, \
-and all accumulated step results, pick the single best answer letter. \
+and all accumulated step results, pick the single best answer letter.
+
+CRITICAL: The Accumulated Step Results section contains the upstream \
+reasoning, tool outputs, and any skill recommendations from earlier \
+steps. You MUST base your answer on those results unless the story \
+explicitly contradicts them. If any accumulated entry contains an \
+'answer_letter' or 'recommendation' field with a valid letter, prefer \
+it.
+
 Reply with ONLY a JSON object: {"answer": "A" | "B" | "C" | "D"}"""
+
+
+def _render_accumulated(accumulated: dict[str, Any], max_per_value: int = 1500) -> str:
+    """Render accumulated_results without the v0.1 ``repr(v)[:400]`` bug.
+
+    The original ``repr`` style cut every value at 400 chars mid-structure,
+    which made structured outputs (StoryModel, evidence_table, …) into
+    garbled strings. We now:
+      - JSON-stringify dicts/lists (so cuts land at field boundaries)
+      - bump per-value cap to 1500 chars
+      - append ``[...truncated]`` when cut so the LLM knows
+    """
+    import json as _json
+    parts = []
+    for k, v in accumulated.items():
+        if isinstance(v, (dict, list)):
+            try:
+                rendered = _json.dumps(v, ensure_ascii=False, default=str)
+            except Exception:  # noqa: BLE001
+                rendered = repr(v)
+        else:
+            rendered = str(v)
+        if len(rendered) > max_per_value:
+            rendered = rendered[:max_per_value] + " [...truncated]"
+        parts.append(f"- {k}: {rendered}")
+    return "\n".join(parts) if parts else "(empty — no upstream results)"
 
 
 @dataclass
@@ -93,11 +127,10 @@ class Executor:
         user = (
             f"## Question\n{question}\n\n"
             f"## Options\n" + "\n".join(f"{k}. {v}" for k, v in options.items() if v) + "\n\n"
-            f"## Accumulated Step Results\n"
-            + "\n".join(f"- {k}: {repr(v)[:400]}" for k, v in accumulated.items())
+            f"## Accumulated Step Results\n" + _render_accumulated(accumulated)
         )
         try:
-            out = self.llm.chat_json(FINALIZE_SYSTEM, user, max_tokens=256)
+            out = self.llm.chat_json(FINALIZE_SYSTEM, user, max_tokens=1024)
             ans = str(out.get("answer", "")).strip().upper()
             if ans in {"A", "B", "C", "D"}:
                 return ans
@@ -115,19 +148,17 @@ class Executor:
         """
         valid = set(options.keys())
         votes: list[str] = []
-        def _scan(v: Any) -> None:
-            if isinstance(v, dict):
-                for key in ("answer_letter", "recommendation"):
-                    val = v.get(key)
-                    if isinstance(val, str) and val.upper() in valid:
-                        votes.append(val.upper())
-                for vv in v.values():
-                    _scan(vv)
-            elif isinstance(v, list):
-                for vv in v:
-                    _scan(vv)
+        # B7 fix: scan only the *direct* values of accumulated_results;
+        # do NOT recurse into nested dicts/lists. Earlier we recursed and
+        # could accidentally pick up recommendation/answer_letter strings
+        # from retrieved Memory.plan trees, producing false votes.
         for v in accumulated.values():
-            _scan(v)
+            if not isinstance(v, dict):
+                continue
+            for key in ("answer_letter", "recommendation"):
+                val = v.get(key)
+                if isinstance(val, str) and val.upper() in valid:
+                    votes.append(val.upper())
         return votes
 
     # ── internals ──────────────────────────────────────────────────────────
