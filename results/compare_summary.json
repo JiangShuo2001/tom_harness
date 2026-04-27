@@ -1,15 +1,15 @@
 {
-  "selective_v04": {
+  "baseline": {
     "overall": {
       "total": 160,
-      "correct": 118,
-      "accuracy": 0.7375
+      "correct": 109,
+      "accuracy": 0.6813
     },
     "per_task": {
       "Ambiguous Story Task": {
         "total": 20,
-        "correct": 14,
-        "accuracy": 0.7
+        "correct": 10,
+        "accuracy": 0.5
       },
       "False Belief Task": {
         "total": 20,
@@ -18,33 +18,33 @@
       },
       "Faux-pas Recognition Test": {
         "total": 20,
-        "correct": 16,
-        "accuracy": 0.8
+        "correct": 12,
+        "accuracy": 0.6
       },
       "Hinting Task Test": {
         "total": 20,
-        "correct": 18,
-        "accuracy": 0.9
+        "correct": 19,
+        "accuracy": 0.95
       },
       "Persuasion Story Task": {
-        "total": 20,
-        "correct": 11,
-        "accuracy": 0.55
-      },
-      "Scalar Implicature Test": {
         "total": 20,
         "correct": 9,
         "accuracy": 0.45
       },
-      "Strange Story Task": {
+      "Scalar Implicature Test": {
         "total": 20,
-        "correct": 17,
-        "accuracy": 0.85
+        "correct": 10,
+        "accuracy": 0.5
       },
-      "Unexpected Outcome Test": {
+      "Strange Story Task": {
         "total": 20,
         "correct": 15,
         "accuracy": 0.75
+      },
+      "Unexpected Outcome Test": {
+        "total": 20,
+        "correct": 16,
+        "accuracy": 0.8
       }
     }
   }

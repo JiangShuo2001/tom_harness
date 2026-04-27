@@ -79,11 +79,23 @@ class Scheduler:
         exec_order = 0
 
         # 2. Execute — phase-by-phase, step-by-step
+        completed_step_ids: set[str] = set()
         while True:
             failed = False
             for phase in plan.phases:
                 for step in phase.steps:
                     exec_order += 1
+                    # B6 fix: enforce depends_on. If any declared dependency
+                    # has not yet completed, log a warning. We don't block
+                    # execution (LLM-emitted depends_on is noisy), but the
+                    # warning surfaces silent corruption to the runner log.
+                    missing = [d for d in (step.depends_on or [])
+                               if d and d not in completed_step_ids]
+                    if missing:
+                        logger.warning(
+                            f"step {step.step_id[:8]} declares depends_on={step.depends_on} "
+                            f"but {missing} are not yet completed — executing anyway"
+                        )
                     ctx = ExecutionContext(
                         plan=plan,
                         current_phase_id=phase.phase_id,
@@ -91,6 +103,8 @@ class Scheduler:
                         global_context=self.context.global_context,
                     )
                     trace = self.executor.execute_step(ctx, exec_order)
+                    if trace.step_result.status == "completed":
+                        completed_step_ids.add(step.step_id)
                     traces.append(trace)
                     if trace.step_result.status == "failed":
                         directive = self._gather_recovery_directive(step, trace, ctx)
