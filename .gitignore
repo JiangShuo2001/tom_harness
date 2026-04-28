@@ -36,4 +36,9 @@ logs/
 secrets.yaml
 *.pem
 *.key
+
+# Benchmark / experiment artifacts (regenerable; not source)
+results/
+results_*/
 !results/frozen_v04_selective/
+!results/frozen_v04_selective/**
