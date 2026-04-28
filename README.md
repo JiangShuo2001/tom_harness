@@ -15,11 +15,20 @@ reasoner on a specific task family. Here the task family is **social
 cognition / Theory of Mind**: multiple-choice questions about characters'
 mental states, false beliefs, hidden emotions, pragmatic inference, etc.
 
-The system separates *strategic planning* from *tactical execution*:
+The system supports two execution modes:
 
-1. **Planner** turns a question into a structured multi-phase plan.
-2. **Executor** runs each step via a ReAct (Reason → Act → Observe) loop.
-3. **Tool layer** provides externalized cognition: Memory, Skills, RAG.
+1. **Full harness** (Plan → Execute → Finalize): Planner generates a multi-phase
+   plan, Executor runs each step via a ReAct loop, Finalizer synthesizes the answer.
+2. **Thin harness** (Skill-prepended single LLM call): A selective router picks
+   the best skill prompt, prepends it to the question, and calls the LLM once.
+
+### Tool Layer
+
+The full harness provides externalized cognition through three pluggable modules:
+
+- **Skills** — curated reasoning prompts (27 skills across two contributor packs)
+- **Memory Playbook** — ACE-refined strategies injected into the Planner
+- **RAG** — commonsense knowledge retrieval (ATOMIC, Social Chemistry, NormBank)
 
 The architecture follows the spec handed down by the project lead. The
 **core is domain-agnostic** (the same skeleton could run legal or math
@@ -32,30 +41,35 @@ pluggable skills, validators, and failure handlers.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         Harness Layer                            │
-│  ┌─────────────────┐ ┌─────────────────┐ ┌───────��─────────┐    │
-│  │    Scheduler    │ │  Tool Registry  │ │ Context Manager │    │
-│  │ (state machine) │ │  (dispatch)     │ │ (three-tier)    │    │
-│  └────────┬────────┘ └────────┬────────┘ └────────┬────────┘    │
-│           │                   │                   │              │
-│  ┌────────▼────────────────────▼───────────────────▼────────┐   │
-│  │                     Planner Agent                         │   │
-│  │ 1. (mandatory) query Memory Store for warm-start         │   │
-│  │ 2. inject Memory Playbook strategies (if enabled)        │   │
-│  │ 3. generate structured JSON plan (phases → steps)        │   │
-│  └──────────────────────────┬────────────────────────────────┘   │
-│                             │                                    │
-│  ┌────────────────────▼──────────────────────────────────┐       │
-│  │                  Executor Agent                       │       │
-│  │        ReAct loop per step: Reason → Act → Observe    │       │
-│  └──────────────────────────┬────────────────────────────┘       │
-│                             │                                    │
-│  ┌────────────────────▼──────────────────────────────────┐       │
-│  │                     Tool Layer                        │       │
-│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐   │       │
-│  │  │ Memory Store │ │  Skill Lib   │ │  RAG Engine  │   │       │
-│  │  └──────────────┘ └──────────────┘ └──────────────┘   │       │
-│  └───────────────────────────────────────────────────────┘       │
+│                         Harness Layer                           │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐   │
+│  │    Scheduler    │ │  Tool Registry  │ │ Context Manager │   │
+│  │ (state machine) │ │  (dispatch)     │ │ (phase-aware)   │   │
+│  └────────┬────────┘ └────────┬────────┘ └────────┬────────┘   │
+│           │                   │                   │             │
+│  ┌────────▼────────────────────▼───────────────────▼────────┐  │
+│  │                     Planner Agent                         │  │
+│  │ 1. query Memory Store for warm-start                     │  │
+│  │ 2. inject Memory Playbook / Skill prompt (if enabled)    │  │
+│  │ 3. generate structured JSON plan (phases → steps)        │  │
+│  └──────────────────────────┬────────────────────────────────┘  │
+│                             │                                   │
+│  ┌──────────────────────────▼────────────────────────────────┐  │
+│  │                  Executor Agent                           │  │
+│  │   ReAct loop per step: Reason → Act → Observe             │  │
+│  │   Phase-aware accumulated results → Finalizer             │  │
+│  └──────────────────────────┬────────────────────────────────┘  │
+│                             │                                   │
+│  ┌──────────────────────────▼────────────────────────────────┐  │
+│  │                     Tool Layer                            │  │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐      │  │
+│  │  │ Memory Store │ │  Skill Lib   │ │  RAG Engine  │      │  │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘      │  │
+│  │  ┌──────────────────────────────────────────────────┐     │  │
+│  │  │ External Skill Packs (Set1: 15, Set2: 12 skills)│     │  │
+│  │  │ + Selective Router (regex-based, no LLM call)    │     │  │
+│  │  └──────────────────────────────────────────────────┘     │  │
+│  └───────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -102,7 +116,7 @@ export TOM_MODEL="qwen3-32b"
 python examples/run_demo.py
 ```
 
-### Run ToMBench benchmark
+### Run ToMBench benchmark (full harness)
 
 ```bash
 # All tasks, 20 samples per task
@@ -116,6 +130,16 @@ python examples/run_tombench_harness.py --limit 0
 
 # With verbose logging
 python examples/run_tombench_harness.py --tasks "False Belief Task" --limit 5 -v
+```
+
+### Run ToMBench benchmark (thin harness — selective skill routing)
+
+```bash
+# Uses regex-based selective router + single LLM call per question
+python examples/run_selective_harness.py --limit 20
+
+# Specific tasks
+python examples/run_selective_harness.py --tasks "Scalar Implicature Test" --limit 0
 ```
 
 Available ToMBench tasks (use exact names with `--tasks`):
@@ -353,15 +377,57 @@ tom_harness/
 │   │       ├── data/                    ← knowledge corpus (577k entries)
 │   │       └── index/                   ← FAISS vector index (built at runtime)
 │   │
-│   └── plugins/tom/                     ← ToM-specific plugins
+│   ├── plugins/
+│   │   ├── tom/                         ← ToM-specific hook plugins
+│   │   └── external_skill_pack/         ← contributed skill packs
+│   │       ├── adapter.py               ← SkillPackAdapter ABC
+│   │       ├── set1_adapter.py          ← Set1 adapter (15 SKILL.md skills)
+│   │       ├── set2_adapter.py          ← Set2 adapter (12 prompt-string skills)
+│   │       ├── selective_router.py      ← regex-based skill router (no LLM call)
+│   │       └── data/                    ← skill definition files
+│   │           ├── skill_set1/          ← 15 SKILL.md files (faux-pas, belief, emotion…)
+│   │           └── skill_set2/          ← skills.py + llm_router.py (12 skills)
+│   │
+│   └── skill_router.py                 ← LLM-based skill router (12 hardcoded skills)
 │
 ├── examples/
 │   ├── run_demo.py                      ← single-question demo
-│   ├── run_tombench_harness.py          ← ToMBench benchmark runner
-│   └── run_cogtom_harness.py            ← CogToM benchmark runner
+│   ├── run_tombench_harness.py          ← ToMBench full harness runner
+│   ├── run_selective_harness.py         ← thin harness (selective routing)
+│   ├── run_cogtom_harness.py            ← CogToM benchmark runner
+│   ├── run_ablation.sh                  ← ablation experiment script
+│   └── run_compare_skill_packs.py       ← skill pack comparison runner
+│
+├── docs/                                ← analysis documents
 │
 └── results/                             ← output (gitignored)
 ```
+
+---
+
+## Skill System
+
+The harness supports two parallel skill routing systems:
+
+### LLM-based router (`skill_router.py`)
+
+Calls the LLM once to pick the best skill from 12 hardcoded prompts (S1–S12). Used by the full harness via `--skill` flag. Each skill is a structured reasoning workflow (e.g. Extract→Calibrate→Select for scalar implicature).
+
+### Selective router (`plugins/external_skill_pack/selective_router.py`)
+
+Regex-based router over 27 external skills (15 from Set1 + 12 from Set2). No extra LLM call — routes by pattern-matching on question text. Falls back to "raw" (no skill) when no pattern matches. Used by the thin harness (`run_selective_harness.py`).
+
+### Ablation findings (Scalar Implicature Test, n=200)
+
+| Variant | Accuracy |
+|:--------|:---------|
+| Baseline (framework only) | 58.5% |
+| + Skill | **62.5%** (+4.0%) |
+| + Memory | 61.0% (+2.5%) |
+| + All | 60.5% (+2.0%) |
+| + RAG | 57.0% (−1.5%) |
+
+Skill brings the largest gain through workflow restructuring. RAG retrieves irrelevant commonsense passages that add noise. Memory (playbook) provides stable but modest improvement. See `docs/0428效果分析.md` for full analysis across three task types.
 
 ---
 

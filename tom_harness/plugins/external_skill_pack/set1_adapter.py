@@ -101,9 +101,9 @@ def _route_set1(question: str, story: str, options: dict[str, str] | None) -> Ro
 
 @dataclass
 class Set1Adapter(SkillPackAdapter):
-    """Wraps /workspace/symbolictom_report/skill_set1/."""
+    """Wraps skill_set1 pack."""
 
-    pack_root: Path = Path("/workspace/symbolictom_report/skill_set1")
+    pack_root: Path = Path(__file__).resolve().parent / "data" / "skill_set1"
     routing_mode: str = "static"           # only mode supported by set1
     _loaded_ids: list[str] = None
 

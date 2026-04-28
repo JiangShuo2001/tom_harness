@@ -41,9 +41,9 @@ def _sandbox_import(module_name: str, file_path: Path):
 
 @dataclass
 class Set2Adapter(SkillPackAdapter):
-    """Wraps /workspace/symbolictom_report/skill_set2/skill_v2/."""
+    """Wraps skill_set2 pack."""
 
-    pack_root: Path = Path("/workspace/symbolictom_report/skill_set2/skill_v2")
+    pack_root: Path = Path(__file__).resolve().parent / "data" / "skill_set2"
     routing_mode: str = "llm"              # "llm" | "signature"
     router_llm_fn: Callable[[str, str], str] | None = None     # adapter caller supplies
     _skills_module: Any = field(default=None, init=False)
