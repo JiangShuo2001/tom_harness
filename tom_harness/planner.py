@@ -289,6 +289,17 @@ class Planner:
                             tool_name=rt.get("tool_name", ""),
                             tool_params=rt.get("tool_params", {}) or {},
                         )
+                        # B9 fix: validate tool_name against registry at plan
+                        # assembly time, not execution time. Unknown tools
+                        # become tool=None (effectively a pure-reasoning step)
+                        # so the executor doesn't waste a dispatch on a name
+                        # that will fail.
+                        if tool and not self.registry.has(tool.tool_type, tool.tool_name):
+                            logger.warning(
+                                f"Planner emitted unknown tool ({tool.tool_type.value}, "
+                                f"{tool.tool_name}) — converting step to pure-reasoning"
+                            )
+                            tool = None
                     except ValueError:
                         tool = None  # unknown tool_type — drop it
                 deps_raw = rs.get("depends_on", []) or []

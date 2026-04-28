@@ -36,10 +36,12 @@ REASON_SYSTEM = """You are the Executor of a Theory-of-Mind reasoning agent. \
 You are given one step from a reasoning plan, along with any Strategy Guide \
 and Retrieved Knowledge in the context. Produce a brief JSON object:
 {
-  "thought": "<your analytical conclusion for this step>",
-  "state_analysis": "<what prior context and step results matter>",
-  "action_rationale": "<how you applied the strategy or reasoning to reach this conclusion>"
+  "thought": "<one-sentence analysis of what this step should do now>",
+  "state_analysis": "<which accumulated_step_results or prior reasoning_of_step_N matter for this step; cite keys>",
+  "action_rationale": "<why the chosen tool/params will help, or why tool=none>"
 }
+If prior reasoning_of_step_N entries are present in the accumulated results, \
+BUILD ON THEM — do not restart the chain of thought.
 Output ONLY that JSON object."""
 
 # ── Original REASON_SYSTEM (tool-aware) ──────────────────────────────────────
@@ -113,6 +115,26 @@ class Executor:
     def finalize_answer(self, question: str, options: dict[str, str], accumulated: dict[str, Any]) -> str:
         logger.info("[Executor] ── Finalize ── synthesizing answer from %d accumulated results", len(accumulated))
         self.hooks.fire("before_finalize", accumulated_results=accumulated)
+
+        # ── Short-circuit: honour skill recommendations.
+        # Procedural skills (S02, S04, S_evidence_scorer, ...) produce a
+        # `recommendation` or `answer_letter` field. In v0.3 we observed
+        # that finalize-LLM systematically overrode these and got worse
+        # answers on Persuasion (4/4 regressions). If skills agree on an
+        # in-option letter, use it directly. Only fall through to the
+        # LLM finalize when skills disagree or produced nothing.
+        votes = self._collect_skill_votes(accumulated, options)
+        if votes:
+            tally: dict[str, int] = {}
+            for v in votes:
+                tally[v] = tally.get(v, 0) + 1
+            top_letter, top_count = max(tally.items(), key=lambda kv: kv[1])
+            second = sorted(tally.values(), reverse=True)[1] if len(tally) > 1 else 0
+            # Trust if unanimous, or a strict majority (>= 2 and leads by 1+)
+            if len(tally) == 1 or top_count > second:
+                logger.debug(f"finalize short-circuit: votes={tally} -> {top_letter}")
+                return top_letter
+
         user = (
             f"## Question\n{question}\n\n"
             f"## Options\n" + "\n".join(f"{k}. {v}" for k, v in options.items() if v) + "\n\n"
@@ -129,6 +151,29 @@ class Executor:
         except Exception as e:  # noqa: BLE001
             logger.warning("[Executor] Finalize JSON parse failed: %s", e)
         return ""
+
+    @staticmethod
+    def _collect_skill_votes(accumulated: dict[str, Any], options: dict[str, str]) -> list[str]:
+        """Scan accumulated results for skill-level letter recommendations.
+
+        Handlers canonically emit `recommendation` or `answer_letter` with a
+        single-letter value. Only letters that appear in the actual option
+        set are honoured; anything else (e.g. a stale default) is ignored.
+        """
+        valid = set(options.keys())
+        votes: list[str] = []
+        # IMPORTANT: scan only the *direct* values of accumulated_results;
+        # do NOT recurse into nested dicts. Earlier we recursed and could
+        # accidentally pick up `recommendation`/`answer_letter` strings
+        # from retrieved Memory.plan trees, producing false votes.
+        for v in accumulated.values():
+            if not isinstance(v, dict):
+                continue
+            for key in ("answer_letter", "recommendation"):
+                val = v.get(key)
+                if isinstance(val, str) and val.upper() in valid:
+                    votes.append(val.upper())
+        return votes
 
     # ── internals ──────────────────────────────────────────────────────────
     @staticmethod
@@ -151,12 +196,22 @@ class Executor:
         reasoning = self._reason_about(ctx)
         logger.info("[Executor]   Reasoning: %s", reasoning.thought[:150])
 
-        # 2) Act — dispatch the step's tool if any
+        # 1b) Persist this step's thought into accumulated_results so the
+        # NEXT step's render_dynamic_state (and thus next step's Reason
+        # LLM prompt) can see it. Key is sortable by step_order.
+        self.context.record_step_result(
+            f"reasoning_of_step_{step.step_order:02d}",
+            reasoning.thought or "",
+        )
+
+        # 2) Act — dispatch the step's tool if any. Pass reasoning so the
+        # current step's Act can incorporate it (e.g. declarative skills
+        # receive action_rationale/state_analysis via input_context).
         tool_call_trace: ToolCallTrace | None = None
         observation: Observation | None = None
         if step.tool is not None and step.tool.tool_type != ToolType.NONE:
             logger.info("[Executor]   Acting: tool=%s:%s", step.tool.tool_type.value, step.tool.tool_name)
-            tool_call_trace, observation = self._act(step.tool)
+            tool_call_trace, observation = self._act(step.tool, reasoning=reasoning)
             if observation.success:
                 logger.info("[Executor]   Observation: success, output=%s",
                              repr(observation.structured_output or observation.raw_output)[:200])
@@ -246,11 +301,27 @@ class Executor:
                 lines.append(f"  {marker} Step {step.step_order}: {step.description[:120]}")
         return "\n".join(lines)
 
-    def _act(self, call: ToolCall) -> tuple[ToolCallTrace, Observation]:
+    def _act(self, call: ToolCall, reasoning: Reasoning | None = None) -> tuple[ToolCallTrace, Observation]:
         # Inject an llm callback for declarative skills
         effective_params = dict(call.tool_params)
-        if call.tool_type == ToolType.SKILL and "llm_fn" not in effective_params:
-            effective_params["llm_fn"] = self.llm.chat
+        if call.tool_type == ToolType.SKILL:
+            if "llm_fn" not in effective_params:
+                effective_params["llm_fn"] = self.llm.chat
+            # Inject the current step's reasoning into input_context so
+            # declarative skills can see action_rationale / state_analysis.
+            # Procedural handlers accept **_ and will ignore this silently.
+            if reasoning is not None:
+                ic = effective_params.get("input_context") or {}
+                if isinstance(ic, dict) and "step_reasoning" not in ic:
+                    ic = {
+                        **ic,
+                        "step_reasoning": {
+                            "thought": reasoning.thought,
+                            "state_analysis": reasoning.state_analysis,
+                            "action_rationale": reasoning.action_rationale,
+                        },
+                    }
+                    effective_params["input_context"] = ic
         effective_call = call.model_copy(update={"tool_params": effective_params})
 
         t0 = time.time()

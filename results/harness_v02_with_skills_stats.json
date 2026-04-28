@@ -1,0 +1,64 @@
+{
+  "overall": {
+    "total": 160,
+    "correct": 101,
+    "accuracy": 0.6312
+  },
+  "per_task": {
+    "Ambiguous Story Task": {
+      "total": 20,
+      "correct": 13,
+      "accuracy": 0.65
+    },
+    "False Belief Task": {
+      "total": 20,
+      "correct": 14,
+      "accuracy": 0.7
+    },
+    "Faux-pas Recognition Test": {
+      "total": 20,
+      "correct": 12,
+      "accuracy": 0.6
+    },
+    "Hinting Task Test": {
+      "total": 20,
+      "correct": 16,
+      "accuracy": 0.8
+    },
+    "Persuasion Story Task": {
+      "total": 20,
+      "correct": 10,
+      "accuracy": 0.5
+    },
+    "Scalar Implicature Test": {
+      "total": 20,
+      "correct": 10,
+      "accuracy": 0.5
+    },
+    "Strange Story Task": {
+      "total": 20,
+      "correct": 14,
+      "accuracy": 0.7
+    },
+    "Unexpected Outcome Test": {
+      "total": 20,
+      "correct": 12,
+      "accuracy": 0.6
+    }
+  },
+  "skill_usage": {
+    "S03_subject_disambig": 114,
+    "S07_causal_chain": 44,
+    "S08_perception_timeline": 18,
+    "S01_evidence_ground": 33,
+    "S05_emotion_moderation": 18,
+    "S06_implicit_knowledge": 11,
+    "S03_subject_disamb": 1,
+    "tpl_false_belief": 9,
+    "tpl_knowledge_gate": 1,
+    "S04_minimal_intervention": 19,
+    "S02_quantifier_solve": 37,
+    "tpl_aware_of_reader": 1
+  },
+  "mode": "v02_with_skills"
+}
