@@ -191,7 +191,7 @@ class GlobalContext(BaseModel):
     original_options: dict[str, str] = Field(default_factory=dict)
     memory_retrieved: list[Memory] = Field(default_factory=list)
     skill_definitions: list[dict[str, Any]] = Field(default_factory=list)
-    accumulated_results: dict[str, Any] = Field(default_factory=dict)
+    accumulated_results: dict[str, dict[str, Any]] = Field(default_factory=dict)
 
 
 class ExecutionContext(BaseModel):

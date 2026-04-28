@@ -77,9 +77,10 @@ class ContextManager:
         assert self.global_context is not None
         self.global_context.skill_definitions = skill_defs
 
-    def record_step_result(self, variable_name: str, value: Any) -> None:
+    def record_step_result(self, phase_name: str, variable_name: str, value: Any) -> None:
         assert self.global_context is not None
-        self.global_context.accumulated_results[variable_name] = value
+        phase_dict = self.global_context.accumulated_results.setdefault(phase_name, {})
+        phase_dict[variable_name] = value
 
     def clear_transient(self) -> None:
         self.transient.clear()
@@ -114,11 +115,12 @@ class ContextManager:
             ]
             parts.append("## Available Skills\n" + "\n".join(sk_lines))
         if include_accumulated and self.global_context.accumulated_results:
-            acc_lines = [
-                f"- {k}: {str(v)}"
-                for k, v in self.global_context.accumulated_results.items()
-            ]
-            parts.append("## Accumulated Step Results\n" + "\n".join(acc_lines))
+            acc_parts = []
+            for phase_name, step_results in self.global_context.accumulated_results.items():
+                acc_parts.append(f"### {phase_name}")
+                for k, v in step_results.items():
+                    acc_parts.append(f"- {k}: {str(v)}")
+            parts.append("## Accumulated Step Results\n" + "\n".join(acc_parts))
         if self.skill_content:
             parts.append(f"## Strategy Guide\n{self.skill_content}")
         if self.rag_context:

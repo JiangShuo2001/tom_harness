@@ -211,6 +211,7 @@ class Scheduler:
     ) -> Plan:
         # Tag the new plan with the failure note so the planner sees it
         self.context.record_step_result(
+            "_recovery",
             "_last_failure",
             {"step_id": failed_step.step_id, "failure_type": directive.failure_type, "note": directive.note},
         )

@@ -66,6 +66,27 @@ it.
 Reply with ONLY a JSON object: {"answer": "A" | "B" | "C" | "D"}"""
 
 
+def _render_accumulated(accumulated, max_per_value=1500):
+    """Render phase-grouped accumulated results for the Finalizer."""
+    import json as _json
+    if not accumulated:
+        return "(empty — no upstream results)"
+    sections = []
+    for phase_name, step_results in accumulated.items():
+        lines = [f"### {phase_name}"]
+        for k, v in step_results.items():
+            if isinstance(v, (dict, list)):
+                try: rendered = _json.dumps(v, ensure_ascii=False, default=str)
+                except Exception: rendered = repr(v)
+            else:
+                rendered = str(v)
+            if len(rendered) > max_per_value:
+                rendered = rendered[:max_per_value] + " [...truncated]"
+            lines.append(f"- {k}: {rendered}")
+        sections.append("\n".join(lines))
+    return "\n\n".join(sections)
+
+
 @dataclass
 class Executor:
     """ReAct loop executor."""
@@ -89,23 +110,6 @@ class Executor:
         return trace
 
 
-def _render_accumulated(accumulated, max_per_value=1500):
-    """JSON-aware renderer. Replaces repr(v)[:400] which destroyed structured outputs."""
-    import json as _json
-    parts = []
-    for k, v in accumulated.items():
-        if isinstance(v, (dict, list)):
-            try: rendered = _json.dumps(v, ensure_ascii=False, default=str)
-            except Exception: rendered = repr(v)
-        else:
-            rendered = str(v)
-        if len(rendered) > max_per_value:
-            rendered = rendered[:max_per_value] + " [...truncated]"
-        parts.append(f"- {k}: {rendered}")
-    return "
-".join(parts) if parts else "(empty — no upstream results)"
-
-
     def finalize_answer(self, question: str, options: dict[str, str], accumulated: dict[str, Any]) -> str:
         logger.info("[Executor] ── Finalize ── synthesizing answer from %d accumulated results", len(accumulated))
         self.hooks.fire("before_finalize", accumulated_results=accumulated)
@@ -127,6 +131,13 @@ def _render_accumulated(accumulated, max_per_value=1500):
         return ""
 
     # ── internals ──────────────────────────────────────────────────────────
+    @staticmethod
+    def _phase_name(ctx: ExecutionContext) -> str:
+        for p in ctx.plan.phases:
+            if p.phase_id == ctx.current_phase_id:
+                return f"Phase {p.phase_order}: {p.phase_name}"
+        return f"Phase {ctx.current_phase_id[:8]}"
+
     def _execute_one(
         self,
         ctx: ExecutionContext,
@@ -155,23 +166,22 @@ def _render_accumulated(accumulated, max_per_value=1500):
             logger.info("[Executor]   Acting: pure reasoning (no tool)")
 
         # 3) Observe & store
+        phase_name = self._phase_name(ctx)
         if observation is not None and observation.success and step.tool is not None:
             store_to = (
                 step.tool.output_mapping.store_to
                 if step.tool.output_mapping
                 else f"{step.step_id[:8]}_result"
             )
-            self.context.record_step_result(store_to, observation.structured_output or observation.raw_output)
+            self.context.record_step_result(phase_name, store_to, observation.structured_output or observation.raw_output)
         elif observation is None:
-            # Pure reasoning step — store the full reasoning so
-            # subsequent steps and the Finalizer can see it.
             store_key = f"step_{execution_order}_reasoning"
             reasoning_summary = reasoning.thought
             if reasoning.state_analysis:
                 reasoning_summary += f" [context: {reasoning.state_analysis}]"
             if reasoning.action_rationale:
                 reasoning_summary += f" [rationale: {reasoning.action_rationale}]"
-            self.context.record_step_result(store_key, reasoning_summary)
+            self.context.record_step_result(phase_name, store_key, reasoning_summary)
 
         # 4) Recurse into sub_steps
         if step.sub_steps and depth < self.max_substep_depth:
