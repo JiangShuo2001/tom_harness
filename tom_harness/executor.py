@@ -163,10 +163,15 @@ def _render_accumulated(accumulated, max_per_value=1500):
             )
             self.context.record_step_result(store_to, observation.structured_output or observation.raw_output)
         elif observation is None:
-            # Pure reasoning step — store the reasoning conclusion so
+            # Pure reasoning step — store the full reasoning so
             # subsequent steps and the Finalizer can see it.
             store_key = f"step_{execution_order}_reasoning"
-            self.context.record_step_result(store_key, reasoning.thought)
+            reasoning_summary = reasoning.thought
+            if reasoning.state_analysis:
+                reasoning_summary += f" [context: {reasoning.state_analysis}]"
+            if reasoning.action_rationale:
+                reasoning_summary += f" [rationale: {reasoning.action_rationale}]"
+            self.context.record_step_result(store_key, reasoning_summary)
 
         # 4) Recurse into sub_steps
         if step.sub_steps and depth < self.max_substep_depth:
@@ -212,9 +217,9 @@ def _render_accumulated(accumulated, max_per_value=1500):
         try:
             out = self.llm.chat_json(REASON_SYSTEM, user, max_tokens=512)
             return Reasoning(
-                thought=str(out.get("thought", ""))[:500],
-                state_analysis=str(out.get("state_analysis", ""))[:500],
-                action_rationale=str(out.get("action_rationale", ""))[:500],
+                thought=str(out.get("thought", "")),
+                state_analysis=str(out.get("state_analysis", "")),
+                action_rationale=str(out.get("action_rationale", "")),
             )
         except Exception as e:  # noqa: BLE001
             logger.warning(f"Reasoning JSON parse failed: {e}")

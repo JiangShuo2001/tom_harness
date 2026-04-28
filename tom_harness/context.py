@@ -115,7 +115,7 @@ class ContextManager:
             parts.append("## Available Skills\n" + "\n".join(sk_lines))
         if include_accumulated and self.global_context.accumulated_results:
             acc_lines = [
-                f"- {k}: {repr(v)[:200]}"
+                f"- {k}: {str(v)}"
                 for k, v in self.global_context.accumulated_results.items()
             ]
             parts.append("## Accumulated Step Results\n" + "\n".join(acc_lines))
