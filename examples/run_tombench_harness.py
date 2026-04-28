@@ -225,7 +225,7 @@ def main():
              "Default: all tasks.",
     )
     data_grp.add_argument(
-        "--limit", type=int, default=200,
+        "--limit", type=int, default=20,
         help="Max samples PER TASK (default: 20, 0 = no limit).",
     )
     data_grp.add_argument(
