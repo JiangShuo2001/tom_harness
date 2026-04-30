@@ -29,7 +29,7 @@ def after_step(step: Step, trace: ExecutionTrace, context: ExecutionContext) -> 
     desc = (step.description or "").lower()
 
     # Rule 1: second-order belief steps should cite first-order state
-    if "second" in desc or "2nd" in desc or "���阶" in desc:
+    if "second" in desc or "2nd" in desc or "二阶" in desc:
         accumulated = context.global_context.accumulated_results
         has_first_order = any(
             isinstance(v, (str, dict)) and _belief_mentioned(v)
