@@ -18,10 +18,15 @@ from __future__ import annotations
 import json
 import logging
 import math
+import threading
 from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable
+
+
+def _make_lock() -> threading.RLock:
+    return threading.RLock()
 
 from ..schemas import Memory, ToolType
 from .base import Tool
@@ -58,6 +63,7 @@ class MemoryStore(Tool):
     embedder: Callable[[str], list[float]] = field(default=_trigram_embed)
     _memories: dict[str, Memory] = field(default_factory=dict, init=False)
     _embeddings: dict[str, list[float]] = field(default_factory=dict, init=False)
+    _lock: "threading.RLock" = field(default_factory=lambda: _make_lock(), init=False)
 
     def __post_init__(self) -> None:
         if self.persist_path and self.persist_path.exists():
@@ -96,13 +102,16 @@ class MemoryStore(Tool):
         metadata_filter: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         q_emb = self.embedder(query)
+        with self._lock:
+            items = list(self._memories.items())
         scored: list[tuple[float, Memory]] = []
-        for mid, mem in self._memories.items():
+        for mid, mem in items:
             if task_type_filter and mem.task.task_type != task_type_filter:
                 continue
             if metadata_filter and not self._match_metadata(mem.metadata, metadata_filter):
                 continue
-            emb = self._embeddings.get(mid)
+            with self._lock:
+                emb = self._embeddings.get(mid)
             if emb is None:
                 continue
             score = _cosine(q_emb, emb)
@@ -126,13 +135,16 @@ class MemoryStore(Tool):
     # ── Direct (non-tool) API used by Scheduler / plugins ──────────────────
     def insert(self, memory: Memory) -> None:
         key_text = f"{memory.task.question} | {memory.task.task_type}"
-        self._memories[memory.memory_id] = memory
-        self._embeddings[memory.memory_id] = self.embedder(key_text)
-        if self.persist_path:
-            self._append_persist(memory)
+        emb = self.embedder(key_text)
+        with self._lock:
+            self._memories[memory.memory_id] = memory
+            self._embeddings[memory.memory_id] = emb
+            if self.persist_path:
+                self._append_persist(memory)
 
     def size(self) -> int:
-        return len(self._memories)
+        with self._lock:
+            return len(self._memories)
 
     # ── internals ──────────────────────────────────────────────────────────
     @staticmethod

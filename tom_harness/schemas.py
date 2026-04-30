@@ -191,7 +191,15 @@ class GlobalContext(BaseModel):
     original_options: dict[str, str] = Field(default_factory=dict)
     memory_retrieved: list[Memory] = Field(default_factory=list)
     skill_definitions: list[dict[str, Any]] = Field(default_factory=list)
-    accumulated_results: dict[str, Any] = Field(default_factory=dict)
+    accumulated_results: dict[str, dict[str, Any]] = Field(default_factory=dict)
+
+    def flat_accumulated(self) -> dict[str, Any]:
+        """Flatten phase→step results into a single dict for legacy consumers."""
+        flat: dict[str, Any] = {}
+        for phase, steps in self.accumulated_results.items():
+            for k, v in steps.items():
+                flat[f"{phase}/{k}"] = v
+        return flat
 
 
 class ExecutionContext(BaseModel):

@@ -9,10 +9,7 @@ English version: [README.md](README.md)
 
 ## 这是什么？
 
-`tom_harness` 是一套 **Agent Harness** —— 即围绕大语言模型构建的基础设施，
-用来把"文本生成器"变成"特定任务上可靠的推理器"。这里的任务是
-**社会认知 / 心智理论**：回答关于角色心理状态、错误信念、隐藏情绪、
-语用推理等的选择题。
+`tom_harness` 是一套 **Agent Harness** —— 即围绕大语言模型构建的基础设施，用来把"文本生成器"变成"特定任务上可靠的推理器"。这里的任务是**社会认知 / 心智理论**：回答关于角色心理状态、错误信念、隐藏情绪、语用推理等的选择题。
 
 系统把**战略规划**与**战术执行**解耦：
 
@@ -20,9 +17,24 @@ English version: [README.md](README.md)
 2. **Executor**（执行 Agent）用 ReAct 循环（Reason → Act → Observe）逐步执行；
 3. **Tool Layer**（工具层）提供外化认知能力：Memory、Skills、RAG。
 
-架构遵循项目组设定的规范。**内核是领域无关的**（同一骨架也能跑法律或
-数学推理）；所有 **ToM 相关知识都以外部插件形式挂载** —— 作为可加载的
-skill、validator、failure handler 等接入。
+架构遵循项目组设定的规范。**内核是领域无关的**（同一骨架也能跑法律或数学推理）；所有 **ToM 相关知识都以外部插件形式挂载** —— 作为可加载的skill、validator、failure handler 等接入。
+
+系统支持两种执行模式：
+
+1. **Full harness**（Plan → Execute → Finalize）：Planner 生成多阶段计划，Executor 通过 ReAct 循环逐步执行，Finalizer 综合得出答案。
+2. **Thin harness**（技能前置单次 LLM 调用）：选择性路由器挑选最佳技能提示词，将其拼接在问题前面，一次 LLM 调用完成。
+
+## 工具层
+
+完整的harness框架提供三个外部的可插拔模块设计：
+
+- **技能**——精选推理提示（涵盖多个套装中的27项外部技能与16项内置技能）
+
+- **记忆手册**——经ACE优化的策略注入planner
+
+- **RAG** —— 常识知识检索（ATOMIC、社会化学、NormBank）
+
+该架构遵循项目负责人所下达的规范。**核心与领域无关**（相同的骨架可用于运行法律或数学推理）；所有**与心智理论相关的知识都是外部的**——作为可插拔的技能、验证器和故障处理程序加载。
 
 ---
 
@@ -30,7 +42,7 @@ skill、validator、failure handler 等接入。
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                       Harness Layer                              │
+│                         Harness Layer                            │
 │  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐    │
 │  │    Scheduler    │ │  Tool Registry  │ │ Context Manager │    │
 │  │   (状态机)      │ │   (工具分发)    │ │  (三级上下文)   │    │
@@ -38,65 +50,37 @@ skill、validator、failure handler 等接入。
 │           │                   │                   │              │
 │  ┌────────▼────────────────────▼───────────────────▼────────┐   │
 │  │                     Planner Agent                         │   │
-│  │  1. (强制) 查询 Memory Store 做 warm-start               │   │
-│  │  2. 生成结构化 JSON 计划（phase → step）                 │   │
+│  │ 1. (强制) 查询 Memory Store 做 warm-start                │   │
+│  │ 2. 注入 Memory Playbook 策略（若启用）                   │   │
+│  │ 3. 生成结构化 JSON 计划（phase → step）                  │   │
 │  └──────────────────────────┬────────────────────────────────┘   │
 │                             │                                    │
-│  ┌────────────────────▼──────────────────────────────────┐       │
-│  │                   Executor Agent                      │       │
-│  │    每步 ReAct 循环：Reason → Act → Observe           │       │
+│  ┌──────────────────────────▼────────────────────────────┐       │
+│  │                  Executor Agent                       │       │
+│  │        每步 ReAct 循环：Reason → Act → Observe        │       │
 │  └──────────────────────────┬────────────────────────────┘       │
 │                             │                                    │
-│  ┌────────────────────▼──────────────────────────────────┐       │
-│  │                     Tool Layer                        │       │
-│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐   │       │
-│  │  │ Memory Store │ │  Skill Lib   │ │  RAG Engine  │   │       │
-│  │  └──────────────┘ └──────────────┘ └──────────────┘   │       │
-│  └───────────────────────────────────────────────────────┘       │
+│  ┌──────────────────────────▼────────────────────────────────┐  │
+│  │                     Tool Layer                            │  │
+│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐      │  │
+│  │  │ Memory Store │ │  Skill Lib   │ │  RAG Engine  │      │  │
+│  │  │ (vector idx) │ │ (declarative │ │ (FAISS+bge)  │      │  │
+│  │  │              │ │  +procedural)│ │              │      │  │
+│  │  └──────────────┘ └──────────────┘ └──────────────┘      │  │
+│  │  ┌──────────────────────────────────────────────────┐     │  │
+│  │  │ Built-in Skills: 16 ToM-specific skills          │     │  │
+│  │  │ External Packs: Set1 (15) + Set2 (12) skills     │     │  │
+│  │  │ Routers: LLM-based / Selective (regex-based)     │     │  │
+│  │  └──────────────────────────────────────────────────┘     │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │                   Plugin System (Hooks)                  │  │
+│  │  • ToM validators (belief-order, knowledge-gate checks)  │  │
+│  │  • Failure handlers (classify → inject recovery skills)  │  │
+│  │  • Memory enrichment (TaskSignature fingerprinting)     │  │
+│  └──────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
-                              ▲
-                              │
-                    ┌──── plugins/tom/ ────┐
-                    │  failure_handlers    │
-                    │  memory_index        │
-                    │  validators          │
-                    │  plan_templates/     │
-                    └──────────────────────┘
-                       (ToM 特化；均不污
-                        染内核代码)
-```
-
-### 数据流（单个任务端到端）
-
-```
-问题 + 选项
-    │
-    ▼
-ContextManager.begin_task()              (第二层状态初始化)
-    │
-    ▼
-Planner.plan()
-  ├── MemoryStore.run(query=...)         (强制 warm-start)
-  ├── LLM 调用 → JSON 计划
-  └── hooks.fire("after_plan")           (插件可修改计划)
-    │
-    ▼
-Scheduler 按 phase × step 驱动循环
-    │
-    ▼ 对每个 step
-Executor.execute_step()
-  ├── Reason   (LLM 产出 Reasoning JSON)
-  ├── Act      (若 step 含 tool，则 ToolRegistry.dispatch)
-  └── Observe  → 结果写入 ExecutionContext
-    │
-    ▼
-Executor.finalize_answer()               (LLM 选出字母答案)
-    │
-    ▼
-Scheduler 将 (task, plan) 写入 MemoryStore   (若成功)
-    │
-    ▼
-FinalResult   (answer + plan + traces + metadata)
 ```
 
 ---
@@ -106,13 +90,18 @@ FinalResult   (answer + plan + traces + metadata)
 需要 Python ≥ 3.10。
 
 ```bash
-git clone https://github.com/JiangShuo2001/tom_harness.git
+git clone <repo-url>
 cd tom_harness
 pip install -r requirements.txt
 ```
 
-依赖刻意保持最小：**只有 `pydantic>=2` 和 `requests`**。
-没有 LangChain / AutoGen / LangGraph。
+**额外依赖（RAG 模式）**：
+
+```bash
+pip install langchain-core langchain-community faiss-cpu sentence-transformers
+```
+
+依赖刻意保持最小：内核只需 **`pydantic>=2` 和 `requests`**。
 
 ---
 
@@ -124,76 +113,236 @@ Harness 通过一个 OpenAI 兼容格式的 Chat Completions 接口调用 LLM。
 ```bash
 export TOM_API_BASE="https://dashscope.aliyuncs.com/compatible-mode/v1"
 export TOM_API_KEY="<你的 key>"
-export TOM_MODEL="qwen3-32b"
+export TOM_MODEL="qwen3.5-27b"
 ```
-
-代码中没有任何硬编码 key。若未设置 `TOM_API_KEY`，运行会直接报错退出。
 
 ---
 
 ## 快速上手
 
-### 跑单题 demo（Sally-Anne 错误信念）
+### 跑单题 demo（Sally-Anne）
 
 ```bash
 python examples/run_demo.py
 ```
 
-预期输出：
-
-```
-========== FINAL ==========
-answer:  A
-success: True
-plan.task_type: false_belief
-phases: ['analyze_sallys_perspective']
-num_steps: 1
-elapsed: ~9s
-```
-
-### 跑 ToMBench 基准测试（无工具模式）
+### 跑 ToMBench 基准测试（full harness）
 
 ```bash
-# 8 大任务 × 20 样本/任务 = 共 160 样本
-python examples/run_tombench_harness.py --per_task 20 --workers 6 --tag notools
+# 全部任务，每任务 20 样本
+python examples/run_tombench_harness.py --limit 20
+
+# 指定任务
+python examples/run_tombench_harness.py --tasks "False Belief Task,Hinting Task Test" --limit 10
+
+# 全部样本（不限制数量）
+python examples/run_tombench_harness.py --limit 0
+
+# 显示详细日志
+python examples/run_tombench_harness.py --tasks "False Belief Task" --limit 5 -v
 ```
 
-结果会写入 `results/harness_notools_results.jsonl` 和
-`results/harness_notools_stats.json`。
+### 跑 ToMBench 基准测试 (thin harness — selective skill routing)
 
-### 作为库调用
+```bash
+# 使用regex-based路由选择器+每个问题单一LLM调用
+python examples/run_selective_harness.py --limit 20
 
-```python
-from tom_harness import (
-    LLMClient, ToolRegistry, ContextManager, Planner, Executor, Scheduler,
-)
-from tom_harness.hooks import HookRegistry
-from tom_harness.tools import MemoryStore
-
-llm = LLMClient(api_base="...", api_key="...", model="qwen3-32b")
-registry = ToolRegistry()
-ctx = ContextManager()
-hooks = HookRegistry()
-memory = MemoryStore()
-
-ctx.install_fixed(
-    system_identity="A ToM-focused reasoning agent.",
-    tool_schema_summary=registry.schema_summary(),
-)
-
-scheduler = Scheduler(
-    planner=Planner(llm=llm, registry=registry, context=ctx, hooks=hooks, memory=memory),
-    executor=Executor(llm=llm, registry=registry, context=ctx, hooks=hooks),
-    registry=registry, context=ctx, hooks=hooks, memory=memory,
-)
-
-result = scheduler.run(
-    task_id="q1",
-    question="故事 + 问题……",
-    options={"A": "...", "B": "...", "C": "...", "D": "..."},
-)
-print(result.answer, result.plan.task_type)
+# 特定任务
+python examples/run_selective_harness.py --tasks "Scalar Implicature Test" --limit 0
 ```
+
+可用的 ToMBench 任务（`--tasks` 参数需使用精确名称）：
+
+```
+Ambiguous Story Task          Completion of Failed Actions
+Discrepant Desires            Discrepant Emotions
+Discrepant Intentions         Emotion Regulation
+False Belief Task             Faux-pas Recognition Test
+Hidden Emotions               Hinting Task Test
+Knowledge-Attention Links     Knowledge-Pretend Play Links
+Moral Emotions                Multiple Desires
+Percepts-Knowledge Links      Persuasion Story Task
+Prediction of Actions         Scalar Implicature Test
+Strange Story Task            Unexpected Outcome Test
+```
+
+### 跑 CogToM 基准测试
+
+```bash
+# 全部类别，每类别 20 样本
+python examples/run_cogtom_harness.py --limit 20
+
+# 指定类别
+python examples/run_cogtom_harness.py --category "Belief" --limit 10
+
+# 多个类别
+python examples/run_cogtom_harness.py --category "Belief,Emotion,Desire" --limit 5
+```
+
+可用的 CogToM 类别（`--category` 参数需使用精确名称）：
+
+```
+Belief    Comprehensive    Desire    Emotion
+Intention Knowledge        Non-literal Percept
+```
+
+---
+
+## Memory Playbook（`--memory`）
+
+Memory Playbook 会将预构建的 ACE 框架策略注入到 Planner 提示词中。这些策略经过多轮迭代精炼，包含：
+
+- **策略与洞察** —— 经过验证的 ToM 任务推理模式
+- **常见错误规避** —— 需要防范的错误模式
+- **问题求解启发式** —— 通用决策规则
+
+### 配置
+
+将 playbook 文件（`.txt` 或 `.md`）放在 `memory_playbook/` 目录下：
+
+```
+memory_playbook/
+└── epoch_1_step_600_playbook.txt    ← ACE 精炼的策略
+```
+
+### 用法
+
+```bash
+# ToMBench + Memory Playbook
+python examples/run_tombench_harness.py --memory --limit 20
+
+# CogToM + Memory Playbook
+python examples/run_cogtom_harness.py --memory --category "Belief" --limit 10
+
+# 自定义 playbook 目录
+python examples/run_tombench_harness.py --memory --memory_dir /path/to/my_playbook/
+```
+
+Playbook 内容**仅注入到 Planner** 提示词中（不进入 Executor 的 ReAct 循环）。Planner 的系统提示词会指导 LLM 主动参考 playbook 中的策略并避免文档中记录的常见错误。
+
+| 参数 | 默认值 | 说明 |
+|:---|:---|:---|
+| `--memory` | 关闭 | 启用 Memory Playbook 注入到 Planner |
+| `--memory_dir` | `memory_playbook/` | Playbook 文件目录路径 |
+
+---
+
+## RAG 检索（`--rag`）
+
+RAG 在执行过程中提供社会规范/常识知识的动态检索。
+
+### 构建 FAISS 索引（一次性）
+
+RAG 引擎使用 bge-m3 embeddings，覆盖三个知识源（共 57.7 万条）：
+- **ATOMIC** —— 常识因果知识（8.1 万条）
+- **Social Chemistry** —— 社会规范（34 万条）
+- **NormBank** —— 行为准则（15.5 万条）
+
+```bash
+# 全量索引构建（CPU 约 30-60 分钟）
+python -c "from tom_harness.tools import RAGEngine; r = RAGEngine(); r.build_index()"
+
+# 小样本快速测试（每源 100 条，约几分钟）
+python -c "from tom_harness.tools import RAGEngine; r = RAGEngine(); r.build_index(num_samples=100); print(f'Done: {r.size()} docs')"
+```
+
+索引缓存在 `tom_harness/tools/tomrag/index/` —— 后续运行从磁盘秒加载。
+
+### 用法
+
+```bash
+python examples/run_tombench_harness.py --rag --limit 20
+python examples/run_cogtom_harness.py --rag --category "Belief" --limit 10
+```
+
+| 参数 | 默认值 | 说明 |
+|:---|:---|:---|
+| `--rag` | 关闭 | 启用 RAG 检索 |
+| `--rag_data_dir` | `tom_harness/tools/tomrag/data` | JSONL 知识语料目录 |
+| `--rag_index_dir` | `tom_harness/tools/tomrag/index` | FAISS 索引缓存目录 |
+| `--rag_model` | `model/bge-m3` | Embedding 模型路径或 HuggingFace 名称 |
+
+### 同时启用 Memory Playbook + RAG
+
+两者可以同时开启：
+
+```bash
+python examples/run_tombench_harness.py --memory --rag --limit 20 --tag memory_rag
+```
+
+---
+
+## LLM 交互缓存
+
+每次 LLM 调用（系统提示词、用户提示词、响应、耗时）都会记录到 JSONL 文件，用于调试和分析。缓存在**每个任务开始时重置**。
+
+缓存路径：`results/<tag>/llm_cache/llm_interactions.jsonl`
+
+每行包含：
+```json
+{
+  "seq": 1,
+  "timestamp": "2026-04-24T09:35:28+0800",
+  "model": "qwen3-32b",
+  "duration_ms": 9867,
+  "system": "You are the Planner...",
+  "user": "## Context\n...",
+  "response": "{\"task_type\": \"false_belief\", ...}"
+}
+```
+
+---
+
+## 输出结构
+
+每次运行在 `results/<tag>/` 下产出以下文件：
+
+```
+results/<tag>/
+├── results.jsonl              ← 逐样本记录（id、预测、正确与否、耗时等）
+├── stats.json                 ← 按任务/类别 + 总体准确率统计
+├── run.log                    ← 详细框架日志（按任务分组，不交叉）
+└── llm_cache/
+    └── llm_interactions.jsonl ← 原始 LLM 请求/响应缓存
+```
+
+所有输出文件在每次运行时**覆盖写入**（无断点续跑机制）。
+
+---
+
+## CLI 参考
+
+### `run_tombench_harness.py`
+
+| 参数 | 默认值 | 说明 |
+|:---|:---|:---|
+| `--data_dir` | `benchmark/ToMBench/` | ToMBench JSONL 目录 |
+| `--tasks` | 全部任务 | 逗号分隔的任务名 |
+| `--limit` | 20 | 每任务最大样本数（0 = 不限制） |
+| `--offset` | 0 | 每任务跳过前 N 个样本 |
+| `--workers` | 8 | 并行 worker 数 |
+| `--verbose` / `-v` | 关闭 | 在控制台显示详细框架日志 |
+| `--out_dir` | `results` | 输出根目录 |
+| `--tag` | `notools` | 运行标签（结果保存到 `<out_dir>/<tag>/`） |
+| `--memory` | 关闭 | 启用 Memory Playbook |
+| `--memory_dir` | `memory_playbook/` | Playbook 目录路径 |
+| `--rag` | 关闭 | 启用 RAG 检索 |
+| `--rag_data_dir` | `tom_harness/tools/tomrag/data` | RAG 数据目录 |
+| `--rag_index_dir` | `tom_harness/tools/tomrag/index` | RAG 索引目录 |
+| `--rag_model` | `model/bge-m3` | Embedding 模型 |
+
+### `run_cogtom_harness.py`
+
+与上面相同的参数，以下为不同之处：
+
+| 参数 | 默认值 | 说明 |
+|:---|:---|:---|
+| `--data_dir` | `benchmark/cogtom/` | CogToM 数据目录 |
+| `--category` | 全部类别 | 逗号分隔的类别名（替代 `--tasks`） |
+| `--limit` | 20 | 每类别最大样本数 |
+| `--offset` | 0 | 每类别跳过前 N 个样本 |
+| `--tag` | `cogtom` | 默认运行标签 |
 
 ---
 
@@ -201,207 +350,111 @@ print(result.answer, result.plan.task_type)
 
 ```
 tom_harness/
-├── README.md                            ← 英文版
-├── README_zh.md                         ← 当前文件
+├── README.md
+├── README_zh.md
 ├── requirements.txt
 ├── .env.example
 │
-├── tom_harness/                          ← 核心包
-│   ├── __init__.py
-│   ├── schemas.py                        ← 所有 Pydantic 数据模型
-│   ├── llm.py                            ← LLM 客户端
-│   ├── context.py                        ← ContextManager (三级上下文)
-│   ├── registry.py                       ← ToolRegistry (工具分发)
-│   ├── hooks.py                          ← 插件钩子系统
-│   ├── planner.py                        ← Planner Agent
-│   ├── executor.py                       ← Executor Agent (ReAct)
-│   ├── scheduler.py                      ← Scheduler (调度 + replan)
+├── benchmark/                           ← 数据加载器 & 数据集
+│   ├── load_tombench.py                 ← ToMBench JSONL 加载器
+│   ├── load_cogtom.py                   ← CogToM JSONL 加载器
+│   ├── ToMBench/                        ← ToMBench 数据（20 个任务 .jsonl 文件）
+│   └── cogtom/                          ← CogToM 数据
+│       ├── CogToM-en.jsonl              ← 英文版（8513 样本）
+│       └── CogToM-zh.jsonl              ← 中文版
+│
+├── memory_playbook/                     ← 静态 playbook 文件
+│   └── epoch_1_step_600_playbook.txt    ← ACE 精炼的策略
+│
+├── tom_harness/                         ← 核心包
+│   ├── schemas.py                       ← Pydantic 数据模型（Plan, Step, Phase, ExecutionTrace 等）
+│   ├── llm.py                           ← LLM 客户端 + 交互缓存 + JSON 解析
+│   ├── context.py                       ← ContextManager（三级上下文 + playbook 注入）
+│   ├── registry.py                      ← ToolRegistry（二维分发：tool_type + tool_name）
+│   ├── hooks.py                         ← 插件钩子系统（7 个扩展点）
+│   ├── planner.py                       ← Planner Agent（问题 → 结构化 Plan）
+│   ├── executor.py                      ← Executor Agent（ReAct 循环 + 终局合成）
+│   ├── scheduler.py                     ← Scheduler（编排 + replan + memory 持久化）
+│   ├── skill_router.py                  ← 基于 LLM 的技能路由（12 个硬编码技能）
 │   │
 │   ├── tools/
-│   │   ├── base.py                       ← Tool 抽象基类
-│   │   ├── memory.py                     ← MemoryStore (任务-计划对)
-│   │   ├── skills.py                     ← SkillLib (SKILL.md 加载器)
-│   │   └── rag.py                        ← RAGEngine (语料检索)
+│   │   ├── base.py                      ← Tool 抽象基类 + ToolResult 封装
+│   │   ├── memory.py                    ← MemoryStore（向量索引的任务-计划对）
+│   │   ├── playbook.py                  ← MemoryPlaybook（静态策略加载器）
+│   │   ├── skills.py                    ← SkillLib（声明式 + 过程式技能）
+│   │   ├── rag.py                       ← RAGEngine（FAISS 适配器）
+│   │   └── tomrag/                      ← ToMRAG 子包
+│   │       ├── rag.py                   ← LangChain + FAISS + bge-m3 embeddings
+│   │       ├── data/                    ← 知识语料（57.7 万条）
+│   │       └── index/                   ← FAISS 向量索引（运行时构建）
 │   │
-│   └── plugins/
-│       └── tom/                          ← ToM 专属插件 (可插拔)
-│           ├── install.py                ← 一键挂载
-│           ├── failure_handlers.py       ← 12 种 ToM 失败类型 → skill 映射
-│           ├── memory_index.py           ← ToM 元数据富化
-│           ├── validators.py             ← 一致性校验
-│           └── plan_templates/           ← 计划骨架 SKILL.md
-│               ├── false_belief.md
-│               ├── knowledge_gate.md
-│               └── aware_of_reader.md
+│   ├── plugins/
+│   │   ├── tom/                         ← ToM 专属插件
+│   │   │   ├── install.py               ← 一键安装器（ToM hooks + skills）
+│   │   │   ├── router.py                ← 基于签名的技能路由
+│   │   │   ├── validators.py            ← after_step 验证器（belief-order, knowledge-gate）
+│   │   │   ├── failure_handlers.py      ← 失败分类 → 注入恢复技能
+│   │   │   ├── memory_index.py          ← TaskSignature 提取 + memory 增强
+│   │   │   ├── story_model.py           ← 外化 ToM 状态（Event, Declaration, 查询）
+│   │   │   ├── plan_templates/          ← 3 个计划模板技能
+│   │   │   └── skills/                  ← 13 个推理技能 + 过程式处理器
+│   │   │       ├── handlers.py          ← Python 实现（quantifier, story_model 等）
+│   │   │       └── *.md                 ← SKILL.md 文件
+│   │   │
+│   │   └── external_skill_pack/         ← 外部贡献的技能包
+│   │       ├── adapter.py               ← SkillPackAdapter 抽象基类
+│   │       ├── set1_adapter.py          ← Set1 适配器（15 个 SKILL.md 技能）
+│   │       ├── set2_adapter.py          ← Set2 适配器（12 个 prompt-string 技能）
+│   │       ├── selective_router.py      ← 元路由器（基于正则，无需 LLM 调用）
+│   │       └── data/
+│   │           ├── skill_set1/          ← 15 个技能（faux-pas, belief, emotion 等）
+│   │           │   ├── ROUTING.md       ← 路由规则文档
+│   │           │   └── skill1..15/      ← 每个含 SKILL.md
+│   │           └── skill_set2/          ← 12 个技能
+│   │               ├── skills.py        ← SKILL_S1..S12 prompt 字符串
+│   │               └── llm_router.py    ← Set2 的 LLM 路由器
 │
 ├── examples/
-│   ├── run_demo.py                       ← 单题演示
-│   └── run_tombench_harness.py           ← 基准测试 runner
+│   ├── run_demo.py                      ← 单题演示（Sally-Anne）
+│   ├── run_tombench_harness.py          ← ToMBench 全 harness runner
+│   ├── run_selective_harness.py         ← thin harness（选择性路由）
+│   ├── run_cogtom_harness.py            ← CogToM 基准测试 runner
+│   ├── run_tombench_with_skills.py      ← ToMBench + LLM 技能路由
+│   ├── run_skills_direct.py             ← 直接调用技能（无 harness）
+│   ├── run_compare_skill_packs.py       ← 技能包对比 runner
+│   ├── run_self_consistency.py          ← 自一致性投票 runner
+│   ├── run_skill_matrix.py              ← 技能 × 任务矩阵评估
+│   ├── run_task_classifier_inferred.py  ← 任务类型分类器评估
+│   ├── run_tombench_v03.py              ← v0.3 基线 runner
+│   └── run_ablation.sh                  ← 消融实验脚本
 │
-└── tests/
+├── docs/                                ← 分析文档
+│   ├── 0428效果分析.md                  ← 消融实验发现
+│   └── ...
+│
+└── results/                             ← 输出（gitignored）
 ```
 
 ---
 
-## 设计原则（协作者请务必对齐）
+## 设计原则
 
-1. **内核是领域无关的**。`tom_harness/` 包（除 `plugins/tom/` 外）
-   不应出现"信念""情绪""失言"这类字眼。若你想往内核加 ToM 相关逻辑，
-   请改成**加一个 hook 点 + 把逻辑写进 plugin**。
-
-2. **Schema 字段名不动**。`schemas.py` 中的字段（`plan_id`、`phases`、
-   `steps`、`tool_type` 等）严格遵循项目原始规范，不得重命名。需要加
-   领域特化字段时，用各模型上统一提供的 `metadata: dict` 插槽
-   （`Plan`、`Phase`、`Step`、`Memory` 都有）。
-
-3. **每次规划阶段都必须查询 Memory Store**。这是规范里的强制要求，
-   哪怕 Memory 是冷启动的空库，也要走这次查询。
-
-4. **插件只通过 hook 挂载，不得直接改内核**。当前支持的 hook 事件：
-   `before_plan`、`after_plan`、`before_step`、`after_step`、
-   `on_step_failure`、`before_finalize`、`enrich_memory`。
-
-5. **不引入大型框架**。故意不依赖 LangChain、AutoGen、LangGraph、CrewAI
-   等。保证系统对科研级使用是可检视、可调试的。
-
----
-
-## 当前状态
-
-| | |
-|---|---|
-| 版本 | 0.1.0 |
-| 核心代码量 | ~2.4K 行 Python |
-| 无工具模式基线 | ToMBench 160 样本，**70.6%** (qwen3-32b) |
-| 已知限制 | Memory/Skill/RAG 尚未默认注册到 ToolRegistry；Planner 把过多题判为 `pragmatic_inference` |
-
-完整 v0.1 基准测试报告见 `REPORT_HARNESS_NOTOOLS.md`。
-
----
-
-## 如何参与贡献
-
-### 工作流（branch + PR）
-
-**禁止**直接推 `main`。`main` 已开启保护，所有变更必须通过 Pull Request
-且至少 1 个 approving review 后才能合并。
-
-```bash
-# 1. 同步本地 main
-git switch main
-git pull
-
-# 2. 开一个新分支（名字要能说明干什么）
-git switch -c feature/wire-memory-tool
-
-# 3. 改代码，commit 粒度小一点，message 写清楚
-git add <文件>
-git commit -m "Wire MemoryStore into ToolRegistry"
-
-# 4. 把 feature 分支推到 GitHub
-git push -u origin feature/wire-memory-tool
-
-# 5. 在 GitHub 网页上针对 main 开 Pull Request
-# 6. 根据 review 意见继续在同一分支 commit
-# 7. 审过后在 GitHub UI 点 squash-merge 或 rebase-merge
-```
-
-分支命名约定：
-- `feature/<短描述>` — 新功能
-- `fix/<短描述>`     — bug 修复
-- `exp/<短描述>`     — 研究实验（可能永不合并）
-- `docs/<短描述>`    — 纯文档改动
-
-### 如何加一个新工具
-
-1. 在 `tom_harness/tools/` 下新建文件，继承
-   `tom_harness.tools.base.Tool`。
-2. 实现 `tool_type`、`tool_name`、`description`、`validate_params`、
-   `run` 五个方法/属性。
-3. 在 `tools/__init__.py` 里导出。
-4. 在入口脚本里 `ToolRegistry.register(your_tool)` 即可。
-
-### 如何加一个新 skill
-
-在 `plugins/tom/plan_templates/`（或你自己的 plugin 目录）下放一个
-`SKILL.md` 文件，使用以下 frontmatter：
-
-```markdown
----
-name: my_skill
-skill_id: S12_my_skill
-description: 一行描述本 skill 的作用。
-triggers:
-  - "触发本 skill 的特征短语"
----
-
-## Workflow
-1. ...
-2. ...
-
-## Output shape
-...
-```
-
-然后 `SkillLib(skills_dir=Path(".../plan_templates"))` 自动加载，
-或运行时 `skill_lib.load_dir(path)`。
-
-若是过程性 skill（确定性 Python 而非 LLM 引导），加载后调用
-`skill_lib.register_handler(skill_id, handler_fn, ...)`。
-
-### 如何注册插件 hook
-
-插件通过向命名事件挂回调来接入：
-
-```python
-from tom_harness.hooks import HookRegistry, RecoveryDirective
-
-def my_failure_handler(step, trace, context):
-    # 检查后返回 RecoveryDirective 或 None
-    return RecoveryDirective(action="replan", failure_type="my_ftype")
-
-hooks = HookRegistry()
-hooks.register("on_step_failure", my_failure_handler)
-```
-
-当前内核会触发的事件（最新版以 `hooks.py` 为准）：
-- `before_plan(question=..., task_type=...)`
-- `after_plan(plan=...)` → 可返回修改后的 Plan
-- `before_step(step=..., context=...)`
-- `after_step(step=..., trace=..., context=...)`
-- `on_step_failure(step=..., trace=..., context=...)` → RecoveryDirective
-- `before_finalize(accumulated_results=...)`
-- `enrich_memory(memory=...)` → 可返回修改后的 Memory
-
----
-
-## 路线图
-
-- [ ] **v0.2** —— 把 `MemoryStore` + `SkillLib` 默认注册进 `ToolRegistry`；
-      在 `run_tombench_harness.py` 里安装 ToM plugin。
-- [ ] **v0.3** —— 让 `RAGEngine` 带上社会规范知识语料
-      （失言模式、语用规约）。
-- [ ] **v0.4** —— 按 task_type 的专属 plan template（Scalar / Persuasion
-      有自己的形状），替代当前 `pragmatic_inference` 的过度分类。
-- [ ] **v0.5** —— 同一 harness 切换 adapter 跑 CogToM 和 ToMATO。
-- [ ] **v1.0** —— Meta-Harness 风格的外循环，在 benchmark 分上自动优化
-      harness 本身。
+1. **内核是领域无关的。** `tom_harness/`（`plugins/tom/` 除外）不出现信念、情绪、失言等字眼。
+2. **Schema 字段稳定。** `schemas.py` 中的字段遵循项目原始规范。扩展请用 `metadata: dict`。
+3. **每次规划都必须查询 Memory Store**（强制 warm-start，即使为空）。
+4. **插件通过 hook 挂载，不直接改内核。**
+5. **不引入大型框架。** 内核不依赖 LangChain/AutoGen/LangGraph。
 
 ---
 
 ## 许可
 
-研究代码 —— 见 `LICENSE`（待加）。默认：团队商定开源协议之前保留所有权利。
+研究代码 —— 见 `LICENSE`（待加）。
 
 ---
 
 ## 参考文献
 
-架构借鉴自：
-
 - [XSkill](https://arxiv.org/abs/2603.12056) —— 经验+技能双流持续学习。
 - [Externalization in LLM Agents](https://arxiv.org/abs/2604.08224) —— Harness 工程综述。
-- [Natural-Language Agent Harnesses](https://arxiv.org/abs/2603.25723) —— Harness 作为可编辑的自然语言 artifact。
-
-完整 harness 领域综述（内部文档）：
-`../survey_1/symbolictom_repro/REPORT_HARNESS_SURVEY.md`
+- [Natural-Language Agent Harnesses](https://arxiv.org/abs/2603.25723) —— Harness 作为自然语言 artifact。

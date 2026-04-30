@@ -1,61 +1,57 @@
-"""RAG Engine.
+"""RAG Engine — adapter wrapping ToMRAG (FAISS + bge-m3).
 
-Generic retrieval over a corpus of text snippets. In the harness spec this
-is used for social-norm knowledge, but the engine itself is domain-agnostic:
-hand it any JSONL corpus with `{id, text, metadata}` records and it will
-index them with the same embedder interface the MemoryStore uses.
+Provides the standard ``Tool`` interface so the rest of the harness
+(Registry, Planner, Executor) interacts with RAG through the same
+dispatch path as Memory and Skill.
 
-Design: identical embedder contract to MemoryStore so both can share a
-production-grade embedder once one is plugged in.
+When *data_dir* is ``None`` or the directory does not exist the engine
+operates in **empty mode**: every search returns zero results.  This
+preserves backward compatibility for no-tools / cold-start runs.
 """
 
 from __future__ import annotations
 
-import json
-import math
-from collections import Counter
+import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from ..schemas import ToolType
 from .base import Tool
 
+logger = logging.getLogger(__name__)
 
-def _trigram_embed(text: str, dim: int = 256) -> list[float]:
-    text = text.lower()
-    grams = [text[i:i + 3] for i in range(max(0, len(text) - 2))]
-    buckets: Counter[int] = Counter()
-    for g in grams:
-        buckets[hash(g) % dim] += 1
-    vec = [float(buckets.get(i, 0)) for i in range(dim)]
-    norm = math.sqrt(sum(x * x for x in vec)) or 1.0
-    return [x / norm for x in vec]
-
-
-def _cosine(a: list[float], b: list[float]) -> float:
-    return sum(x * y for x, y in zip(a, b))
-
-
-@dataclass
-class RAGDocument:
-    doc_id: str
-    text: str
-    metadata: dict[str, Any] = field(default_factory=dict)
+_TOMRAG_DATA_DIR = str(Path(__file__).resolve().parent / "tomrag" / "data")
+_TOMRAG_INDEX_DIR = str(Path(__file__).resolve().parent / "tomrag" / "index")
 
 
 @dataclass
 class RAGEngine(Tool):
-    """Minimal retrieval engine with pluggable embedder."""
+    """FAISS-backed retrieval over social-norm knowledge bases.
 
-    corpus_path: Path | None = None
-    embedder: Callable[[str], list[float]] = field(default=_trigram_embed)
-    _docs: dict[str, RAGDocument] = field(default_factory=dict, init=False)
-    _embeddings: dict[str, list[float]] = field(default_factory=dict, init=False)
+    Wraps :class:`tom_harness.tools.tomrag.ToMRAG` behind the harness
+    ``Tool`` interface.  Call :meth:`build_index` once (idempotent) before
+    running searches; subsequent calls load the cached FAISS index from
+    disk in seconds.
 
-    def __post_init__(self) -> None:
-        if self.corpus_path and self.corpus_path.exists():
-            self.load_corpus(self.corpus_path)
+    Parameters
+    ----------
+    data_dir:
+        Directory containing ``{atomic,social_chem,normbank}.jsonl``.
+        Defaults to ``tom_harness/tools/tomrag/data/``.
+    index_dir:
+        Directory for persisted FAISS indices (auto-created).
+        Defaults to ``tom_harness/tools/tomrag/index/``.
+    model_name:
+        Path or HuggingFace name of the embedding model (default bge-m3).
+    """
+
+    data_dir: str | None = _TOMRAG_DATA_DIR
+    index_dir: str | None = _TOMRAG_INDEX_DIR
+    model_name: str = "model/bge-m3"
+
+    _backend: Any = field(default=None, init=False, repr=False)
+    _ready: bool = field(default=False, init=False, repr=False)
 
     # ── Tool interface ─────────────────────────────────────────────────────
     @property
@@ -68,12 +64,15 @@ class RAGEngine(Tool):
 
     @property
     def description(self) -> str:
-        return "Retrieve top_k passages from the knowledge corpus. Params: query:str, top_k:int=5, domain_filter:list[str]|None"
+        return (
+            "Retrieve top_k passages of social-norm / commonsense knowledge. "
+            "Params: query:str, top_k:int=5, source_filter:list[str]|None"
+        )
 
     def validate_params(self, params: dict[str, Any]) -> dict[str, Any]:
         out = dict(params)
         out.setdefault("top_k", 5)
-        out.setdefault("domain_filter", None)
+        out.setdefault("source_filter", None)
         if "query" not in out:
             raise ValueError("rag_retrieve requires `query`")
         return out
@@ -83,44 +82,90 @@ class RAGEngine(Tool):
         *,
         query: str,
         top_k: int = 5,
-        domain_filter: list[str] | None = None,
+        source_filter: list[str] | None = None,
+        **_kwargs: Any,
     ) -> dict[str, Any]:
-        q_emb = self.embedder(query)
-        scored: list[tuple[float, RAGDocument]] = []
-        for did, doc in self._docs.items():
-            if domain_filter:
-                if doc.metadata.get("domain") not in domain_filter:
-                    continue
-            score = _cosine(q_emb, self._embeddings[did])
-            scored.append((score, doc))
-        scored.sort(key=lambda x: x[0], reverse=True)
-        top = scored[:top_k]
+        """Search the knowledge corpus and return ranked passages."""
+        if not self._ready:
+            return {"passages": []}
+
+        results = self._backend.search(
+            query=query,
+            top_k=top_k,
+            source_filter=source_filter,
+        )
         return {
             "passages": [
-                {"doc_id": d.doc_id, "text": d.text, "score": float(s), "metadata": d.metadata}
-                for s, d in top
+                {
+                    "doc_id": r["id"],
+                    "text": r["content"],
+                    "source": r["source"],
+                    "category": r["category"],
+                    "title": r["title"],
+                    "metadata": r.get("metadata", {}),
+                }
+                for r in results
             ]
         }
 
-    # ── corpus management ─────────────────────────────────────────────────
-    def load_corpus(self, path: Path) -> None:
-        with open(path, encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
-                rec = json.loads(line)
-                doc = RAGDocument(
-                    doc_id=rec["id"],
-                    text=rec["text"],
-                    metadata=rec.get("metadata", {}),
-                )
-                self._docs[doc.doc_id] = doc
-                self._embeddings[doc.doc_id] = self.embedder(doc.text)
+    # ── lifecycle ──────────────────────────────────────────────────────────
+    def build_index(
+        self,
+        *,
+        force_rebuild: bool = False,
+        num_samples: int = -1,
+    ) -> None:
+        """Build (or load cached) FAISS indices for all knowledge sources.
 
-    def add_document(self, doc: RAGDocument) -> None:
-        self._docs[doc.doc_id] = doc
-        self._embeddings[doc.doc_id] = self.embedder(doc.text)
+        Must be called once before :meth:`run`. Subsequent calls are
+        near-instant when indices already exist on disk.
+        """
+        if self.data_dir is None:
+            logger.info("[RAG] No data_dir configured — running in empty mode")
+            return
+
+        data_path = Path(self.data_dir)
+        if not data_path.exists():
+            logger.warning("[RAG] data_dir %s does not exist — running in empty mode", data_path)
+            return
+
+        index_dir = self.index_dir or str(data_path.parent / "index")
+
+        from .tomrag import ToMRAG
+
+        logger.info("[RAG] Initializing ToMRAG (model=%s, data=%s, index=%s)",
+                     self.model_name, self.data_dir, index_dir)
+        self._backend = ToMRAG(
+            data_dir=str(data_path),
+            index_dir=index_dir,
+            model_name=self.model_name,
+        )
+        self._backend.build_index(force_rebuild=force_rebuild, num_samples=num_samples)
+        self._ready = True
+
+        total = sum(store.index.ntotal for store in self._backend.stores.values())
+        logger.info("[RAG] Index ready — %d documents across %d sources",
+                     total, len(self._backend.stores))
+
+    def format_context(self, results: list[dict], max_length: int = 2000) -> str:
+        """Format search results as a text block for prompt injection."""
+        if not self._ready:
+            return ""
+        search_results = [
+            {
+                "content": r.get("text", r.get("content", "")),
+                "source": r.get("source", ""),
+                "category": r.get("category", ""),
+                "title": r.get("title", ""),
+                "id": r.get("doc_id", r.get("id", "")),
+                "metadata": r.get("metadata", {}),
+            }
+            for r in results
+        ]
+        return self._backend.format_context(search_results, max_length=max_length)
 
     def size(self) -> int:
-        return len(self._docs)
+        """Total number of indexed documents across all sources."""
+        if not self._ready:
+            return 0
+        return sum(store.index.ntotal for store in self._backend.stores.values())

@@ -10,6 +10,7 @@ dist/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.claude/
 
 # Virtual environments
 venv/
@@ -30,10 +31,24 @@ Thumbs.db
 
 # Run artifacts — do NOT commit
 results/
+*.jsonl
 logs/
 *.jsonl.tmp
+docs/
+model/
+skills/
+skill_v2/
+tom_harness/tools/tomrag/index
+*.faiss
+*.pkl
 
 # Local secrets — NEVER commit
 secrets.yaml
 *.pem
 *.key
+
+# Benchmark / experiment artifacts (regenerable; not source)
+results/
+results_*/
+!results/frozen_v04_selective/
+!results/frozen_v04_selective/**
