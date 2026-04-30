@@ -20,10 +20,12 @@ from .base import Validator, ValidationResult
 from .scalar_procedural import ScalarProceduralValidator
 from .cross_skill import CrossSkillValidator, DEFAULT_SIBLINGS
 from .fb_state import FBStateBackedValidator
+from .critic_retry import LLMCriticValidator
 
 __all__ = [
     "Validator", "ValidationResult",
     "ScalarProceduralValidator",
     "CrossSkillValidator", "DEFAULT_SIBLINGS",
     "FBStateBackedValidator",
+    "LLMCriticValidator",
 ]

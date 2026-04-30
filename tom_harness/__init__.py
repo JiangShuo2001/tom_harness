@@ -29,6 +29,7 @@ from .routing import Router, RouteDecision, OraclePicksRouter
 from .validators import (
     Validator, ValidationResult,
     ScalarProceduralValidator, CrossSkillValidator, FBStateBackedValidator,
+    LLMCriticValidator,
 )
 
 # ── Legacy (Plan/Execute) — kept for back-compat, not recommended for ToMBench
@@ -48,6 +49,7 @@ __all__ = [
     "Router", "RouteDecision", "OraclePicksRouter",
     "Validator", "ValidationResult",
     "ScalarProceduralValidator", "CrossSkillValidator", "FBStateBackedValidator",
+    "LLMCriticValidator",
     # legacy
     "Plan", "Phase", "Step", "ToolCall", "ToolType",
     "ExecutionTrace", "Memory", "ExecutionContext", "FinalResult",
