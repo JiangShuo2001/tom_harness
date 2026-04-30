@@ -203,11 +203,26 @@ def build_default_runtime(
     llm: LLMClient,
     skill_lib: SkillLib,
     router: Router,
-    enable_scalar_validator: bool = True,
+    enable_scalar_validator: bool = False,    # disabled: 3/200 fires, net -1pp on full Scalar (2026-04-29 A/B)
+    enable_cross_skill_validator: bool = True,
+    enable_fb_state_validator: bool = False,  # disabled: 0 fires on full FB (regex pattern doesn't match real ToMBench FB)
 ) -> HarnessRuntime:
-    """Convenience factory: wires the default validator stack."""
+    """Convenience factory: wires the default validator stack.
+
+    Validator order matters. Cheaper (no-LLM) validators run first so
+    that downstream LLM-callers see already-corrected answers:
+        1. ScalarProceduralValidator   (no LLM, procedural arithmetic)
+        2. FBStateBackedValidator      (no LLM, regex-based story facts)
+        3. CrossSkillValidator         (multiple LLM calls; runs last)
+    """
     validators: list[Validator] = []
     if enable_scalar_validator:
         from .validators.scalar_procedural import ScalarProceduralValidator
         validators.append(ScalarProceduralValidator())
+    if enable_fb_state_validator:
+        from .validators.fb_state import FBStateBackedValidator
+        validators.append(FBStateBackedValidator())
+    if enable_cross_skill_validator:
+        from .validators.cross_skill import CrossSkillValidator
+        validators.append(CrossSkillValidator(llm=llm, skill_lib=skill_lib))
     return HarnessRuntime(llm=llm, skill_lib=skill_lib, router=router, validators=validators)

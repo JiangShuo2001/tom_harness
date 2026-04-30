@@ -26,7 +26,10 @@ If you are starting fresh, import from the canonical path:
 from .llm import LLMClient
 from .runtime import HarnessRuntime, RuntimeResult, build_default_runtime
 from .routing import Router, RouteDecision, OraclePicksRouter
-from .validators import Validator, ValidationResult, ScalarProceduralValidator
+from .validators import (
+    Validator, ValidationResult,
+    ScalarProceduralValidator, CrossSkillValidator, FBStateBackedValidator,
+)
 
 # ── Legacy (Plan/Execute) — kept for back-compat, not recommended for ToMBench
 from .schemas import (
@@ -43,7 +46,8 @@ __all__ = [
     # canonical
     "LLMClient", "HarnessRuntime", "RuntimeResult", "build_default_runtime",
     "Router", "RouteDecision", "OraclePicksRouter",
-    "Validator", "ValidationResult", "ScalarProceduralValidator",
+    "Validator", "ValidationResult",
+    "ScalarProceduralValidator", "CrossSkillValidator", "FBStateBackedValidator",
     # legacy
     "Plan", "Phase", "Step", "ToolCall", "ToolType",
     "ExecutionTrace", "Memory", "ExecutionContext", "FinalResult",
