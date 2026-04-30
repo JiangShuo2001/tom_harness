@@ -54,14 +54,23 @@ class Set2Adapter(SkillPackAdapter):
         # Both files import each other (`from skills import SKILLS`); we must
         # ensure the directory is importable as the canonical name.
         sys.path.insert(0, str(self.pack_root))
+        _MISSING = object()
+        prev_skills = sys.modules.get("skills", _MISSING)
         # Import order matters: skills first (router imports skills)
         try:
             self._skills_module = _sandbox_import("set2_skills", self.pack_root / "skills.py")
             sys.modules["skills"] = self._skills_module    # router does `from skills import SKILLS`
             self._router_module = _sandbox_import("set2_router", self.pack_root / "llm_router.py")
         finally:
-            try: sys.path.remove(str(self.pack_root))
-            except ValueError: pass
+            # Restore the previous "skills" entry (or remove it if absent before).
+            if prev_skills is _MISSING:
+                sys.modules.pop("skills", None)
+            else:
+                sys.modules["skills"] = prev_skills
+            try:
+                sys.path.remove(str(self.pack_root))
+            except ValueError:
+                pass
 
     # ─── load skills into our SkillLib ─────────────────────────────────
     def load_into(self, skill_lib: SkillLib) -> int:
