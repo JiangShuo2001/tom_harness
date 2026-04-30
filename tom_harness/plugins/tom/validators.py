@@ -29,11 +29,12 @@ def after_step(step: Step, trace: ExecutionTrace, context: ExecutionContext) -> 
     desc = (step.description or "").lower()
 
     # Rule 1: second-order belief steps should cite first-order state
-    if "second" in desc or "2nd" in desc or "二阶" in desc:
+    if "second" in desc or "2nd" in desc or "���阶" in desc:
         accumulated = context.global_context.accumulated_results
         has_first_order = any(
             isinstance(v, (str, dict)) and _belief_mentioned(v)
-            for v in accumulated.values()
+            for phase_dict in accumulated.values()
+            for v in (phase_dict.values() if isinstance(phase_dict, dict) else [phase_dict])
         )
         if not has_first_order:
             logger.info(
@@ -44,8 +45,11 @@ def after_step(step: Step, trace: ExecutionTrace, context: ExecutionContext) -> 
     # Rule 2: knowledge-gate steps should cite a prior knowledge-tracking step
     if "knowledge gate" in desc or "知识门" in desc:
         accumulated = context.global_context.accumulated_results
-        has_knowledge_map = any("knows" in str(v).lower() or "knowledge" in k.lower()
-                                for k, v in accumulated.items())
+        has_knowledge_map = any(
+            "knows" in str(v).lower() or "knowledge" in k.lower()
+            for phase_dict in accumulated.values()
+            for k, v in (phase_dict.items() if isinstance(phase_dict, dict) else [])
+        )
         if not has_knowledge_map:
             logger.info(
                 f"[ToM validator] step {step.step_id[:8]}: knowledge-gate without "

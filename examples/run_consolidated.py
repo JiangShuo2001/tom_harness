@@ -22,7 +22,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-sys.path.insert(0, "/home/coder/survey_1/symbolictom_repro")
+_ext_repo = os.environ.get("SYMBOLICTOM_REPRO_PATH", str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, _ext_repo)
 
 from benchmark_adapters import load_tombench  # type: ignore  # noqa: E402
 
@@ -62,9 +63,11 @@ def build_runtime(api_base: str, api_key: str, model: str,
         api_base=api_base, api_key=api_key, model=model,
         temperature=0.0, max_tokens=1024, timeout=180.0, max_retries=3,
     )
+    _repo_root = Path(__file__).resolve().parent.parent
+    _skill_root = Path(os.environ.get("SKILL_PACK_ROOT", str(_repo_root / "tom_harness/plugins/external_skill_pack/data")))
     skill_lib = SkillLib()
-    Set1Adapter(pack_root=Path("/workspace/symbolictom_report/skill_set1")).load_into(skill_lib)
-    Set2Adapter(pack_root=Path("/workspace/symbolictom_report/skill_set2/skill_v2"),
+    Set1Adapter(pack_root=_skill_root / "skill_set1").load_into(skill_lib)
+    Set2Adapter(pack_root=_skill_root / "skill_set2",
                 routing_mode="signature").load_into(skill_lib)
     logger.info(f"loaded {len(skill_lib.list_skills())} skills into SkillLib")
 

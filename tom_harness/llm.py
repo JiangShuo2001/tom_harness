@@ -53,11 +53,12 @@ class LLMClient:
         self.reset_cache()
 
     def reset_cache(self) -> None:
-        self._call_seq = 0
-        if self.cache_dir:
-            cache_file = Path(self.cache_dir) / "llm_interactions.jsonl"
-            if cache_file.exists():
-                cache_file.unlink()
+        with self._log_lock:
+            self._call_seq = 0
+            if self.cache_dir:
+                cache_file = Path(self.cache_dir) / "llm_interactions.jsonl"
+                if cache_file.exists():
+                    cache_file.unlink()
 
     def _log_interaction(self, system: str, user: str, response: str, duration_ms: int) -> None:
         if not self.cache_dir:

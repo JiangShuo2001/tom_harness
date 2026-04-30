@@ -20,7 +20,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-sys.path.insert(0, "/home/coder/survey_1/symbolictom_repro")
+_ext_repo = os.environ.get("SYMBOLICTOM_REPRO_PATH", str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, _ext_repo)
 
 from benchmark_adapters import load_tombench  # type: ignore  # noqa: E402
 from tom_harness import LLMClient  # noqa: E402

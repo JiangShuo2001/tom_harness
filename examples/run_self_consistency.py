@@ -16,7 +16,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-sys.path.insert(0, "/home/coder/survey_1/symbolictom_repro")
+_ext_repo = os.environ.get("SYMBOLICTOM_REPRO_PATH", str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, _ext_repo)
 
 from benchmark_adapters import load_tombench  # type: ignore  # noqa: E402
 from tom_harness import LLMClient  # noqa: E402
@@ -73,11 +74,15 @@ def parse_letter(text: str) -> str:
 
 
 def load_set1_skill(name: str) -> str:
-    return Path(f"/workspace/symbolictom_report/skill_set1/{name}/SKILL.md").read_text(encoding="utf-8")
+    _skill_root = Path(os.environ.get("SKILL_PACK_ROOT",
+                       str(Path(__file__).resolve().parent.parent / "tom_harness/plugins/external_skill_pack/data")))
+    return (_skill_root / "skill_set1" / name / "SKILL.md").read_text(encoding="utf-8")
 
 
 def load_set2_skill(key: str) -> str:
-    skills_path = "/workspace/symbolictom_report/skill_set2/skill_v2/skills.py"
+    _skill_root = Path(os.environ.get("SKILL_PACK_ROOT",
+                       str(Path(__file__).resolve().parent.parent / "tom_harness/plugins/external_skill_pack/data")))
+    skills_path = str(_skill_root / "skill_set2" / "skills.py")
     spec = importlib.util.spec_from_file_location("set2_skills_module", skills_path)
     mod = importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)  # type: ignore
     return mod.SKILLS[key]
