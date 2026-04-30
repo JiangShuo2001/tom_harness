@@ -68,9 +68,10 @@ def _route_set1(question: str, story: str, options: dict[str, str] | None) -> Ro
         return RoutingResult(skill_id="cs1_skill10", confidence=0.85, rationale="E: scalar prior")
 
     # Family C — Social cue ────────────────────────────────────────────────
-    if _has_any(q, ["why did .+ smile", "why did .+ wink", "why did .+ glance", "为什么.*笑", "为什么.*眨眼"]):
+    if _has_re(q, r"why did \w+ smile") or _has_re(q, r"why did \w+ wink") or \
+       _has_re(q, r"why did \w+ glance") or _has_any(q, ["为什么.*笑", "为什么.*眨眼"]):
         return RoutingResult(skill_id="cs1_skill7", confidence=0.7, rationale="C: cue intention")
-    if _has_any(q, ["really mean", "what does .* mean", "imply", "really want", "真正想", "言外之意", "暗示"]):
+    if _has_re(q, r"what does .* mean") or _has_any(q, ["really mean", "imply", "really want", "真正想", "言外之意", "暗示"]):
         return RoutingResult(skill_id="cs1_skill12", confidence=0.7, rationale="C: indirect speech")
     if _has_any(q, ["what does the observer", "after seeing", "look", "react", "感受", "觉得"]) and \
        _has_any(s, ["smile", "wink", "glance", "nod", "微笑", "眨眼", "点头"]):
@@ -81,13 +82,14 @@ def _route_set1(question: str, story: str, options: dict[str, str] | None) -> Ro
         return RoutingResult(skill_id="cs1_skill13", confidence=0.85, rationale="F: persuasion")
 
     # Family G — Truth/motive ─────────────────────────────────────────────
-    if _has_any(q, ["is .+ true", "is what .+ said true", "yes or no", "属实", "是真的吗"]):
+    if _has_re(q, r"is \w+ true") or _has_any(q, ["is what", "said true", "yes or no", "属实", "是真的吗"]):
         return RoutingResult(skill_id="cs1_skill14", confidence=0.8, rationale="G: truth judgement")
     if _has_re(q, r"why does .+ say") or _has_any(q, ["为什么.*说", "为什么.*会说"]):
         return RoutingResult(skill_id="cs1_skill15", confidence=0.8, rationale="G: motive explanation")
 
     # Family D — Emotion ───────────────────────────────────────────────────
-    if _has_any(q, ["why does .+ feel", "why .+ surprising", "为什么.*感到", "为什么.*惊讶"]):
+    if _has_re(q, r"why does \w+ feel") or _has_re(q, r"why .+ surprising") or \
+       _has_any(q, ["为什么.*感到", "为什么.*惊讶"]):
         return RoutingResult(skill_id="cs1_skill9", confidence=0.7, rationale="D: emotion explanation")
     if _has_any(q, ["feel", "mood", "emotion", "情绪", "感受", "心情"]):
         return RoutingResult(skill_id="cs1_skill8", confidence=0.7, rationale="D: emotion attribution")

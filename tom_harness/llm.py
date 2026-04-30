@@ -17,6 +17,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import threading
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -44,6 +45,7 @@ class LLMClient:
     max_retries: int = 3
     cache_dir: str | None = None
     _call_seq: int = field(default=0, init=False, repr=False)
+    _log_lock: threading.Lock = field(default_factory=threading.Lock, init=False, repr=False)
 
     def set_cache_dir(self, path: str) -> None:
         self.cache_dir = path
@@ -60,19 +62,20 @@ class LLMClient:
     def _log_interaction(self, system: str, user: str, response: str, duration_ms: int) -> None:
         if not self.cache_dir:
             return
-        self._call_seq += 1
-        record = {
-            "seq": self._call_seq,
-            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
-            "model": self.model,
-            "duration_ms": duration_ms,
-            "system": system,
-            "user": user,
-            "response": response,
-        }
-        cache_file = Path(self.cache_dir) / "llm_interactions.jsonl"
-        with open(cache_file, "a", encoding="utf-8") as f:
-            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+        with self._log_lock:
+            self._call_seq += 1
+            record = {
+                "seq": self._call_seq,
+                "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                "model": self.model,
+                "duration_ms": duration_ms,
+                "system": system,
+                "user": user,
+                "response": response,
+            }
+            cache_file = Path(self.cache_dir) / "llm_interactions.jsonl"
+            with open(cache_file, "a", encoding="utf-8") as f:
+                f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
     def _headers(self) -> dict[str, str]:
         return {

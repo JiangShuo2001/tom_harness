@@ -162,17 +162,18 @@ class Executor:
         """
         valid = set(options.keys())
         votes: list[str] = []
-        # IMPORTANT: scan only the *direct* values of accumulated_results;
-        # do NOT recurse into nested dicts. Earlier we recursed and could
-        # accidentally pick up `recommendation`/`answer_letter` strings
-        # from retrieved Memory.plan trees, producing false votes.
-        for v in accumulated.values():
-            if not isinstance(v, dict):
+        # accumulated_results is dict[phase_name, dict[step_key, value]].
+        # Scan step-level values for skill recommendations.
+        for phase_dict in accumulated.values():
+            if not isinstance(phase_dict, dict):
                 continue
-            for key in ("answer_letter", "recommendation"):
-                val = v.get(key)
-                if isinstance(val, str) and val.upper() in valid:
-                    votes.append(val.upper())
+            for step_val in phase_dict.values():
+                if not isinstance(step_val, dict):
+                    continue
+                for key in ("answer_letter", "recommendation"):
+                    val = step_val.get(key)
+                    if isinstance(val, str) and val.upper() in valid:
+                        votes.append(val.upper())
         return votes
 
     # ── internals ──────────────────────────────────────────────────────────

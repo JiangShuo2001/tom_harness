@@ -102,6 +102,8 @@ class ToMRAG:
             # Check if index exists
             if index_path.exists() and not force_rebuild:
                 print(f"Loading existing index for {source} from {index_path}")
+                # allow_dangerous_deserialization is required by FAISS.load_local;
+                # index_dir is trusted (locally built or checked-in).
                 self.stores[source] = FAISS.load_local(
                     str(index_path),
                     self.embeddings,
