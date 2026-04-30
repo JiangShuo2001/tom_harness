@@ -1,0 +1,27 @@
+
+=== ToMBench | 15 cases ===
+
+[ToMBench/router] 15 cases (15 pending) with gpt-5.4-mini ...
+  [   15/15] route tombench_14 → S1_FauxPas
+
+[ToMBench/gpt-5.4-mini] 15 cases (15 pending) ...
+  [   15/15] ans tombench_11 S1_FauxPas         → B (gold=B) OK
+
+[ToMBench/glm-5] 15 cases (15 pending) ...
+  [   15/15] ans tombench_5 S2_Scalar          → A (gold=D) -
+Saved /apdcephfs_cq8/share_1324356/yanxiaolei/yan/Opencrawl/papers/skill_v2/data/results/full_eval/ToMBench__full.md
+
+=== CogToM | 15 cases ===
+
+[CogToM/router] 15 cases (15 pending) with gpt-5.4-mini ...
+  [   15/15] route cogtom_5364 → S3_BeliefLedger
+
+[CogToM/gpt-5.4-mini] 15 cases (15 pending) ...
+  [   15/15] ans cogtom_5388 S3_BeliefLedger    → C (gold=B) -
+
+[CogToM/glm-5] 15 cases (15 pending) ...
+  [   15/15] ans cogtom_5469 S5_Expectation     → B (gold=A) -
+Saved /apdcephfs_cq8/share_1324356/yanxiaolei/yan/Opencrawl/papers/skill_v2/data/results/full_eval/CogToM__full.md
+Saved /apdcephfs_cq8/share_1324356/yanxiaolei/yan/Opencrawl/papers/skill_v2/data/results/full_eval/HEADLINE.md
+
+Done in 578.4s.

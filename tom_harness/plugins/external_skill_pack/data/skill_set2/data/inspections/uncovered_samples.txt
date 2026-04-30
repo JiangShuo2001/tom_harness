@@ -1,0 +1,509 @@
+================================================================================
+## task_type: Discrepant desires    (2 sampled)
+================================================================================
+
+--- case 1: tombench_437 ---
+ability    : Desire: Discrepant desires
+story      : Xiao Li is a ten-year-old girl, she recently sees a beautiful doll in the store, it is the toy she dreams of. Her eyes sparkle when she sees this doll, she really wants to have it. On the other hand, her father, Mr. Zhang, is an ordinary worker, his income is limited, just enough to maintain their basic life. Although Mr. Zhang tries every way to satisfy his daughter's wish, he currently cannot afford the cost of this doll. Xiao Li does not know the family's financial situation, she just simply looks forward to having this doll.
+question   : How does Mr. Zhang most likely respond to Xiao Li's desire for the doll?
+options    :
+  A. Promises that he buys it when Xiao Li gets good grades in the future, to comfort Xiao Li's current disappointment
+  B. Tells Xiao Li that they can hardly afford food at home, he cannot afford this toy at the moment, talk about it later
+  C. Buys a similar but cheaper toy as a substitute
+  D. Tells Xiao Li that there are more important things in life than toys
+gold       : C
+GPT pred   : A
+GLM pred   : A
+
+--- case 2: tombench_729 ---
+ability    : Desire: Discrepant desires
+story      : Li Hua is a person who is passionate about outdoor adventures, and he goes hiking or camping every weekend. He always seeks fresh and exciting experiences. Wang Fang, a quiet librarian, spends her weekends in a quiet library, reading and organizing books. She likes a calm and orderly environment. This weekend, Li Hua invites Wang Fang to go out for the weekend.
+question   : Where does Li Hua plan to spend the weekend with Wang Fang?
+options    :
+  A. Hiking
+  B. Library
+  C. Sports Park
+  D. Skiing
+gold       : B
+GPT pred   : A
+GLM pred   : A
+
+================================================================================
+## task_type: Knowledge-attention links    (2 sampled)
+================================================================================
+
+--- case 1: tombench_50 ---
+ability    : Knowledge: Knowledge-attention links
+story      : On a winter vacation night, Zhang Lei, Wang Li, and Xiao Gang play toys together at home. They first play with the first novel toy - a transforming robot, then they play with the second novel toy - colorful balloons. At this time, Zhang Lei says, "I go to adjust the room's air conditioning temperature", gets up and walks towards the air conditioner, and watches them continue to play. Wang Li says, "Oh, he is there, it doesn't matter, but he still watches us, so we continue to play." Wang Li and Xiao Gang play with the third novel toy - an electric airplane. After playing, they put all three toys in a plate on the table. At this time, Zhang Lei comes back for a while, looks at the three toys in the tray, and excitedly says, "Oh, look! Look at that toy!", "Xiao Gang, can you pass it to me?"
+question   : What does Xiao Gang most likely do?
+options    :
+  A. Xiao Gang picks out the transforming robot and gives it to Zhang Lei
+  B. Gang randomly picks a toy from the three toys and gives it to Zhang Lei
+  C. Xiao Gang picks out the electric airplane and gives it to Zhang Lei
+  D. Xiao Gang picks out the colorful balloon and gives it to Zhang Lei
+gold       : B
+GPT pred   : A
+GLM pred   : C
+
+--- case 2: tombench_98 ---
+ability    : Knowledge: Knowledge-attention links
+story      : On a weekend, Liu Meng, Li Qiang, and Xiao Yu play together in the bedroom. Li Qiang takes out a new toy--a square vase, with a heart-shaped sticker on the bottom of the vase. Everyone admires the vase in the room, appreciating the design of the vase. During this process, one side of the vase base faces each person, but no one pays special attention to the sticker. Then Liu Meng says "I go to close the room door", gets up and walks to the door. Li Qiang puts the vase on the table, Xiao Fang can see but cannot touch the sticker. After Liu Meng closes the door and turns around, she just sees the heart-shaped sticker on the bottom of the vase, she stares at the sticker and excitedly shouts: "Oh, that's great, look!" Then she briefly glances at Xiao Yu.
+question   : How does Xiao Yu most likely react?
+options    :
+  A. Xiao Yu says "This is a vase"
+  B. Xiao Yu looks left and right without a fixed direction
+  C. Xiao Yu points to the vase, but does not point to the sticker
+  D. Xiao Yu clearly points to the heart sticker
+gold       : D
+GPT pred   : C
+GLM pred   : D
+
+================================================================================
+## task_type: Discrepant emotions     (2 sampled)
+================================================================================
+
+--- case 1: tombench_282 ---
+ability    : Emotion: Discrepant emotions
+story      : Xiao Fei is in the hospital after experiencing a tragic accident recently, so Xiao Gang takes Xiao Fei's girlfriend to visit him.
+question   : What kind of emotion does Xiao Fei have?
+options    :
+  A. Thrilled
+  B. Touched
+  C. Worried
+  D. Regretful
+gold       : B
+GPT pred   : C
+GLM pred   : B
+
+--- case 2: tombench_374 ---
+ability    : Emotion: Discrepant emotions
+story      : Xiao Liu is an advertising creative designer, he designs an eye-catching advertisement, when he gives the advertisement to the client, the client is attracted by the content of the advertisement, he does not say anything for a long time.
+question   : What kind of emotion does Xiao Liu have?
+options    :
+  A. Satisfied
+  B. Angry
+  C. Nervous
+  D. Regretful
+gold       : C
+GPT pred   : A
+GLM pred   : A
+
+================================================================================
+## task_type: Emotion Regulation    (2 sampled)
+================================================================================
+
+--- case 1: tombench_316 ---
+ability    : Emotion: Emotion regulation
+story      : Xiao Ming and Xiao Hong are the organizers of community activities together. Because they involve the installation of children's play facilities, they start to pay attention to Xiao Gang - a worker who repairs facilities in the community all year round. Xiao Ming looks at Xiao Hong playing ball on the football field, winks at Xiao Hong, and then looks at Xiao Gang, Xiao Gang is repairing a swing on the side. Then, Xiao Ming gives Xiao Hong a deep smile. Xiao Hong nods her head in a seemingly understanding way, and continues to focus back on the football.
+question   : What does Xiao Hong do next?
+options    :
+  A. Find another organizer or friend, discuss her confusion with them, especially about the meaning of Xiao Ming's wink and smile, and how to best cooperate with Xiao Gang.
+  B. Ignore Xiao Ming's wink and smile, and instead focus entirely on football
+  C. Repair the swing by herself
+  D. Think that Xiao Ming's wink and smile may be a way to encourage her to cooperate with Xiao Gang, not any other meaning.
+gold       : B
+GPT pred   : D
+GLM pred   : D
+
+--- case 2: tombench_340 ---
+ability    : Emotion: Emotion regulation
+story      : Zhang Hua and Li Qiang are jointly responsible for a project, the performance of this project directly affects their promotion. Li Qiang frowns in front of the computer, the data analysis report in front of him seems to trouble him. Zhang Hua notices Li Qiang's appearance, walks over and seems to enthusiastically ask about the project progress and difficulties. Li Qiang answers with some hesitation, seems to hold back. In this process, Zhang Hua occasionally exchanges glances with Zhou Yan across the room, then Zhang Hua invites Li Qiang to go downstairs for dinner and a walk. When they leave, Zhou Yan immediately puts down her work, pretends to go to the bathroom, passes by Li Qiang's position, and looks at something. At this moment, Li Qiang suddenly turns back and happens to see Zhou Yan's action.
+question   : What does Li Qiang do next?
+options    :
+  A. Li Qiang decides to personally review more relevant information, enhance his understanding of the project, to alleviate his concerns about the uncertainty in the data analysis report.
+  B. Li Qiang chooses to discuss his feelings and challenges on the project with a trustworthy colleague or friend.
+  C. Li Qiang tries to change his view of the project pressure, tells himself this is a growth and learning opportunity, not a challenge that threatens his career.
+  D. Li Qiang decides to temporarily put down his work, to do some relaxing activities, such as walking or listening to music, to divert his anxiety about the project.
+gold       : B
+GPT pred   : A
+GLM pred   : A
+
+================================================================================
+## task_type: Completion of failed actions    (2 sampled)
+================================================================================
+
+--- case 1: tombench_52 ---
+ability    : Intention: Completion of failed actions
+story      : Zhang Hua is a student who loves painting, he is painting a picture about the ocean at home. Suddenly, his good friend Li Lei calls, saying his bicycle breaks down on the road, he needs help. Zhang Hua agrees to help, after hanging up the phone, he turns around and sees the sunset outside the window. He considers whether to finish the painting first, but at the same time he remembers there is an important painting competition tomorrow. His mother is busy preparing dinner in the kitchen, she calls him to help.
+question   : After Zhang Hua hangs up the phone, what does he do next?
+options    :
+  A. He goes to help Li Lei fix the bicycle.
+  B. He goes to the kitchen to help his mother cook.
+  C. He watches the sunset outside the window.
+  D. He prepares for the painting competition tomorrow.
+gold       : A
+GPT pred   : C
+GLM pred   : A
+
+--- case 2: tombench_426 ---
+ability    : Intention: Completion of failed actions
+story      : Li Hua studies in the library, suddenly his laptop shows low battery. He starts to look for power outlets in the library, but all the outlets are in use by others. At this time, his friend Xiao Hong sends a message, inviting him to study in the coffee shop. Li Hua also remembers that his sister comes to the library to discuss an important family event with him in the afternoon. He is considering whether to go to the coffee shop, or stay in the library waiting for his sister.
+question   : After the battery of Li Hua's laptop runs low, what does he do?
+options    :
+  A. He goes to the coffee shop to study with Xiao Hong.
+  B. He continues to look for power outlets in the library.
+  C. He goes home to get the charger.
+  D. He stays in the library waiting for his sister.
+gold       : D
+GPT pred   : B
+GLM pred   : B
+
+================================================================================
+## task_type: Moral emotions    (2 sampled)
+================================================================================
+
+--- case 1: tombench_29 ---
+ability    : Emotion: Moral emotions
+story      : Xiao Hua and Xiao Qiang went to the zoo together and found the rabbits very cute. There were carrots for sale at the zoo's ticket booth for visitors to feed the rabbits. Xiao Qiang, however, took out a bag of carrots that he had prepared in advance, but he didn't tell Xiao Hua that the carrots were his own and not purchased from the booth. The zookeepers do not recommend that visitors feed the animals with their own food. After they left, they overheard a zookeeper saying that the rabbits were very popular and had eaten too much. As they were leaving, Xiao Qiang revealed that the carrots they had fed the rabbits were the ones he had brought.
+question   : What kind of emotion does Xiao Qiang feel after knowing that the rabbit shows adverse reactions?
+options    :
+  A. Xiao Qiang possibly feels happy, because he thinks he does a good deed.
+  B. Xiao Qiang possibly feels indifferent, because he does not think this is his responsibility.
+  C. Xiao Qiang possibly feels confused, because he does not know that carrots cause discomfort to the rabbit.
+  D. Xiao Qiang possibly feels surprised and guilty, because he unintentionally harms the rabbit.
+gold       : A
+GPT pred   : D
+GLM pred   : D
+
+--- case 2: tombench_254 ---
+ability    : Emotion: Moral emotions
+story      : Xiao Hua and Xiao Qiang went to the zoo together and found the rabbits very cute. There were carrots for sale at the zoo's ticket booth for visitors to feed the rabbits. Xiao Qiang, however, took out a bag of carrots that he had prepared in advance, but he didn't tell Xiao Hua that the carrots were his own and not purchased from the booth. The zookeepers do not recommend that visitors feed the animals with their own food. After they left, they overheard a zookeeper saying that the rabbits were very popular and had eaten too much. As they were leaving, Xiao Qiang revealed that the carrots they had fed the rabbits were the ones he had brought.
+question   : What kind of emotion does Xiao Qiang feel after knowing that the rabbit shows adverse reactions?
+options    :
+  A. Xiao Qiang possibly feels happy, because he thinks he does a good deed.
+  B. Xiao Qiang possibly feels indifferent, because he does not think this is his responsibility.
+  C. Xiao Qiang possibly feels confused, because he does not know that carrots cause discomfort to the rabbit.
+  D. Xiao Qiang possibly feels surprised and guilty, because he unintentionally harms the rabbit.
+gold       : A
+GPT pred   : D
+GLM pred   : D
+
+================================================================================
+## task_type: Discrepant intentions    (2 sampled)
+================================================================================
+
+--- case 1: tombench_201 ---
+ability    : Intention: Discrepant intentions
+story      : Li Lei forgets his laptop in the library. Han Meimei volunteers at the library, finds this computer, but thinks it is a donated old computer, so she puts it in the donation box. Li Hua sees it, he knows this is Li Lei's computer, but he is always the second in the class, always falls behind Li Lei by one place, deliberately does not tell Han Meimei the truth. When Li Lei comes back to look for the computer, he still does not find the computer, he feels very anxious and lost. Han Meimei only learns that she mishandles Li Lei's laptop when Li Lei asks her.
+question   : What is the possible intention of Han Meimei's behavior?
+options    :
+  A. Han Meimei possibly thinks this computer is redundant equipment of the library, so she decides to put it in the donation box to clear space.
+  B. Han Meimei possibly due to personal disinterest in electronic devices, does not consider the ownership of the computer, casually treats it as a donatable item.
+  C. Han Meimei possibly wants to help those who need a computer but cannot afford it, so she deliberately puts this seemingly ownerless computer in the donation box.
+  D. Han Meimei possibly is unconscious or uninformed, because she mistakenly thinks Li Lei's laptop is a donated old computer, so she puts it in the donation box.
+gold       : D
+GPT pred   : D
+GLM pred   : C
+
+--- case 2: tombench_462 ---
+ability    : Intention: Discrepant intentions
+story      : Li Hua, a peddler in the village, often sells fruits in the market. One day, he finds that a box of his apples disappears. On the same day, Zhang Wei accidentally finds this box of unattended apples behind the market, which is quite troublesome, so he takes them home. Wang Li knows these apples belong to Li Hua, but she has a bad relationship with Li Hua, so she chooses to keep silent. A few days later, Li Hua learns about the whereabouts of the apples while chatting with friends.
+question   : What is the possible intention behind Zhang Wei taking the apples?
+options    :
+  A. Zhang Wei possibly thinks the apples are ownerless, and he is helping to clean up the market.
+  B. Zhang Wei possibly wants free apples, deliberately not looking for the owner of the apples.
+  C. Zhang Wei possibly thinks taking the apples is a kind of help to the market.
+  D. Zhang Wei possibly likes free things and does not consider the real owner of the apples.
+gold       : A
+GPT pred   : B
+GLM pred   : A
+
+================================================================================
+## task_type: Prediction of actions    (2 sampled)
+================================================================================
+
+--- case 1: tombench_337 ---
+ability    : Intention: Prediction of actions
+story      : Jack, Nina, and Li Ming form a small team and are preparing for this semester's subject research project. One day, Jack sees Nina and Li Ming in a meeting. Jack does not go to disturb them, he just quietly observes at the door. Nina keeps waving to Li Ming to look at a document, but Li Ming focuses more on his own work. Jack notices that the atmosphere is a bit off. He is a bit worried.
+question   : What does Jack prepare to do?
+options    :
+  A. Interrupts Nina and Li Ming's meeting, stops their collaboration.
+  B. Quietly waits, communicates with them after the meeting ends.
+  C. Takes the initiative to find other colleagues, chats to distract his attention.
+  D. Decides to join the meeting himself, to understand the ongoing discussion and ease the atmosphere.
+gold       : D
+GPT pred   : B
+GLM pred   : B
+
+--- case 2: tombench_730 ---
+ability    : Intention: Prediction of actions
+story      : Xuanxuan, Zhiming, and Weijie are classmates in college. That day, they go to a party together. Zhiming jokes that his dance skills are sure to beat Weijie. Then, Zhiming notices Xuanxuan standing alone in the corner, not dancing. He walks over quickly, calls out in a special voice, "Weijie, watch me dance the steps you teach me yesterday." Then Zhiming starts to dance. Zhiming dances very happily, but he keeps glancing at Xuanxuan's reaction.
+question   : What does Zhiming want to do?
+options    :
+  A. Walks to Xuanxuan and shows off his dance skills to her.
+  B. Walks to Weijie and shows off his dance skills are better than Weijie.
+  C. Walks to Xuanxuan and dances, inviting Xuanxuan to start dancing together.
+  D. Walks away and continues to dance with other friends.
+gold       : C
+GPT pred   : A
+GLM pred   : A
+
+================================================================================
+## task_type: Hinting Task Test    (2 sampled)
+================================================================================
+
+--- case 1: tombench_17 ---
+ability    : Non-Literal Communication: Irony/Sarcasm
+story      : Lao Wang works in the most powerful team in the company, and everyone in the team has strong work ability. He is a perfectionist and cannot tolerate any flaws in his work. In a work meeting, Lao Wang summarizes many detail problems that exist in the current work. Subordinate Xiao Zhang suddenly asks Lao Wang, "Lao Wang, do you like to eat fish?"
+question   : What does Xiao Zhang really mean when he says these words?
+options    :
+  A. Xiao Zhang is asking about Lao Wang's eating habits in order to invite Old Wang to eat in the future.
+  B. Xiao Zhang wants to invite Lao Wang to eat fish to promote their relationship.
+  C. Xiao Zhang is mocking Lao Wang for being picky.
+  D. Xiao Zhang wants to change the topic to ease the tension of the work meeting.
+gold       : C
+GPT pred   : D
+GLM pred   : C
+
+--- case 2: tombench_267 ---
+ability    : Non-Literal Communication: Irony/Sarcasm
+story      : Once, Cheng Wei takes his son to the mall and accompanies him to the children's playground. Suddenly, he sees a person leading a dog in. Cheng Wei asks this person, "Don't you see the sign that says no pets are allowed?" The other party appears very disdainful and has no intention of paying attention to Cheng Wei. At this moment, his son laughs and says to Cheng Wei, "Dad, you are so silly, dogs don't know how to read."
+question   : What does the son really mean when he says this?
+options    :
+  A. The son is mocking this person for lacking social morality.
+  B. The son is joking with his father, trying to lighten the mood.
+  C. The son likes dogs and hopes to have one.
+  D. The son wants to tell his father that dogs can't understand human language.
+gold       : A
+GPT pred   : D
+GLM pred   : A
+
+================================================================================
+## task_type: Synesthetic Fallacy Problem    (2 sampled)
+================================================================================
+
+--- case 1: cogtom_3812 ---
+ability    : Knowledge
+story      : Water phone is a simple instrument used for teaching: glass tubes of different lengths are placed in a transparent sink, and rubber balls are attached externally. Pressing the rubber balls allows air to pass through the water column and produce strange long sounds like whale songs. You demonstrated the water telephone device to a blind student and a deaf student in the classroom. The glass tube and water pipe looked very similar to the chemical device in the laboratory.
+question   : What do deaf students most likely think you're doing?
+options    :
+  A. Setting off fireworks and firecrackers in the classroom
+  B. Playing whale songs or organ recordings
+  C. Doing a set of ordinary chemical pipeline experiments
+  D. Using a water phone
+gold       : C
+GPT pred   : B
+GLM pred   : C
+
+--- case 2: cogtom_3824 ---
+ability    : Knowledge
+story      : At the sewage treatment plant, an ozone aeration reactor is operating. When high-pressure air passes through the liquid, there will be small discharge crackling sounds between the electrodes above, and the pool will be filled with a pungent smell similar to a mixture of concentrated bleach and electrical burning. Two people wearing eye masks were observing, one taking deep breaths in an attempt to distinguish the odor, while the other listened attentively to the sound of water and electricity.
+question   : What is the most likely place for people who rely mainly on sound to judge?
+options    :
+  A. Cooking traditional Chinese medicine
+  B. Using a large amount of 84 disinfectant to clean the floor
+  C. Welding precision electronic components
+  D. Fermentation of garden waste in compost
+gold       : C
+GPT pred   : B
+GLM pred   : C
+
+================================================================================
+## task_type: Aware of Reader’s Knowledge Task    (2 sampled)
+================================================================================
+
+--- case 1: cogtom_4049 ---
+ability    : Knowledge
+story      : You are a photography enthusiast. Today, at sunset, you captured a dreamy "silhouette light" with orange red outlines on the edge of a cloud layer. I can't wait to share it with others.
+question   : You are sharing with professional landscape photographer Mika. How should you mention 'contour light'?
+options    :
+  A. Contour light is a type of light that brightens the edges of the subject, making the contours stand out.
+  B. The outline light cast by the sunset on the edge of the clouds today is too dim, and the clouds seem to have been hooked by flames!
+  C. Do you know about contour light? It's the effect where light shines from behind and brightens the edges.
+  D. Contour lighting is generally suitable for highlighting the edge lines of characters or objects.
+gold       : B
+GPT pred   : C
+GLM pred   : B
+
+--- case 2: cogtom_3995 ---
+ability    : Knowledge
+story      : You are a photography enthusiast. Today, you took a portrait of the "golden moment" at dusk, with soft lighting. You are particularly satisfied with the effect of the "backlit contour light".
+question   : You are chatting with your friend Mara, who works as a professional portrait photographer in an advertising company. How should you mention 'golden moments' in a conversation?
+options    :
+  A. The golden time is the period after sunrise and before sunset when the light is relatively soft.
+  B. I took a set of backlit portraits of my friends by the river during the prime time this evening, and the outline light was particularly clean.
+  C. Do you know about the golden hour? The most suitable time period for taking photos in photography.
+  D. The color temperature captured during the golden hour is lower than noon, and the image is warmer.
+gold       : B
+GPT pred   : C
+GLM pred   : B
+
+================================================================================
+## task_type: Test of Emotion Comprehension: Belief Based Emotions    (2 sampled)
+================================================================================
+
+--- case 1: cogtom_1241 ---
+ability    : Emotion
+story      : Hana and Roy are both preparing to apply to the same graduate school. Hana has just received a reply from the professor, who has affirmed her research plan and expressed willingness to write a recommendation letter. She feels that her chances of admission are very high. Roy's emails to several professors have not received a response, and his last exam results were not satisfactory, so he felt that he was "ignored" by the school and almost had no hope.
+question   : What is Roy's mood at this moment?
+options    :
+  A. optimistic
+  B. irritated
+  C. wronged
+  D. surprise
+gold       : B
+GPT pred   : C
+GLM pred   : C
+
+--- case 2: cogtom_1134 ---
+ability    : Emotion
+story      : Yuki and Haru work in the same building. The company suddenly notified us of layoffs today. Yuki just received a project invitation email from her superiors and thinks she really needs it; Haru heard that his group is a key target for layoffs, and the list will be announced tonight.
+question   : What is Yuki's mood at this moment?
+options    :
+  A. peace of mind
+  B. flustered
+  C. pleasure
+  D. disdain
+gold       : A
+GPT pred   : B
+GLM pred   : A
+
+================================================================================
+## task_type: Sarah Task    (2 sampled)
+================================================================================
+
+--- case 1: cogtom_3738 ---
+ability    : Knowledge
+story      : On a polar day planet with a tightly controlled climate, there is a research city called "Hengguang Dome". There is no naturally generated starry sky or night here, and the entire planet has never seen a sunset, stars, or moon. It is only familiar with the lights hanging in the city, the navigation lights of aircraft, and the flickering of advertising screens. One day, Luma was engaged in imitative behavior: it slowly turned off most of its own lights, leaving only a few small points of light, and then lit and extinguished them one by one, occasionally gathering into a line and then dispersing, reminiscent of some kind of flickering and arranged light source.
+question   : What might Luma be imitating?
+options    :
+  A. starry starry night 
+  B. Fireworks set off over the city
+  C. Meteor showers gliding across the sky
+  D. Signal lights for distant aircraft formations
+gold       : D
+GPT pred   : A
+GLM pred   : A
+
+--- case 2: cogtom_3726 ---
+ability    : Knowledge
+story      : On an abandoned planet entirely composed of metal ruins, there is a recycling city called Scrapfield. This planet has never had any 'aquatic life', and the concepts of oceans and lakes only exist in abstract data. All that can be seen here are rolling waste, flying patrol drones, and crawling repair machines shuttling between metal piles. One day, Rusty began to imitate: it twisted its body to move forward like waves, with its mechanical arms slightly extended on both sides, as if imagining a gentle swimming posture in some medium.
+question   : What might Rusty be imitating?
+options    :
+  A. Dolphins swimming in the ocean
+  B. Swans gliding slowly in the lake
+  C. Goldfish wagging their tails in an aquarium
+  D. Crawling repair machine winding through metal gaps
+gold       : D
+GPT pred   : A
+GLM pred   : A
+
+================================================================================
+## task_type: Strange Story: Double Bluff    (2 sampled)
+================================================================================
+
+--- case 1: cogtom_5727 ---
+ability    : Belief
+story      : In a crucial game of a high stakes Texas Hold'em tournament, Xiao Li needs to assess the success of his opponent Xiao Wang. He knew that Xiao Wang either got the same flower or just a high card. Xiao Li asked, "Are you playing the same card or the high card?" Xiao Wang answered truthfully, "Same card." Therefore, Xiao Li judged that the opponent was only playing the high card and chose to use a more aggressive approach to fully suppress the pressure card.
+question   : Why does Xiao Li still think that the opponent is just a high card player after hearing 'Xiao Wang is the same flower'?
+options    :
+  A. Xiao Li believes that Xiao Wang will definitely lie in this critical situation.
+  B. Xiaoli had long known through card theory that there could be no identical flowers.
+  C. Xiao Li just wants to test Xiao Wang's psychological resilience.
+  D. Xiao Li believes that the game is no longer important and can be played casually.
+gold       : A
+GPT pred   : B
+GLM pred   : A
+
+--- case 2: cogtom_5792 ---
+ability    : Belief
+story      : In a large-scale e-sports competition, road athlete Amin needs to guard against Gank who is playing in the opposite field. The coach told him that in the opposing field, he would either turn back from "above the river" or turn back from "below the river". Amin provocatively asked the opposing jungler on the public screen message, "Are you coming from above or below later?" The opposing jungler answered truthfully, "From above." However, Amin chose to fill his field of vision in the grass below and retreat.
+question   : In fact, the opposing team did launch Gank from above the river. Why do jungle players choose to answer truthfully?
+options    :
+  A. Wild players believe that Ah Ming will use this statement as a bluff and mainly defend against the enemy.
+  B. Wild players hope to add entertainment to the game.
+  C. The jungle player was momentarily careless and did not realize that they had exposed their plan.
+  D. Wild players believe that being honest is beneficial for obtaining official rewards.
+gold       : A
+GPT pred   : C
+GLM pred   : A
+
+================================================================================
+## task_type: Affective Perspective-Taking Task    (2 sampled)
+================================================================================
+
+--- case 1: cogtom_244 ---
+ability    : Emotion
+story      : The company manager announced that Xiaoming has been promoted, and Xiaoli has been looking forward to this promotion for a long time.
+question   : How would Xiao Li feel?
+options    :
+  A. happy
+  B. angry
+  C. jealousy
+  D. look forward to
+gold       : D
+GPT pred   : C
+GLM pred   : C
+
+--- case 2: cogtom_355 ---
+ability    : Emotion
+story      : The sudden strong wind blew Xiaoyuan's paintings hanging on the balcony all over the ground. She hurriedly ran out to tidy them up, while her neighbor Xiaomu's wind chimes made a crisp sound in the wind.
+question   : How would Xiaoyuan feel?
+options    :
+  A. impatient
+  B. sad
+  C. surprise
+  D. moved
+gold       : A
+GPT pred   : B
+GLM pred   : C
+
+================================================================================
+## task_type: Humor Task    (2 sampled)
+================================================================================
+
+--- case 1: cogtom_6836 ---
+ability    : Non-literal
+story      : On the parade ground, the new commander saw a soldier standing guard on a bench, and the soldier replied that it was "traditional". The commander traced back 50 years and finally contacted the 90 year old general who initially ordered by phone. The commander asked, "General, I want to know why you ordered a guard to be placed next to the benches in the parade ground 50 years ago
+question   : The old general answered with some confusion, '...'. Please make up for what the old general said and make it a joke.
+options    :
+  A. To exercise the willpower of soldiers
+  B. What? The paint on that bench hasn't been done yet
+  C. I have no recollection of such a thing
+  D. That's to commemorate a fallen comrade in arms
+gold       : B
+GPT pred   : C
+GLM pred   : B
+
+--- case 2: cogtom_6791 ---
+ability    : Non-literal
+story      : In the psychological clinic, the patient nervously said to the doctor, "Doctor, I think I have delusions
+question   : The doctor looked at the patient and said seriously, 'Relax, they will also say it in person.' Why is this joke funny?
+options    :
+  A. Because the doctor felt that the patient needed medication
+  B. Doctors are aware of patients' social anxiety, and saying so can exacerbate their social anxiety
+  C. Because the doctor's words are illogical, leaving patients and readers confused
+  D. Because the doctor's words reflect the current common doctor-patient conflict
+gold       : B
+GPT pred   : C
+GLM pred   : B
+
+================================================================================
+## task_type: Test of Emotion Comprehension: Hidden Emotions    (2 sampled)
+================================================================================
+
+--- case 1: cogtom_746 ---
+ability    : Emotion
+story      : Lele submitted her proudest painting in the art competition, but the final winner was another classmate's work. The teacher praised the student in front of the whole class and asked everyone to learn from the award-winning student. Lele reluctantly applauded with everyone and forced out a smile, saying, 'You drew really well.'.
+question   : What is Lele's true feeling?
+options    :
+  A. happy
+  B. anger
+  C. sadness
+  D. calm
+gold       : C
+GPT pred   : B
+GLM pred   : C
+
+--- case 2: cogtom_798 ---
+ability    : Emotion
+story      : The score of the aerospace exam was much lower than usual. After school, classmates were discussing their grades in the hallway. Someone asked him how he did on the exam, and he smiled and said, "It's okay, about that.
+question   : What is the real feeling of space exploration?
+options    :
+  A. confidence
+  B. anxiety
+  C. happy
+  D. satisfy
+gold       : B
+GPT pred   : B
+GLM pred   : A

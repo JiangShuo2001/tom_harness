@@ -191,6 +191,7 @@ class Executor:
     ) -> ExecutionTrace:
         step = ctx.current_step
         t_step_start = time.time()
+        phase_name = self._phase_name(ctx)
 
         # 1) Reason — ask LLM to produce a reasoning trio
         reasoning = self._reason_about(ctx)
@@ -199,7 +200,9 @@ class Executor:
         # 1b) Persist this step's thought into accumulated_results so the
         # NEXT step's render_dynamic_state (and thus next step's Reason
         # LLM prompt) can see it. Key is sortable by step_order.
+        phase_name = self._phase_name(ctx)
         self.context.record_step_result(
+            phase_name,
             f"reasoning_of_step_{step.step_order:02d}",
             reasoning.thought or "",
         )
@@ -221,7 +224,6 @@ class Executor:
             logger.info("[Executor]   Acting: pure reasoning (no tool)")
 
         # 3) Observe & store
-        phase_name = self._phase_name(ctx)
         if observation is not None and observation.success and step.tool is not None:
             store_to = (
                 step.tool.output_mapping.store_to
