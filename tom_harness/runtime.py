@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 
 SYSTEM_RAW = (
     "You are a reading comprehension assistant. Read the story and answer "
-    'the multiple-choice question. Reply with ONLY a JSON object: '
+    "the multiple-choice question. Reply with ONLY a JSON object: "
     '{"answer": "A" | "B" | "C" | "D"}'
 )
 

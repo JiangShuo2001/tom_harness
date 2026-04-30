@@ -56,7 +56,8 @@ class ToMRAG:
         count = 0
 
         # Count total lines first for progress bar
-        total_lines = sum(1 for _ in open(file_path, 'r', encoding='utf-8'))
+        with open(file_path, 'r', encoding='utf-8') as f_count:
+            total_lines = sum(1 for _ in f_count)
         if num_samples > 0:
             total_lines = min(total_lines, num_samples)
 

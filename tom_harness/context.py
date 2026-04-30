@@ -119,7 +119,8 @@ class ContextManager:
             for phase_name, step_results in self.global_context.accumulated_results.items():
                 acc_parts.append(f"### {phase_name}")
                 for k, v in step_results.items():
-                    acc_parts.append(f"- {k}: {str(v)}")
+                    v_str = str(v)[:500]
+                    acc_parts.append(f"- {k}: {v_str}")
             parts.append("## Accumulated Step Results\n" + "\n".join(acc_parts))
         if self.skill_content:
             parts.append(f"## Strategy Guide\n{self.skill_content}")
