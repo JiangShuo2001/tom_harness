@@ -4,7 +4,7 @@ For ToMBench Scalar Implicature problems:
   - Story states a total set size N (e.g. "18 players")
   - Story uses a vague proportion phrase (e.g. "almost one third")
   - Story (often) gives an observed count (e.g. "found 4 goalkeepers")
-  - Question asks for one of: prior, observed-now, remaining, total
+  - Question asks for one of: prior, remaining, total
 
 We extract (N, fraction, observed) from the story with deterministic
 regex, compute the integer answer in Python, then map it to the option

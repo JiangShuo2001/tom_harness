@@ -11,5 +11,7 @@ untouched.
 """
 
 from .adapter import SkillPackAdapter, SkillPackInfo, RoutingResult
+from .set1_adapter import Set1Adapter
+from .set2_adapter import Set2Adapter
 
-__all__ = ["SkillPackAdapter", "SkillPackInfo", "RoutingResult"]
+__all__ = ["SkillPackAdapter", "SkillPackInfo", "RoutingResult", "Set1Adapter", "Set2Adapter"]

@@ -22,6 +22,7 @@ class ToMRAG:
         data_dir: str = "./data",
         index_dir: str = "./index",
         model_name: str = "./models/bge-m3",
+        trust_index: bool = True,
     ):
         """Initialize RAG system.
 
@@ -29,10 +30,12 @@ class ToMRAG:
             data_dir: Directory containing JSONL files
             index_dir: Directory to store FAISS indices
             model_name: HuggingFace embedding model name
+            trust_index: Allow deserialization of FAISS index (set False for untrusted dirs)
         """
         self.data_dir = Path(data_dir)
         self.index_dir = Path(index_dir)
         self.index_dir.mkdir(parents=True, exist_ok=True)
+        self.trust_index = trust_index
 
         # Initialize embeddings
         # bge-m3 uses encode_kwargs for retrieval normalization
@@ -55,11 +58,13 @@ class ToMRAG:
         documents = []
         count = 0
 
-        # Count total lines first for progress bar
-        with open(file_path, 'r', encoding='utf-8') as f_count:
-            total_lines = sum(1 for _ in f_count)
-        if num_samples > 0:
-            total_lines = min(total_lines, num_samples)
+        # Count total lines for progress bar only when loading all samples
+        total_lines = None
+        if num_samples <= 0:
+            with open(file_path, 'r', encoding='utf-8') as f_count:
+                total_lines = sum(1 for _ in f_count)
+        else:
+            total_lines = num_samples
 
         with open(file_path, 'r', encoding='utf-8') as f:
             for line in tqdm(f, total=total_lines, desc=f"Loading {file_path.stem}", unit="doc"):
@@ -104,6 +109,11 @@ class ToMRAG:
                 print(f"Loading existing index for {source} from {index_path}")
                 # allow_dangerous_deserialization is required by FAISS.load_local;
                 # index_dir is trusted (locally built or checked-in).
+                if not self.trust_index:
+                    raise RuntimeError(
+                        f"Refusing to load FAISS index from {index_path} — "
+                        "set trust_index=True if you trust this directory."
+                    )
                 self.stores[source] = FAISS.load_local(
                     str(index_path),
                     self.embeddings,

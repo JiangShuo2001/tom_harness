@@ -73,7 +73,10 @@ def _build_user_prompt(*, story: str, question: str, options: dict[str, str],
             f"## Options\n{opts}\n\n"
             '## Answer\nAfter applying the skill above, reply with ONLY a JSON object: {"answer": "A"|"B"|"C"|"D"}'
         )
-    return f"Story: {story}\n\nQuestion: {question}\n\nOptions:\n{opts}"
+    return (
+        f"Story: {story}\n\nQuestion: {question}\n\nOptions:\n{opts}\n\n"
+        'Reply with ONLY a JSON object: {"answer": "A"|"B"|"C"|"D"}'
+    )
 
 
 def _build_retry_prompt(*, base_user: str, prior_answer: str, validator_feedback: str) -> str:

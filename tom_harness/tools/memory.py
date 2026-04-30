@@ -104,14 +104,14 @@ class MemoryStore(Tool):
         q_emb = self.embedder(query)
         with self._lock:
             items = list(self._memories.items())
-            embs = dict(self._embeddings)
         scored: list[tuple[float, Memory]] = []
         for mid, mem in items:
             if task_type_filter and mem.task.task_type != task_type_filter:
                 continue
             if metadata_filter and not self._match_metadata(mem.metadata, metadata_filter):
                 continue
-            emb = embs.get(mid)
+            with self._lock:
+                emb = self._embeddings.get(mid)
             if emb is None:
                 continue
             score = _cosine(q_emb, emb)
