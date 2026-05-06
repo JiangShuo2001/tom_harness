@@ -34,7 +34,6 @@ from typing import Any
 
 from .llm import LLMClient
 from .routing.base import Router, RouteDecision
-from .tools.skills import SkillLib
 from .validators.base import Validator, ValidationResult
 
 logger = logging.getLogger(__name__)
@@ -63,20 +62,26 @@ def _parse_letter(text: str) -> str:
 
 
 def _build_user_prompt(*, story: str, question: str, options: dict[str, str],
-                       skill_body: str | None) -> str:
-    opts = "\n".join(f"{k}. {v}" for k, v in options.items() if v)
+                       skill_body: str | None = None,
+                       rag_context: str | None = None,
+                       playbook: str | None = None) -> str:
+    sections: list[str] = []
     if skill_body:
-        return (
-            f"## Reasoning Skill (apply before answering)\n{skill_body}\n\n"
-            f"## Story\n{story}\n\n"
-            f"## Question\n{question}\n\n"
-            f"## Options\n{opts}\n\n"
-            '## Answer\nAfter applying the skill above, reply with ONLY a JSON object: {"answer": "A"|"B"|"C"|"D"}'
+        sections.append(f"## Reasoning Skill (apply before answering)\n{skill_body}")
+    if rag_context:
+        sections.append(
+            "## Background Knowledge\n"
+            "The following information may be relevant to the current question and is for reference only:\n"
+            f"{rag_context}"
         )
-    return (
-        f"Story: {story}\n\nQuestion: {question}\n\nOptions:\n{opts}\n\n"
-        'Reply with ONLY a JSON object: {"answer": "A"|"B"|"C"|"D"}'
-    )
+    if playbook:
+        sections.append(f"## Playbook\n{playbook}")
+    sections.append(f"## Story\n{story}")
+    sections.append(f"## Question\n{question}")
+    opts = "\n".join(f"{k}. {v}" for k, v in options.items() if v)
+    sections.append(f"## Options\n{opts}")
+    sections.append('## Answer\nAfter applying any guidance above, reply with ONLY a JSON object: {"answer": "A"|"B"|"C"|"D"}')
+    return "\n\n".join(sections)
 
 
 def _build_retry_prompt(*, base_user: str, prior_answer: str, validator_feedback: str) -> str:
@@ -101,10 +106,11 @@ class RuntimeResult:
 class HarnessRuntime:
     """Single-shot harness with optional validator-retry."""
     llm: LLMClient
-    skill_lib: SkillLib
-    router: Router
-    validators: list[Validator] = field(default_factory=list)
-    max_retries: int = 1                     # per-validator; 0 = no retry, just substitute
+    router: "Router"
+    validators: list["Validator"] = field(default_factory=list)
+    rag_engine: Any = None
+    playbook: str | None = None
+    max_retries: int = 1
 
     def answer_one(
         self,
@@ -119,22 +125,32 @@ class HarnessRuntime:
         )
         skill_id = decision.skill_id
         skill_body = None
-        if skill_id:
-            rec = self.skill_lib.get(skill_id)
-            if rec is None:
-                logger.warning(f"router picked unregistered skill_id={skill_id}; falling back to raw")
-            else:
-                skill_body = rec.body
+        if skill_id and hasattr(self.router, 'get_skill_body'):
+            skill_body = self.router.get_skill_body(skill_id)
+            if skill_body is None:
+                logger.warning("router picked skill_id=%s but get_skill_body returned None", skill_id)
+
+        rag_context = None
+        if self.rag_engine is not None:
+            try:
+                rag_context = self.rag_engine.retrieve(
+                    query=question, category=task_type
+                )
+            except Exception as e:
+                logger.warning("RAG retrieve failed: %s", e)
+
         base_user = _build_user_prompt(
-            story=story, question=question, options=options, skill_body=skill_body,
+            story=story, question=question, options=options,
+            skill_body=skill_body, rag_context=rag_context or None,
+            playbook=self.playbook,
         )
 
         # ── 1. initial LLM call ───────────────────────────────────────────
         n_calls = 1
         try:
             text = self.llm.chat(SYSTEM_RAW, base_user, max_tokens=1024)
-        except Exception as e:  # noqa: BLE001
-            logger.warning(f"initial LLM call failed: {e}")
+        except Exception as e:
+            logger.warning("initial LLM call failed: %s", e)
             text = ""
         answer = _parse_letter(text)
         events: list[dict] = []
@@ -157,16 +173,14 @@ class HarnessRuntime:
             if result.valid:
                 continue
 
-            # 2a. direct substitute when validator is confident
             if result.suggested_answer:
                 logger.info(
-                    f"[{v.__class__.__name__}] substituting {answer} -> "
-                    f"{result.suggested_answer} ({result.rationale})"
+                    "[%s] substituting %s -> %s (%s)",
+                    v.__class__.__name__, answer, result.suggested_answer, result.rationale,
                 )
                 answer = result.suggested_answer
                 continue
 
-            # 2b. retry LLM with feedback
             for retry_idx in range(self.max_retries):
                 retry_user = _build_retry_prompt(
                     base_user=base_user, prior_answer=answer,
@@ -175,13 +189,12 @@ class HarnessRuntime:
                 n_calls += 1
                 try:
                     text = self.llm.chat(SYSTEM_RAW, retry_user, max_tokens=1024)
-                except Exception as e:  # noqa: BLE001
-                    logger.warning(f"retry LLM call failed: {e}")
+                except Exception as e:
+                    logger.warning("retry LLM call failed: %s", e)
                     break
                 new_answer = _parse_letter(text)
                 if new_answer:
                     answer = new_answer
-                # re-run this validator to see if fixed
                 result = v.validate(
                     question=question, story=story, options=options,
                     task_type=task_type, current_answer=answer,
@@ -204,13 +217,17 @@ class HarnessRuntime:
 def build_default_runtime(
     *,
     llm: LLMClient,
-    skill_lib: SkillLib,
-    router: Router,
+    router: "Router",
+    rag_engine: Any = None,
+    playbook: str | None = None,
     enable_scalar_validator: bool = True,
 ) -> HarnessRuntime:
     """Convenience factory: wires the default validator stack."""
-    validators: list[Validator] = []
+    validators: list["Validator"] = []
     if enable_scalar_validator:
         from .validators.scalar_procedural import ScalarProceduralValidator
         validators.append(ScalarProceduralValidator())
-    return HarnessRuntime(llm=llm, skill_lib=skill_lib, router=router, validators=validators)
+    return HarnessRuntime(
+        llm=llm, router=router, validators=validators,
+        rag_engine=rag_engine, playbook=playbook,
+    )
