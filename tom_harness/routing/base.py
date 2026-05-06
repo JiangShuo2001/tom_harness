@@ -14,10 +14,10 @@ class RouteDecision:
 
 
 class Router(ABC):
-    """Pure-function router: (question, story, options, task_type) -> RouteDecision.
+    """Route a sample to a skill_id.
 
-    Routers MUST NOT make LLM calls. If the routing decision needs LLM
-    judgment, do it offline once and encode the rules.
+    Implementations may use LLM calls (e.g. SkillV4Router) or pure
+    lookup tables (e.g. OraclePicksRouter).
     """
 
     @abstractmethod
