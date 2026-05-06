@@ -1,31 +1,20 @@
 """tom_harness — ToM Agent Harness.
 
-Two layers, two purposes:
+CANONICAL single-shot path (use this by default):
+  runtime.HarnessRuntime
+    · Router      — routing/ (SkillV4Router or OraclePicksRouter)
+    · RAGv2Engine — tools/rag_v2.py (optional, category-aware retrieval)
+    · Validators  — validators/ (e.g. ScalarProceduralValidator)
+  One LLM call per sample, optional validator-driven retry.
 
-  1. CANONICAL single-shot path (use this by default):
-       runtime.HarnessRuntime
-         · Router      — routing/  (e.g. OraclePicksRouter)
-         · SkillLib    — tools/skills.py (with adapters in plugins/external_skill_pack/)
-         · Validators  — validators/ (e.g. ScalarProceduralValidator)
-       One LLM call per sample, optional validator-driven retry.
-       Empirically beats Plan/Execute on qwen-plus + ToMBench by 7-9pp.
-
-  2. LEGACY Plan/Execute path (kept for research scenarios that need
-     multi-step orchestration; not the default):
-       Scheduler -> Planner -> Executor -> Tool Layer
-
-If you are starting fresh, import from the canonical path:
-
-    from tom_harness import LLMClient, HarnessRuntime, build_default_runtime
-    from tom_harness.routing import OraclePicksRouter
-    from tom_harness.tools.skills import SkillLib
-    from tom_harness.plugins.external_skill_pack import Set1Adapter, Set2Adapter
+LEGACY Plan/Execute path (kept for research scenarios):
+  Scheduler -> Planner -> Executor -> Tool Layer
 """
 
 # ── Canonical (single-shot) ────────────────────────────────────────────────
 from .llm import LLMClient
 from .runtime import HarnessRuntime, RuntimeResult, build_default_runtime
-from .routing import Router, RouteDecision, OraclePicksRouter
+from .routing import Router, RouteDecision, OraclePicksRouter, SkillV4Router
 from .validators import Validator, ValidationResult, ScalarProceduralValidator
 
 # ── Legacy (Plan/Execute) — kept for back-compat, not recommended for ToMBench
@@ -42,7 +31,7 @@ from .context import ContextManager
 __all__ = [
     # canonical
     "LLMClient", "HarnessRuntime", "RuntimeResult", "build_default_runtime",
-    "Router", "RouteDecision", "OraclePicksRouter",
+    "Router", "RouteDecision", "OraclePicksRouter", "SkillV4Router",
     "Validator", "ValidationResult", "ScalarProceduralValidator",
     # legacy
     "Plan", "Phase", "Step", "ToolCall", "ToolType",
@@ -50,4 +39,4 @@ __all__ = [
     "Scheduler", "Planner", "Executor",
     "ToolRegistry", "ContextManager",
 ]
-__version__ = "0.4.0"
+__version__ = "0.5.0"
