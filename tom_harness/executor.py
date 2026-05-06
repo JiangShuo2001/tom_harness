@@ -27,7 +27,6 @@ from .schemas import (
     ExecutionContext, ExecutionTrace, Observation, Reasoning, Step, StepResult,
     ToolCall, ToolCallTrace, ToolType,
 )
-from .tools.skills import SkillLib
 
 logger = logging.getLogger(__name__)
 
@@ -97,7 +96,7 @@ class Executor:
     registry: ToolRegistry
     context: ContextManager
     hooks: HookRegistry
-    skill_lib: SkillLib | None = None
+    skill_lib: object | None = None
     max_substep_depth: int = 3
 
     # ── public API ─────────────────────────────────────────────────────────
