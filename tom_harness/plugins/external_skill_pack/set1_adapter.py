@@ -16,7 +16,13 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-from ...tools.skills import SkillLib, SkillRecord, _parse_simple_yaml
+try:
+    from ...tools.skills import SkillLib, SkillRecord, _parse_simple_yaml
+except ImportError:
+    raise ImportError(
+        "external_skill_pack.set1_adapter requires the removed tom_harness.tools.skills module. "
+        "This adapter is incompatible with skills_v4. Use SkillV4Router instead."
+    )
 from .adapter import RoutingResult, SkillPackAdapter, SkillPackInfo
 
 

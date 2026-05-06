@@ -34,7 +34,7 @@ class ToMRAGv2:
         'Knowledge': {'xAttr', 'xNeed', 'xWant'},
         'Non-literal': None,
         'Comprehensive': None,
-        'Percept': 'skip',
+        'Percept': set(),
         'Ambiguous Story Task': None,
         'Completion of Failed Actions': {'xIntent', 'xWant'},
         'Discrepant Desires': {'xWant', 'Desires', 'NotDesires'},
@@ -135,10 +135,6 @@ class ToMRAGv2:
 
         documents = []
         count = 0
-
-        total_lines = sum(1 for _ in open(file_path, 'r', encoding='utf-8'))
-        if num_samples > 0:
-            total_lines = min(total_lines, num_samples)
 
         with open(file_path, 'r', encoding='utf-8') as f:
             for line in f:

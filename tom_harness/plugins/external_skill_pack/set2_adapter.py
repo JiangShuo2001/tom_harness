@@ -21,7 +21,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable
 
-from ...tools.skills import SkillLib, SkillRecord
+try:
+    from ...tools.skills import SkillLib, SkillRecord
+except ImportError:
+    raise ImportError(
+        "external_skill_pack.set2_adapter requires the removed tom_harness.tools.skills module. "
+        "This adapter is incompatible with skills_v4. Use SkillV4Router instead."
+    )
 from .adapter import RoutingResult, SkillPackAdapter, SkillPackInfo
 
 

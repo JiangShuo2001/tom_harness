@@ -18,7 +18,13 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from ..tom.memory_index import extract_signature
-from ...tools.skills import SkillLib
+try:
+    from ...tools.skills import SkillLib
+except ImportError:
+    raise ImportError(
+        "external_skill_pack.selective_router requires the removed tom_harness.tools.skills module. "
+        "This adapter is incompatible with skills_v4. Use SkillV4Router instead."
+    )
 from .adapter import RoutingResult, SkillPackAdapter, SkillPackInfo
 from .set1_adapter import Set1Adapter
 from .set2_adapter import Set2Adapter
