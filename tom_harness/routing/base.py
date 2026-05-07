@@ -29,3 +29,12 @@ class Router(ABC):
         options: dict[str, str] | None = None,
         task_type: str | None = None,
     ) -> RouteDecision: ...
+
+
+class NoOpRouter(Router):
+    """Always returns no skill — pure raw LLM baseline."""
+
+    def route(self, *, question: str, story: str = "",
+              options: dict[str, str] | None = None,
+              task_type: str | None = None) -> RouteDecision:
+        return RouteDecision(skill_id=None, rationale="no-op")

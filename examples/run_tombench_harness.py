@@ -37,7 +37,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from benchmark.load_tombench import load_tombench  # noqa: E402
 
 from tom_harness import LLMClient, build_default_runtime  # noqa: E402
-from tom_harness.routing import SkillV4Router  # noqa: E402
+from tom_harness.routing import SkillV4Router, NoOpRouter  # noqa: E402
 from tom_harness.tools.rag_v2 import RAGv2Engine  # noqa: E402
 from tom_harness.tools.playbook import MemoryPlaybook  # noqa: E402
 
@@ -83,17 +83,15 @@ def build_harness(
     if cache_dir:
         llm.set_cache_dir(cache_dir)
 
-    router = SkillV4Router(llm=llm) if enable_skill else None
+    router = SkillV4Router(llm=llm) if enable_skill else NoOpRouter()
 
     playbook_text = None
     if shared_playbook is not None and shared_playbook.ready:
         playbook_text = shared_playbook.content
 
-    from tom_harness.routing.oracle_picks import OraclePicksRouter
-
     return build_default_runtime(
         llm=llm,
-        router=router or OraclePicksRouter(),
+        router=router,
         rag_engine=shared_rag if (shared_rag is not None and shared_rag.size() > 0) else None,
         playbook=playbook_text,
         enable_scalar_validator=enable_validator,
@@ -157,6 +155,8 @@ def process_one(runtime_factory, sample, timeout_sec: float = 180.0):
         rec["correct"] = (result.answer == sample["answer"])
         rec["skill_id"] = result.skill_id
         rec["n_llm_calls"] = result.n_llm_calls
+        if result.thinking:
+            rec["thinking"] = result.thinking
     except Exception as e:
         rec["error"] = f"{type(e).__name__}: {e}"
     rec["elapsed_sec"] = round(time.time() - t0, 2)
@@ -368,23 +368,24 @@ def _load_all(path: Path):
 def _compute_stats(records, pool):
     total = len(records)
     correct = sum(1 for r in records if r.get("correct"))
-    errors = sum(1 for r in records if r.get("error"))
+    errors = sum(1 for r in records if r.get("error") or not r.get("predicted"))
     per_task = defaultdict(lambda: {"total": 0, "correct": 0, "errors": 0, "avg_elapsed": 0.0})
     elapsed_sum = defaultdict(float)
     for r in records:
         t = r.get("task", "unknown")
         per_task[t]["total"] += 1
         per_task[t]["correct"] += int(bool(r.get("correct")))
-        per_task[t]["errors"] += int(bool(r.get("error")))
+        per_task[t]["errors"] += int(bool(r.get("error") or not r.get("predicted")))
         elapsed_sum[t] += float(r.get("elapsed_sec", 0.0) or 0.0)
     for t, d in per_task.items():
-        n = d["total"] or 1
-        d["accuracy"] = d["correct"] / n
-        d["avg_elapsed"] = round(elapsed_sum[t] / n, 2)
+        valid_n = d["total"] - d["errors"]
+        d["accuracy"] = d["correct"] / valid_n if valid_n > 0 else 0.0
+        d["avg_elapsed"] = round(elapsed_sum[t] / (d["total"] or 1), 2)
+    valid_total = total - errors
     return {
         "overall": {
             "total": total, "correct": correct, "errors": errors,
-            "accuracy": round(correct / total, 4) if total else 0,
+            "accuracy": round(correct / valid_total, 4) if valid_total else 0,
         },
         "per_task": dict(per_task),
         "mode": "single_shot_v2",

@@ -1,7 +1,7 @@
 # tom_harness
 
 > 面向心智理论 (Theory-of-Mind, ToM) 基准测试的轻量级、技能驱动的 Agent Harness。
-> 基于 Plan-then-Execute 架构 + ReAct 内循环；通用内核 + 可插拔的 ToM 特化层。
+> 单次推理运行时 (v2) 为默认模式；Plan-then-Execute 架构可用于多步研究场景。
 
 English version: [README.md](README.md)
 
@@ -11,75 +11,51 @@ English version: [README.md](README.md)
 
 `tom_harness` 是一套 **Agent Harness** —— 即围绕大语言模型构建的基础设施，用来把"文本生成器"变成"特定任务上可靠的推理器"。这里的任务是**社会认知 / 心智理论**：回答关于角色心理状态、错误信念、隐藏情绪、语用推理等的选择题。
 
-系统把**战略规划**与**战术执行**解耦：
+系统支持三种执行模式：
 
-1. **Planner**（规划 Agent）把问题转成结构化的多阶段计划；
-2. **Executor**（执行 Agent）用 ReAct 循环（Reason → Act → Observe）逐步执行；
-3. **Tool Layer**（工具层）提供外化认知能力：Memory、Skills、RAG。
+1. **单次推理运行时 (v2, 默认)**：路由 → 组装 prompt（skill + RAG + playbook）→ 单次 LLM 调用 → 验证器检查 → 返回答案。这是基准评测的标准路径。
+2. **Full harness**（Plan → Execute → Finalize）：Planner 生成多阶段计划，Executor 通过 ReAct 循环逐步执行，Finalizer 综合得出答案。
+3. **Thin harness**（技能前置单次 LLM 调用）：选择性路由器挑选最佳技能提示词，拼接在问题前面，一次 LLM 调用完成。
 
-架构遵循项目组设定的规范。**内核是领域无关的**（同一骨架也能跑法律或数学推理）；所有 **ToM 相关知识都以外部插件形式挂载** —— 作为可加载的skill、validator、failure handler 等接入。
+### 工具层 (v2)
 
-系统支持两种执行模式：
+单次推理运行时提供三个可插拔模块：
 
-1. **Full harness**（Plan → Execute → Finalize）：Planner 生成多阶段计划，Executor 通过 ReAct 循环逐步执行，Finalizer 综合得出答案。
-2. **Thin harness**（技能前置单次 LLM 调用）：选择性路由器挑选最佳技能提示词，将其拼接在问题前面，一次 LLM 调用完成。
-
-## 工具层
-
-完整的harness框架提供三个外部的可插拔模块设计：
-
-- **技能**——精选推理提示（涵盖多个套装中的27项外部技能与16项内置技能）
-
-- **记忆手册**——经ACE优化的策略注入planner
-
-- **RAG** —— 常识知识检索（ATOMIC、社会化学、NormBank）
-
-该架构遵循项目负责人所下达的规范。**核心与领域无关**（相同的骨架可用于运行法律或数学推理）；所有**与心智理论相关的知识都是外部的**——作为可插拔的技能、验证器和故障处理程序加载。
+- **Skills v4** — 22 个精选 SKILL.md 推理提示 + LLM 路由器 (SkillV4Router)
+- **RAG v2** — 基于类别的 FAISS 检索，使用改写后的聚类数据（1500 条精简文档，来源：ATOMIC、Social Chemistry、NormBank）
+- **Memory Playbook** — 静态策略注入（ACE 精炼的 playbook）
 
 ---
 
-## 架构
+## 架构（v2 单次推理运行时）
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         Harness Layer                            │
-│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐    │
-│  │    Scheduler    │ │  Tool Registry  │ │ Context Manager │    │
-│  │   (状态机)      │ │   (工具分发)    │ │  (三级上下文)   │    │
-│  └────────┬────────┘ └────────┬────────┘ └────────┬────────┘    │
-│           │                   │                   │              │
-│  ┌────────▼────────────────────▼───────────────────▼────────┐   │
-│  │                     Planner Agent                         │   │
-│  │ 1. (强制) 查询 Memory Store 做 warm-start                │   │
-│  │ 2. 注入 Memory Playbook 策略（若启用）                   │   │
-│  │ 3. 生成结构化 JSON 计划（phase → step）                  │   │
-│  └──────────────────────────┬────────────────────────────────┘   │
-│                             │                                    │
-│  ┌──────────────────────────▼────────────────────────────┐       │
-│  │                  Executor Agent                       │       │
-│  │        每步 ReAct 循环：Reason → Act → Observe        │       │
-│  └──────────────────────────┬────────────────────────────┘       │
-│                             │                                    │
-│  ┌──────────────────────────▼────────────────────────────────┐  │
-│  │                     Tool Layer                            │  │
-│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐      │  │
-│  │  │ Memory Store │ │  Skill Lib   │ │  RAG Engine  │      │  │
-│  │  │ (vector idx) │ │ (declarative │ │ (FAISS+bge)  │      │  │
-│  │  │              │ │  +procedural)│ │              │      │  │
-│  │  └──────────────┘ └──────────────┘ └──────────────┘      │  │
-│  │  ┌──────────────────────────────────────────────────┐     │  │
-│  │  │ Built-in Skills: 16 ToM-specific skills          │     │  │
-│  │  │ External Packs: Set1 (15) + Set2 (12) skills     │     │  │
-│  │  │ Routers: LLM-based / Selective (regex-based)     │     │  │
-│  │  └──────────────────────────────────────────────────┘     │  │
-│  └───────────────────────────────────────────────────────────┘  │
+│                    HarnessRuntime (single-shot)                  │
 │                                                                 │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │                   Plugin System (Hooks)                  │  │
-│  │  • ToM validators (belief-order, knowledge-gate checks)  │  │
-│  │  • Failure handlers (classify → inject recovery skills)  │  │
-│  │  • Memory enrichment (TaskSignature fingerprinting)     │  │
-│  └──────────────────────────────────────────────────────────┘  │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐      │
+│  │ SkillV4Router│    │  RAGv2Engine │    │   Playbook   │      │
+│  │ (22 skills,  │    │ (FAISS+bge,  │    │  (static txt │      │
+│  │  LLM-routed) │    │  1500 docs)  │    │   injection) │      │
+│  └──────┬───────┘    └──────┬───────┘    └──────┬───────┘      │
+│         │                   │                   │               │
+│  ┌──────▼───────────────────▼───────────────────▼────────────┐  │
+│  │              Prompt Assembly                               │  │
+│  │  [Skill body] + [RAG context] + [Playbook] +              │  │
+│  │  [Story] + [Question] + [Options] + [Format instruction]  │  │
+│  └──────────────────────────┬────────────────────────────────┘  │
+│                             │                                   │
+│  ┌──────────────────────────▼────────────────────────────────┐  │
+│  │                    LLM Call (single-shot)                  │  │
+│  │  System: "Read story, give reason, then JSON answer"      │  │
+│  │  → Returns: reasoning + {"answer": "A"|"B"|"C"|"D"}      │  │
+│  └──────────────────────────┬────────────────────────────────┘  │
+│                             │                                   │
+│  ┌──────────────────────────▼────────────────────────────────┐  │
+│  │              Validators (optional retry)                   │  │
+│  │  ScalarProceduralValidator: arithmetic check for           │  │
+│  │  Scalar Implicature tasks → suggest/retry if invalid      │  │
+│  └───────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -126,11 +102,23 @@ export TOM_MODEL="qwen3.5-27b"
 python examples/run_demo.py
 ```
 
-### 跑 ToMBench 基准测试（full harness）
+### 跑 ToMBench 基准测试（单次推理 v2 运行时 — 默认）
 
 ```bash
-# 全部任务，每任务 20 样本
+# 全部任务，每任务 20 样本（基线，不启用任何模块）
 python examples/run_tombench_harness.py --limit 20
+
+# 启用技能路由（22 个 LLM 路由技能）
+python examples/run_tombench_harness.py --skill --limit 20
+
+# 启用 RAG v2 检索
+python examples/run_tombench_harness.py --rag --limit 20
+
+# 启用 Memory Playbook
+python examples/run_tombench_harness.py --memory --limit 20
+
+# 全部模块组合
+python examples/run_tombench_harness.py --skill --rag --memory --limit 20
 
 # 指定任务
 python examples/run_tombench_harness.py --tasks "False Belief Task,Hinting Task Test" --limit 10
@@ -142,10 +130,45 @@ python examples/run_tombench_harness.py --limit 0
 python examples/run_tombench_harness.py --tasks "False Belief Task" --limit 5 -v
 ```
 
+### 跑消融实验（全部 7 种模块组合）
+
+```bash
+# 全量数据（全部任务，全部样本）
+bash examples/run_ablation.sh
+
+# 快速测试（每任务 2 样本）
+bash examples/run_ablation.sh --limit 2
+
+# 指定任务
+bash examples/run_ablation.sh --tasks "False Belief Task,Persuasion Story Task"
+```
+
+消融脚本运行 7 种组合：baseline、skill、rag、memory、skill+rag、skill+memory、skill+rag+memory。已完成的运行会自动跳过。
+
+### 重跑失败样本 / 恢复中断的运行
+
+```bash
+# 仅重跑预测为空的样本
+python examples/rerun_failed.py results/ablation_0507/2_skill --skill
+
+# 恢复中断的运行（补全缺失样本）
+python examples/rerun_failed.py results/ablation_0507/7_rag_memory --rag --memory --resume
+```
+
+### 计算详细统计（8 类任务 + 6 个能力维度）
+
+```bash
+# 对父目录下所有配置计算
+python examples/compute_detailed_stats.py results/ablation_0507
+
+# 单个配置
+python examples/compute_detailed_stats.py results/ablation_0507/2_skill
+```
+
 ### 跑 ToMBench 基准测试 (thin harness — selective skill routing)
 
 ```bash
-# 使用regex-based路由选择器+每个问题单一LLM调用
+# 使用 regex-based 路由选择器 + 每个问题单一 LLM 调用
 python examples/run_selective_harness.py --limit 20
 
 # 特定任务
@@ -230,24 +253,16 @@ Playbook 内容**仅注入到 Planner** 提示词中（不进入 Executor 的 Re
 
 ## RAG 检索（`--rag`）
 
-RAG 在执行过程中提供社会规范/常识知识的动态检索。
+RAG v2 在单次推理时提供基于类别的社会规范/常识知识检索。
 
-### 构建 FAISS 索引（一次性）
+### 数据与索引
 
-RAG 引擎使用 bge-m3 embeddings，覆盖三个知识源（共 57.7 万条）：
-- **ATOMIC** —— 常识因果知识（8.1 万条）
-- **Social Chemistry** —— 社会规范（34 万条）
-- **NormBank** —— 行为准则（15.5 万条）
+RAG v2 使用 bge-m3 embeddings，覆盖三个原始知识源经过聚类改写后的 1500 条精简文档：
+- **ATOMIC** —— 常识因果知识
+- **Social Chemistry** —— 社会规范
+- **NormBank** —— 行为准则
 
-```bash
-# 全量索引构建（CPU 约 30-60 分钟）
-python -c "from tom_harness.tools import RAGEngine; r = RAGEngine(); r.build_index()"
-
-# 小样本快速测试（每源 100 条，约几分钟）
-python -c "from tom_harness.tools import RAGEngine; r = RAGEngine(); r.build_index(num_samples=100); print(f'Done: {r.size()} docs')"
-```
-
-索引缓存在 `tom_harness/tools/tomrag/index/` —— 后续运行从磁盘秒加载。
+数据放在 `tom_harness/tools/rag_v2_data/`，FAISS 索引缓存在 `tom_harness/tools/rag_v2_index/` —— 后续运行从磁盘秒加载。
 
 ### 用法
 
@@ -258,10 +273,11 @@ python examples/run_cogtom_harness.py --rag --category "Belief" --limit 10
 
 | 参数 | 默认值 | 说明 |
 |:---|:---|:---|
-| `--rag` | 关闭 | 启用 RAG 检索 |
-| `--rag_data_dir` | `tom_harness/tools/tomrag/data` | JSONL 知识语料目录 |
-| `--rag_index_dir` | `tom_harness/tools/tomrag/index` | FAISS 索引缓存目录 |
+| `--rag` | 关闭 | 启用 RAG v2 检索 |
+| `--rag_data_dir` | `tom_harness/tools/rag_v2_data` | RAG 数据目录 |
+| `--rag_index_dir` | `tom_harness/tools/rag_v2_index` | FAISS 索引缓存目录 |
 | `--rag_model` | `model/bge-m3` | Embedding 模型路径或 HuggingFace 名称 |
+| `--rag_rewritten` | 开启 | 使用改写后的聚类数据 |
 
 ### 同时启用 Memory Playbook + RAG
 
@@ -296,18 +312,40 @@ python examples/run_tombench_harness.py --memory --rag --limit 20 --tag memory_r
 
 ## 输出结构
 
-每次运行在 `results/<tag>/` 下产出以下文件：
+每次运行在 `results/<out_dir>/` 下产出以下文件：
 
 ```
-results/<tag>/
-├── results.jsonl              ← 逐样本记录（id、预测、正确与否、耗时等）
+results/<out_dir>/
+├── results.jsonl              ← 逐样本记录
 ├── stats.json                 ← 按任务/类别 + 总体准确率统计
-├── run.log                    ← 详细框架日志（按任务分组，不交叉）
+├── stats_detailed.json        ← （可选）8 类任务 + 6 能力维度细分
+├── run.log                    ← 详细框架日志
 └── llm_cache/
     └── llm_interactions.jsonl ← 原始 LLM 请求/响应缓存
 ```
 
-所有输出文件在每次运行时**覆盖写入**（无断点续跑机制）。
+### results.jsonl 格式
+
+```json
+{
+  "id": "False Belief Task_0001",
+  "task": "False Belief Task",
+  "answer": "B",
+  "predicted": "B",
+  "correct": true,
+  "skill_id": "skill3",
+  "n_llm_calls": 1,
+  "elapsed_sec": 5.12,
+  "error": null,
+  "thinking": "故事中 Sally 把球放在篮子里然后离开，Anne 把球移走了。Sally 仍然相信球在篮子里。"
+}
+```
+
+### 准确率计算
+
+- `predicted=""` （解析失败）或 `error != null` 的记录计为**错误**
+- 准确率 = `correct / (total - errors)` —— 错误从分母中排除
+- 这避免了解析失败人为拉低准确率
 
 ---
 
@@ -324,13 +362,14 @@ results/<tag>/
 | `--workers` | 8 | 并行 worker 数 |
 | `--verbose` / `-v` | 关闭 | 在控制台显示详细框架日志 |
 | `--out_dir` | `results` | 输出根目录 |
-| `--tag` | `notools` | 运行标签（结果保存到 `<out_dir>/<tag>/`） |
+| `--skill` | 关闭 | 启用 LLM 路由技能注入（22 个 v4 技能） |
+| `--rag` | 关闭 | 启用 RAG v2 检索 |
+| `--rag_data_dir` | `tom_harness/tools/rag_v2_data` | RAG 数据目录 |
+| `--rag_index_dir` | `tom_harness/tools/rag_v2_index` | RAG 索引目录 |
+| `--rag_model` | `model/bge-m3` | Embedding 模型 |
+| `--rag_rewritten` | 开启 | 使用改写后的聚类数据（1500 条） |
 | `--memory` | 关闭 | 启用 Memory Playbook |
 | `--memory_dir` | `memory_playbook/` | Playbook 目录路径 |
-| `--rag` | 关闭 | 启用 RAG 检索 |
-| `--rag_data_dir` | `tom_harness/tools/tomrag/data` | RAG 数据目录 |
-| `--rag_index_dir` | `tom_harness/tools/tomrag/index` | RAG 索引目录 |
-| `--rag_model` | `model/bge-m3` | Embedding 模型 |
 
 ### `run_cogtom_harness.py`
 
@@ -367,71 +406,48 @@ tom_harness/
 │   └── epoch_1_step_600_playbook.txt    ← ACE 精炼的策略
 │
 ├── tom_harness/                         ← 核心包
-│   ├── schemas.py                       ← Pydantic 数据模型（Plan, Step, Phase, ExecutionTrace 等）
+│   ├── schemas.py                       ← Pydantic 数据模型
 │   ├── llm.py                           ← LLM 客户端 + 交互缓存 + JSON 解析
+│   ├── runtime.py                       ← HarnessRuntime（v2 单次推理路径）
 │   ├── context.py                       ← ContextManager（三级上下文 + playbook 注入）
 │   ├── registry.py                      ← ToolRegistry（二维分发：tool_type + tool_name）
 │   ├── hooks.py                         ← 插件钩子系统（7 个扩展点）
-│   ├── planner.py                       ← Planner Agent（问题 → 结构化 Plan）
-│   ├── executor.py                      ← Executor Agent（ReAct 循环 + 终局合成）
-│   ├── scheduler.py                     ← Scheduler（编排 + replan + memory 持久化）
-│   ├── skill_router.py                  ← 基于 LLM 的技能路由（12 个硬编码技能）
+│   ├── planner.py                       ← Planner Agent（v1 多步路径，仍可用）
+│   ├── executor.py                      ← Executor Agent（ReAct 循环）
+│   ├── scheduler.py                     ← Scheduler（v1 编排器）
+│   │
+│   ├── routing/                         ← v2 路由器
+│   │   ├── base.py                      ← Router ABC + RouteDecision
+│   │   ├── skill_v4_router.py           ← LLM 路由器（22 个 SKILL.md）
+│   │   └── oracle_picks.py              ← 静态查表路由（用于消融对比）
+│   │
+│   ├── validators/                      ← v2 程序化验证器
+│   │   ├── base.py                      ← Validator ABC + ValidationResult
+│   │   └── scalar_procedural.py         ← Scalar Implicature 算术校验
 │   │
 │   ├── tools/
 │   │   ├── base.py                      ← Tool 抽象基类 + ToolResult 封装
-│   │   ├── memory.py                    ← MemoryStore（向量索引的任务-计划对）
+│   │   ├── memory.py                    ← MemoryStore（向量索引的任务-计划对，v1）
 │   │   ├── playbook.py                  ← MemoryPlaybook（静态策略加载器）
-│   │   ├── skills.py                    ← SkillLib（声明式 + 过程式技能）
-│   │   ├── rag.py                       ← RAGEngine（FAISS 适配器）
-│   │   └── tomrag/                      ← ToMRAG 子包
-│   │       ├── rag.py                   ← LangChain + FAISS + bge-m3 embeddings
-│   │       ├── data/                    ← 知识语料（57.7 万条）
-│   │       └── index/                   ← FAISS 向量索引（运行时构建）
+│   │   ├── skills_v4/                   ← 22 个 v4 SKILL.md（按目录组织）
+│   │   ├── rag_v2/                      ← RAG v2 引擎（类别感知的 FAISS 检索）
+│   │   ├── rag_v2_data/                 ← 1500 条改写后的聚类知识
+│   │   └── rag_v2_index/                ← FAISS 索引缓存
 │   │
-│   ├── plugins/
-│   │   ├── tom/                         ← ToM 专属插件
-│   │   │   ├── install.py               ← 一键安装器（ToM hooks + skills）
-│   │   │   ├── router.py                ← 基于签名的技能路由
-│   │   │   ├── validators.py            ← after_step 验证器（belief-order, knowledge-gate）
-│   │   │   ├── failure_handlers.py      ← 失败分类 → 注入恢复技能
-│   │   │   ├── memory_index.py          ← TaskSignature 提取 + memory 增强
-│   │   │   ├── story_model.py           ← 外化 ToM 状态（Event, Declaration, 查询）
-│   │   │   ├── plan_templates/          ← 3 个计划模板技能
-│   │   │   └── skills/                  ← 13 个推理技能 + 过程式处理器
-│   │   │       ├── handlers.py          ← Python 实现（quantifier, story_model 等）
-│   │   │       └── *.md                 ← SKILL.md 文件
-│   │   │
-│   │   └── external_skill_pack/         ← 外部贡献的技能包
-│   │       ├── adapter.py               ← SkillPackAdapter 抽象基类
-│   │       ├── set1_adapter.py          ← Set1 适配器（15 个 SKILL.md 技能）
-│   │       ├── set2_adapter.py          ← Set2 适配器（12 个 prompt-string 技能）
-│   │       ├── selective_router.py      ← 元路由器（基于正则，无需 LLM 调用）
-│   │       └── data/
-│   │           ├── skill_set1/          ← 15 个技能（faux-pas, belief, emotion 等）
-│   │           │   ├── ROUTING.md       ← 路由规则文档
-│   │           │   └── skill1..15/      ← 每个含 SKILL.md
-│   │           └── skill_set2/          ← 12 个技能
-│   │               ├── skills.py        ← SKILL_S1..S12 prompt 字符串
-│   │               └── llm_router.py    ← Set2 的 LLM 路由器
+│   └── plugins/                         ← v1 插件系统（仍可用）
+│       └── tom/                         ← ToM 专属插件（hooks + skills）
 │
 ├── examples/
 │   ├── run_demo.py                      ← 单题演示（Sally-Anne）
-│   ├── run_tombench_harness.py          ← ToMBench 全 harness runner
+│   ├── run_tombench_harness.py          ← ToMBench v2 运行时 runner（默认）
+│   ├── run_ablation.sh                  ← 消融实验脚本（7 种组合）
+│   ├── rerun_failed.py                  ← 重跑失败样本 / 恢复中断运行
+│   ├── compute_detailed_stats.py        ← 8 任务 + 6 能力维度细分统计
 │   ├── run_selective_harness.py         ← thin harness（选择性路由）
 │   ├── run_cogtom_harness.py            ← CogToM 基准测试 runner
-│   ├── run_tombench_with_skills.py      ← ToMBench + LLM 技能路由
-│   ├── run_skills_direct.py             ← 直接调用技能（无 harness）
-│   ├── run_compare_skill_packs.py       ← 技能包对比 runner
-│   ├── run_self_consistency.py          ← 自一致性投票 runner
-│   ├── run_skill_matrix.py              ← 技能 × 任务矩阵评估
-│   ├── run_task_classifier_inferred.py  ← 任务类型分类器评估
-│   ├── run_tombench_v03.py              ← v0.3 基线 runner
-│   └── run_ablation.sh                  ← 消融实验脚本
+│   └── ...                              ← 其他研究脚本
 │
 ├── docs/                                ← 分析文档
-│   ├── 0428效果分析.md                  ← 消融实验发现
-│   └── ...
-│
 └── results/                             ← 输出（gitignored）
 ```
 

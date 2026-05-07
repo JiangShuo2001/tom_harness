@@ -21,13 +21,14 @@ import threading
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 import requests
 
 logger = logging.getLogger(__name__)
 
 _THINK_TAG = re.compile(r"<think>[\s\S]*?</think>", re.MULTILINE)
+_THINK_EXTRACT = re.compile(r"<think>([\s\S]*?)</think>", re.MULTILINE)
 _JSON_FENCE = re.compile(r"```(?:json)?\s*([\s\S]*?)```", re.MULTILINE)
 _FIRST_JSON_OBJECT = re.compile(r"\{[\s\S]*\}", re.MULTILINE)
 
@@ -35,6 +36,8 @@ _FIRST_JSON_OBJECT = re.compile(r"\{[\s\S]*\}", re.MULTILINE)
 @dataclass
 class LLMClient:
     """OpenAI-compatible chat client."""
+    _class_lock: ClassVar[threading.Lock] = threading.Lock()
+
     api_base: str
     api_key: str
     model: str
@@ -45,7 +48,6 @@ class LLMClient:
     max_retries: int = 3
     cache_dir: str | None = None
     _call_seq: int = field(default=0, init=False, repr=False)
-    _log_lock: threading.Lock = field(default_factory=threading.Lock, init=False, repr=False)
 
     def set_cache_dir(self, path: str) -> None:
         self.cache_dir = path
@@ -53,17 +55,16 @@ class LLMClient:
         self.reset_cache()
 
     def reset_cache(self) -> None:
-        with self._log_lock:
+        with LLMClient._class_lock:
             self._call_seq = 0
             if self.cache_dir:
                 cache_file = Path(self.cache_dir) / "llm_interactions.jsonl"
-                if cache_file.exists():
-                    cache_file.unlink()
+                cache_file.unlink(missing_ok=True)
 
     def _log_interaction(self, system: str, user: str, response: str, duration_ms: int) -> None:
         if not self.cache_dir:
             return
-        with self._log_lock:
+        with LLMClient._class_lock:
             self._call_seq += 1
             record = {
                 "seq": self._call_seq,
@@ -123,6 +124,16 @@ class LLMClient:
                 msg = data["choices"][0]["message"]
                 content = msg.get("content") or ""
                 result = _THINK_TAG.sub("", content).strip()
+                # Fallback 1: check reasoning_content field (DashScope)
+                if not result:
+                    reasoning = msg.get("reasoning_content") or ""
+                    if reasoning:
+                        result = _THINK_TAG.sub("", reasoning).strip()
+                # Fallback 2: extract from inside <think> tags in content
+                if not result:
+                    m_think = _THINK_EXTRACT.search(content)
+                    if m_think:
+                        result = m_think.group(1).strip()
                 duration_ms = int((time.time() - t0) * 1000)
                 self._log_interaction(system, user, result, duration_ms)
                 return result
@@ -132,6 +143,58 @@ class LLMClient:
                 if attempt < self.max_retries - 1:
                     time.sleep(2 ** attempt)
         raise RuntimeError(f"LLM chat failed after {self.max_retries} attempts: {last_err}")
+
+    def chat_full(
+        self,
+        system: str,
+        user: str,
+        *,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
+        enable_thinking: bool | None = None,
+    ) -> tuple[str, str]:
+        """Return (answer, thinking) — answer has think tags stripped."""
+        think = self.enable_thinking if enable_thinking is None else enable_thinking
+        payload = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            "temperature": self.temperature if temperature is None else temperature,
+            "max_tokens": self.max_tokens if max_tokens is None else max_tokens,
+            "chat_template_kwargs": {"enable_thinking": think},
+            "enable_thinking": think,
+        }
+        last_err: Exception | None = None
+        for attempt in range(self.max_retries):
+            try:
+                t0 = time.time()
+                resp = requests.post(
+                    f"{self.api_base}/chat/completions",
+                    headers=self._headers(),
+                    json=payload,
+                    timeout=self.timeout,
+                )
+                resp.raise_for_status()
+                data = resp.json()
+                msg = data["choices"][0]["message"]
+                content = msg.get("content") or ""
+                # DashScope: separate reasoning_content field; vLLM: inline <think> tags
+                thinking = msg.get("reasoning_content") or ""
+                if not thinking:
+                    thinking_parts = _THINK_EXTRACT.findall(content)
+                    thinking = "\n".join(t.strip() for t in thinking_parts)
+                answer = _THINK_TAG.sub("", content).strip()
+                duration_ms = int((time.time() - t0) * 1000)
+                self._log_interaction(system, user, answer, duration_ms)
+                return answer, thinking
+            except Exception as e:  # noqa: BLE001
+                last_err = e
+                logger.warning(f"LLM chat_full attempt {attempt + 1}/{self.max_retries} failed: {e}")
+                if attempt < self.max_retries - 1:
+                    time.sleep(2 ** attempt)
+        raise RuntimeError(f"LLM chat_full failed after {self.max_retries} attempts: {last_err}")
 
     def chat_json(
         self,

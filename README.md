@@ -1,7 +1,7 @@
 # tom_harness
 
 > A lightweight, skill-based agent harness for Theory-of-Mind (ToM) benchmarks.
-> Plan-then-Execute architecture with ReAct inner loop; generic core + pluggable ToM specialization.
+> Single-shot runtime (v2) as default; Plan-then-Execute architecture available for multi-step research.
 
 中文版: [README_zh.md](README_zh.md)
 
@@ -15,20 +15,19 @@ reasoner on a specific task family. Here the task family is **social
 cognition / Theory of Mind**: multiple-choice questions about characters'
 mental states, false beliefs, hidden emotions, pragmatic inference, etc.
 
-The system supports two execution modes:
+The system supports three execution modes:
 
-1. **Full harness** (Plan → Execute → Finalize): Planner generates a multi-phase
-   plan, Executor runs each step via a ReAct loop, Finalizer synthesizes the answer.
-2. **Thin harness** (Skill-prepended single LLM call): A selective router picks
-   the best skill prompt, prepends it to the question, and calls the LLM once.
+1. **Single-shot runtime (v2, default)**: Route → Build prompt (skill + RAG + playbook) → Single LLM call → Validator check → Return answer. This is the canonical path for benchmark evaluation.
+2. **Full harness** (Plan → Execute → Finalize): Planner generates a multi-phase plan, Executor runs each step via a ReAct loop, Finalizer synthesizes the answer.
+3. **Thin harness** (Skill-prepended single LLM call): A selective router picks the best skill prompt, prepends it to the question, and calls the LLM once.
 
-### Tool Layer
+### Tool Layer (v2)
 
-The full harness provides externalized cognition through three pluggable modules:
+The single-shot runtime provides three pluggable modules:
 
-- **Skills** — curated reasoning prompts (27 external skills + 16 built-in skills across multiple packs)
-- **Memory Playbook** — ACE-refined strategies injected into the Planner
-- **RAG** — commonsense knowledge retrieval (ATOMIC, Social Chemistry, NormBank)
+- **Skills v4** — 22 curated SKILL.md reasoning prompts + LLM-based router (SkillV4Router)
+- **RAG v2** — category-aware FAISS retrieval over rewritten clusters (1500 condensed documents from ATOMIC, Social Chemistry, NormBank)
+- **Memory Playbook** — static strategy injection (ACE-refined playbook)
 
 The architecture follows the spec handed down by the project lead. The
 **core is domain-agnostic** (the same skeleton could run legal or math
@@ -37,50 +36,35 @@ pluggable skills, validators, and failure handlers.
 
 ---
 
-## Architecture
+## Architecture (v2 Single-Shot Runtime)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         Harness Layer                           │
-│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐   │
-│  │    Scheduler    │ │  Tool Registry  │ │ Context Manager │   │
-│  │ (orchestrator)  │ │  (dispatch)     │ │ (3-tier context)│   │
-│  └────────┬────────┘ └────────┬────────┘ └────────┬────────┘   │
-│           │                   │                   │             │
-│  ┌────────▼────────────────────▼───────────────────▼────────┐  │
-│  │                     Planner Agent                         │  │
-│  │ 1. (mandatory) query Memory Store for warm-start         │  │
-│  │ 2. inject Memory Playbook / Skill / RAG (if enabled)     │  │
-│  │ 3. generate structured JSON plan (phases → steps)        │  │
-│  └──────────────────────────┬────────────────────────────────┘  │
-│                             │                                   │
-│  ┌──────────────────────────▼────────────────────────────────┐  │
-│  │                  Executor Agent                           │  │
-│  │   ReAct loop per step: Reason → Act → Observe             │  │
-│  │   Phase-aware accumulated results → Finalizer             │  │
-│  │   Supports sub-steps (recursive execution)                │  │
-│  └──────────────────────────┬────────────────────────────────┘  │
-│                             │                                   │
-│  ┌──────────────────────────▼────────────────────────────────┐  │
-│  │                     Tool Layer                            │  │
-│  │  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐      │  │
-│  │  │ Memory Store │ │  Skill Lib   │ │  RAG Engine  │      │  │
-│  │  │ (vector idx) │ │ (declarative │ │ (FAISS+bge)  │      │  │
-│  │  │              │ │  +procedural)│ │              │      │  │
-│  │  └──────────────┘ └──────────────┘ └──────────────┘      │  │
-│  │  ┌──────────────────────────────────────────────────┐     │  │
-│  │  │ Built-in Skills: 16 ToM-specific skills          │     │  │
-│  │  │ External Packs: Set1 (15) + Set2 (12) skills     │     │  │
-│  │  │ Routers: LLM-based / Selective (regex-based)     │     │  │
-│  │  └──────────────────────────────────────────────────┘     │  │
-│  └───────────────────────────────────────────────────────────┘  │
+│                    HarnessRuntime (single-shot)                  │
 │                                                                 │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │                   Plugin System (Hooks)                  │  │
-│  │  • ToM validators (belief-order, knowledge-gate checks)  │  │
-│  │  • Failure handlers (classify → inject recovery skills)  │  │
-│  │  • Memory enrichment (TaskSignature fingerprinting)     │  │
-│  └──────────────────────────────────────────────────────────┘  │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐      │
+│  │ SkillV4Router│    │  RAGv2Engine │    │   Playbook   │      │
+│  │ (22 skills,  │    │ (FAISS+bge,  │    │  (static txt │      │
+│  │  LLM-routed) │    │  1500 docs)  │    │   injection) │      │
+│  └──────┬───────┘    └──────┬───────┘    └──────┬───────┘      │
+│         │                   │                   │               │
+│  ┌──────▼───────────────────▼───────────────────▼────────────┐  │
+│  │              Prompt Assembly                               │  │
+│  │  [Skill body] + [RAG context] + [Playbook] +              │  │
+│  │  [Story] + [Question] + [Options] + [Format instruction]  │  │
+│  └──────────────────────────┬────────────────────────────────┘  │
+│                             │                                   │
+│  ┌──────────────────────────▼────────────────────────────────┐  │
+│  │                    LLM Call (single-shot)                  │  │
+│  │  System: "Read story, give reason, then JSON answer"      │  │
+│  │  → Returns: reasoning + {"answer": "A"|"B"|"C"|"D"}      │  │
+│  └──────────────────────────┬────────────────────────────────┘  │
+│                             │                                   │
+│  ┌──────────────────────────▼────────────────────────────────┐  │
+│  │              Validators (optional retry)                   │  │
+│  │  ScalarProceduralValidator: arithmetic check for           │  │
+│  │  Scalar Implicature tasks → suggest/retry if invalid      │  │
+│  └───────────────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -127,11 +111,23 @@ export TOM_MODEL="qwen3.5-27b"
 python examples/run_demo.py
 ```
 
-### Run ToMBench benchmark (full harness)
+### Run ToMBench benchmark (single-shot v2 runtime — default)
 
 ```bash
-# All tasks, 20 samples per task
+# All tasks, 20 samples per task (baseline, no modules)
 python examples/run_tombench_harness.py --limit 20
+
+# With skill routing (22 LLM-routed skills)
+python examples/run_tombench_harness.py --skill --limit 20
+
+# With RAG v2 retrieval
+python examples/run_tombench_harness.py --rag --limit 20
+
+# With memory playbook
+python examples/run_tombench_harness.py --memory --limit 20
+
+# All modules combined
+python examples/run_tombench_harness.py --skill --rag --memory --limit 20
 
 # Specific tasks only
 python examples/run_tombench_harness.py --tasks "False Belief Task,Hinting Task Test" --limit 10
@@ -141,6 +137,41 @@ python examples/run_tombench_harness.py --limit 0
 
 # With verbose logging
 python examples/run_tombench_harness.py --tasks "False Belief Task" --limit 5 -v
+```
+
+### Run ablation experiments (all 7 module combinations)
+
+```bash
+# Full data (all tasks, all samples)
+bash examples/run_ablation.sh
+
+# Quick test (2 samples per task)
+bash examples/run_ablation.sh --limit 2
+
+# Specific tasks
+bash examples/run_ablation.sh --tasks "False Belief Task,Persuasion Story Task"
+```
+
+The ablation script runs 7 combinations: baseline, skill, rag, memory, skill+rag, skill+memory, skill+rag+memory. Completed runs are auto-skipped.
+
+### Rerun failed samples / resume interrupted runs
+
+```bash
+# Rerun only empty-prediction samples
+python examples/rerun_failed.py results/ablation_0507/2_skill --skill
+
+# Resume an interrupted run (fills in missing samples)
+python examples/rerun_failed.py results/ablation_0507/7_rag_memory --rag --memory --resume
+```
+
+### Compute detailed statistics (8 tasks + 6 ability dimensions)
+
+```bash
+# All configs under a parent directory
+python examples/compute_detailed_stats.py results/ablation_0507
+
+# Single config
+python examples/compute_detailed_stats.py results/ablation_0507/2_skill
 ```
 
 ### Run ToMBench benchmark (thin harness — selective skill routing)
@@ -297,18 +328,40 @@ Each line contains:
 
 ## Output Structure
 
-Each run produces the following under `results/<tag>/`:
+Each run produces the following under `results/<out_dir>/`:
 
 ```
-results/<tag>/
-├── results.jsonl              ← per-sample records (id, predicted, correct, timing, etc.)
-├── stats.json                 ← per-task/category + overall accuracy statistics
-├── run.log                    ← detailed framework logs (per-task, non-interleaved)
+results/<out_dir>/
+├── results.jsonl              ← per-sample records
+├── stats.json                 ← per-task + overall accuracy statistics
+├── stats_detailed.json        ← (optional) 8-task + 6-ability breakdown
+├── run.log                    ← detailed framework logs
 └── llm_cache/
     └── llm_interactions.jsonl ← raw LLM request/response cache
 ```
 
-All output files are **overwritten** on each run (no resume mechanism).
+### results.jsonl format
+
+```json
+{
+  "id": "False Belief Task_0001",
+  "task": "False Belief Task",
+  "answer": "B",
+  "predicted": "B",
+  "correct": true,
+  "skill_id": "skill3",
+  "n_llm_calls": 1,
+  "elapsed_sec": 5.12,
+  "error": null,
+  "thinking": "The story shows Sally placed the ball in the basket, then left. Anne moved it. Sally still believes it's in the basket."
+}
+```
+
+### Accuracy calculation
+
+- Records with `predicted=""` (parse failure) or `error != null` are counted as **errors**
+- Accuracy = `correct / (total - errors)` — errors are excluded from the denominator
+- This prevents parse failures from artificially deflating accuracy
 
 ---
 
@@ -324,14 +377,15 @@ All output files are **overwritten** on each run (no resume mechanism).
 | `--offset` | 0 | Skip first N samples per task |
 | `--workers` | 8 | Number of parallel workers |
 | `--verbose` / `-v` | off | Show detailed framework logs on console |
-| `--out_dir` | `results` | Root output directory |
-| `--tag` | `notools` | Run tag (results saved to `<out_dir>/<tag>/`) |
+| `--out_dir` | `results` | Output directory |
+| `--skill` | off | Enable LLM-routed skill injection (22 skills v4) |
+| `--rag` | off | Enable RAG v2 retrieval |
+| `--rag_data_dir` | `tom_harness/tools/rag_v2_data` | RAG data directory |
+| `--rag_index_dir` | `tom_harness/tools/rag_v2_index` | RAG index directory |
+| `--rag_model` | `model/bge-m3` | Embedding model |
+| `--rag_rewritten` | on | Use rewritten cluster data (1500 docs) |
 | `--memory` | off | Enable memory playbook |
 | `--memory_dir` | `memory_playbook/` | Playbook directory path |
-| `--rag` | off | Enable RAG retrieval |
-| `--rag_data_dir` | `tom_harness/tools/tomrag/data` | RAG data directory |
-| `--rag_index_dir` | `tom_harness/tools/tomrag/index` | RAG index directory |
-| `--rag_model` | `model/bge-m3` | Embedding model |
 
 ### `run_cogtom_harness.py`
 
@@ -754,7 +808,7 @@ Pluggable adapters consuming external skill sets via `SkillPackAdapter` ABC:
 | Script | Description |
 |:-------|:------------|
 | `run_demo.py` | Single Sally-Anne question through full harness |
-| `run_tombench_harness.py` | ToMBench full harness benchmark (parallel, configurable) |
+| `run_tombench_harness.py` | ToMBench single-shot v2 runner (parallel, configurable modules) |
 | `run_cogtom_harness.py` | CogToM benchmark runner (8 categories) |
 | `run_selective_harness.py` | Thin harness with selective routing (regex-based) |
 | `run_tombench_with_skills.py` | ToMBench with LLM skill router enabled |
@@ -764,25 +818,34 @@ Pluggable adapters consuming external skill sets via `SkillPackAdapter` ABC:
 | `run_skill_matrix.py` | Skill × task matrix evaluation |
 | `run_task_classifier_inferred.py` | Task-type classifier accuracy evaluation |
 | `run_tombench_v03.py` | v0.3 baseline runner |
-| `run_ablation.sh` | Shell script for ablation experiments |
+| `run_ablation.sh` | 7-combination ablation experiment (all module combos) |
+| `rerun_failed.py` | Rerun failed/empty samples, resume interrupted runs |
+| `compute_detailed_stats.py` | Compute stats by 8 task types + 6 ability dimensions |
 
 ---
 
-## Ablation Findings (Scalar Implicature Test, n=200)
+## Ablation Findings (ToMBench full dataset, n=2860, qwen3.5-27b)
 
-| Variant | Accuracy |
-|:--------|:---------|
-| Baseline (framework only) | 58.5% |
-| + Skill | **62.5%** (+4.0%) |
-| + Memory | 61.0% (+2.5%) |
-| + All | 60.5% (+2.0%) |
-| + RAG | 57.0% (−1.5%) |
+| Variant | Accuracy | Errors |
+|:--------|:---------|:-------|
+| Baseline (no modules) | 79.78% | 6 |
+| + Skill (v4, 22 skills) | **83.07%** | 2 |
+| + RAG (v2) | 77.73% | 4 |
+| + Memory (playbook) | 84.55% | 401 |
+| + Skill + RAG | 83.03% | 14 |
+| + Skill + Memory | 84.51% | 607 |
+| + RAG + Memory | 90.87%* | 56 |
+
+*RAG+Memory result based on partial run (1074/2860 samples).
 
 **Key insights**:
-- **Skill** brings the largest gain through workflow restructuring
-- **RAG** retrieves irrelevant commonsense passages that add noise for this task type
-- **Memory** (playbook) provides stable but modest improvement
-- See `docs/0428效果分析.md` for full analysis across three task types
+- **Skill v4** brings consistent +3.3pp gain with near-zero errors
+- **RAG v2** alone slightly hurts (−2pp) — retrieved passages can add noise
+- **Memory** achieves high accuracy on valid samples but causes high error rate (14%) due to long playbook (186KB) causing output truncation
+- **Skill + RAG** performs similarly to Skill alone — RAG doesn't add value on top of skill routing
+- Error rates for memory-containing configs are high due to prompt length; accuracy numbers should be interpreted with caution (survivorship bias)
+
+Statistics are computed excluding errors from the denominator (errors = parse failures + API errors).
 
 ---
 

@@ -41,24 +41,55 @@ logger = logging.getLogger(__name__)
 
 SYSTEM_RAW = (
     "You are a reading comprehension assistant. Read the story and answer "
-    "the multiple-choice question. Reply with ONLY a JSON object: "
+    "the multiple-choice question.\n"
+    "First give a brief reason (2-3 sentences) for your choice, "
+    "then output a JSON object on its own line: "
     '{"answer": "A" | "B" | "C" | "D"}'
 )
 
 _LETTER_RE = re.compile(r'"answer"\s*:\s*"([A-D])"')
+_REASON_RE = re.compile(r'^([\s\S]*?)\s*(\{[\s\S]*"answer"[\s\S]*\})\s*$')
+_BARE_LETTER_RE = re.compile(
+    r'(?:答案|answer|选)\s*(?:[:：为]|is)?\s*\(?([A-D])\)?'
+    r'|(?:^|\n)\s*\(?([A-D])\)?\s*[.。]?\s*$',
+    re.IGNORECASE | re.MULTILINE
+)
 
 
-def _parse_letter(text: str) -> str:
-    text = re.sub(r"<think>[\s\S]*?</think>", "", text or "").strip()
+def _parse_response(text: str) -> tuple[str, str]:
+    """Return (answer_letter, reasoning_text)."""
+    raw = text or ""
+    stripped = re.sub(r"<think>[\s\S]*?</think>", "", raw).strip()
+    # If stripping think tags leaves nothing, fall back to think content
+    if not stripped:
+        m_think = re.search(r"<think>([\s\S]*?)</think>", raw)
+        stripped = m_think.group(1).strip() if m_think else ""
+    text = stripped
+    reasoning = ""
+    m = _REASON_RE.match(text)
+    if m:
+        reasoning = m.group(1).strip()
+        json_part = m.group(2).strip()
+    else:
+        json_part = text
+
     try:
-        d = json.loads(text)
+        d = json.loads(json_part)
         a = str(d.get("answer", "")).strip().upper()
         if a in {"A", "B", "C", "D"}:
-            return a
+            return a, reasoning
     except Exception:  # noqa: BLE001
         pass
-    m = _LETTER_RE.search(text)
-    return m.group(1).upper() if m else ""
+    m2 = _LETTER_RE.search(text)
+    if m2:
+        return m2.group(1).upper(), reasoning
+    # Last resort: match bare letter patterns like "答案：B", "answer is C", or trailing letter
+    m3 = _BARE_LETTER_RE.search(text)
+    if m3:
+        letter = (m3.group(1) or m3.group(2)).upper()
+        return letter, reasoning
+    logger.warning("_parse_response failed to extract answer from: %s", text)
+    return ("", reasoning)
 
 
 def _build_user_prompt(*, story: str, question: str, options: dict[str, str],
@@ -80,7 +111,11 @@ def _build_user_prompt(*, story: str, question: str, options: dict[str, str],
     sections.append(f"## Question\n{question}")
     opts = "\n".join(f"{k}. {v}" for k, v in options.items() if v)
     sections.append(f"## Options\n{opts}")
-    sections.append('## Answer\nAfter applying any guidance above, reply with ONLY a JSON object: {"answer": "A"|"B"|"C"|"D"}')
+    sections.append(
+        '## Answer\n'
+        'After applying any guidance above, first state your reason in 2-3 sentences, '
+        'then output a JSON object on its own line: {"answer": "A"|"B"|"C"|"D"}'
+    )
     return "\n\n".join(sections)
 
 
@@ -90,7 +125,7 @@ def _build_retry_prompt(*, base_user: str, prior_answer: str, validator_feedback
         f"## Validator Feedback (from a procedural check on your prior answer)\n"
         f"Your previous answer was {prior_answer}.\n"
         f"{validator_feedback}\n\n"
-        '## Reconsider\nReply with ONLY a JSON object: {"answer": "A"|"B"|"C"|"D"}'
+        '## Reconsider\nState your reason in 2-3 sentences, then output a JSON object: {"answer": "A"|"B"|"C"|"D"}'
     )
 
 
@@ -99,6 +134,7 @@ class RuntimeResult:
     answer: str
     skill_id: str | None
     n_llm_calls: int
+    thinking: str = ""
     validator_events: list[dict] = field(default_factory=list)
 
 
@@ -147,12 +183,13 @@ class HarnessRuntime:
 
         # ── 1. initial LLM call ───────────────────────────────────────────
         n_calls = 1
+        reasoning = ""
         try:
-            text = self.llm.chat(SYSTEM_RAW, base_user, max_tokens=1024)
+            text = self.llm.chat(SYSTEM_RAW, base_user, max_tokens=4096)
         except Exception as e:
             logger.warning("initial LLM call failed: %s", e)
             text = ""
-        answer = _parse_letter(text)
+        answer, reasoning = _parse_response(text)
         events: list[dict] = []
 
         # ── 2. validators ─────────────────────────────────────────────────
@@ -192,7 +229,7 @@ class HarnessRuntime:
                 except Exception as e:
                     logger.warning("retry LLM call failed: %s", e)
                     break
-                new_answer = _parse_letter(text)
+                new_answer, _ = _parse_response(text)
                 if new_answer:
                     answer = new_answer
                 result = v.validate(
@@ -210,7 +247,7 @@ class HarnessRuntime:
 
         return RuntimeResult(
             answer=answer, skill_id=skill_id, n_llm_calls=n_calls,
-            validator_events=events,
+            thinking=reasoning, validator_events=events,
         )
 
 
