@@ -1,21 +1,21 @@
 """Run the harness on CogToM — single-shot runtime with v2 skill/RAG.
 
 Usage examples:
-  # Run 10 samples per category
-  python examples/run_cogtom_harness.py --limit 10
+  # Run all distilled samples, no tools
+  python examples/run_cogtom_v2_harness.py --data_file benchmark/CogToM/CogToM-en-distilled.jsonl
 
   # Run with skill routing + RAG + memory playbook
-  python examples/run_cogtom_harness.py --limit 10 --skill --rag --memory
+  python examples/run_cogtom_v2_harness.py --data_file benchmark/CogToM/CogToM-en-distilled.jsonl --skill --rag --memory
 
-  # Run only "Belief" category, 5 samples starting from the 20th
-  python examples/run_cogtom_harness.py --category "Belief" --limit 5 --offset 20
+  # Run only "Belief" category, 5 samples
+  python examples/run_cogtom_v2_harness.py --category "Belief" --limit 5 --skill
 
-  # Run all samples
-  python examples/run_cogtom_harness.py --limit 0
+  # Run full English dataset
+  python examples/run_cogtom_v2_harness.py --limit 0
 
 Outputs (saved to <out_dir>/):
   - results.jsonl        per-sample records
-  - stats.json           per-category + overall accuracy
+  - stats.json           per-category + per-subcategory + overall accuracy
 """
 
 from __future__ import annotations
@@ -61,6 +61,40 @@ from dotenv import load_dotenv  # noqa: E402
 load_dotenv()
 
 
+def load_cogtom_file(data_file: str) -> list[dict]:
+    """Load CogToM samples directly from a JSONL file."""
+    path = Path(data_file)
+    if not path.exists():
+        raise FileNotFoundError(f"CogToM data file not found: {path}")
+
+    samples: list[dict] = []
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            raw = json.loads(line)
+
+            answer = str(raw.get("answer", "")).strip().upper()
+            if answer not in {"A", "B", "C", "D"}:
+                answer = ""
+
+            samples.append({
+                "id": raw.get("id", ""),
+                "story": raw.get("scene", ""),
+                "question": raw.get("question", ""),
+                "options": raw.get("options", {}),
+                "answer": answer,
+                "metadata": {
+                    "category": raw.get("category", ""),
+                    "subcategory": raw.get("subcategory", ""),
+                    "scene_id": raw.get("scene_id", 0),
+                    "question_id": raw.get("question_id", 0),
+                },
+            })
+    return samples
+
+
 def build_harness(
     *,
     shared_rag: RAGv2Engine | None = None,
@@ -73,7 +107,7 @@ def build_harness(
     api_key = os.environ.get("TOM_API_KEY")
     model = os.environ.get("TOM_MODEL", "qwen3-32b")
     if not api_key:
-        raise SystemExit("ERROR: set the TOM_API_KEY env var (see README > Configuration)")
+        raise SystemExit("ERROR: set the TOM_API_KEY env var")
 
     llm = LLMClient(
         api_base=api_base, api_key=api_key, model=model,
@@ -157,7 +191,7 @@ def process_one(runtime_factory, sample, timeout_sec: float = 180.0):
         rec["n_llm_calls"] = result.n_llm_calls
         if result.thinking:
             rec["thinking"] = result.thinking
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         rec["error"] = f"{type(e).__name__}: {e}"
     rec["elapsed_sec"] = round(time.time() - t0, 2)
 
@@ -172,42 +206,28 @@ def process_one(runtime_factory, sample, timeout_sec: float = 180.0):
 
 def main():
     ap = argparse.ArgumentParser(
-        description="Run ToM harness on CogToM (single-shot runtime).",
+        description="Run ToM harness on CogToM (single-shot v2 runtime).",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
 
-    # ── data selection ────────────────────────────────────────────────────
     data_grp = ap.add_argument_group("data selection")
-    data_grp.add_argument(
-        "--data_dir", type=str, default=None,
-        help="Path to CogToM data directory (default: benchmark/cogtom/).",
-    )
-    data_grp.add_argument(
-        "--category", type=str, default=None,
-        help='Comma-separated category names, e.g. "Belief,Emotion". '
-             "Default: all categories. "
-             "Available: Belief, Comprehensive, Desire, Emotion, Intention, Knowledge, Non-literal, Percept.",
-    )
-    data_grp.add_argument(
-        "--limit", type=int, default=20,
-        help="Max samples PER CATEGORY (default: 20, 0 = no limit).",
-    )
-    data_grp.add_argument(
-        "--offset", type=int, default=0,
-        help="Skip the first N samples within each category (default: 0).",
-    )
+    data_grp.add_argument("--data_dir", type=str, default=None,
+                          help="Path to CogToM data directory (default: benchmark/cogtom/).")
+    data_grp.add_argument("--data_file", type=str, default=None,
+                          help="Path to a specific JSONL file (overrides --data_dir).")
+    data_grp.add_argument("--category", type=str, default=None,
+                          help='Comma-separated category names, e.g. "Belief,Emotion".')
+    data_grp.add_argument("--limit", type=int, default=0,
+                          help="Max samples PER CATEGORY (default: 0 = no limit).")
+    data_grp.add_argument("--offset", type=int, default=0)
 
-    # ── execution ─────────────────────────────────────────────────────────
     exec_grp = ap.add_argument_group("execution")
-    exec_grp.add_argument("--workers", type=int, default=8, help="Parallel workers (default: 8).")
-    exec_grp.add_argument("--verbose", "-v", action="store_true",
-                          help="Show detailed framework trace for each sample.")
+    exec_grp.add_argument("--workers", type=int, default=8)
+    exec_grp.add_argument("--verbose", "-v", action="store_true")
 
-    # ── output ────────────────────────────────────────────────────────────
     out_grp = ap.add_argument_group("output")
-    out_grp.add_argument("--out_dir", default="results", help="Output directory (default: results/).")
+    out_grp.add_argument("--out_dir", default="results")
 
-    # ── RAG retrieval (v2) ────────────────────────────────────────────────
     rag_grp = ap.add_argument_group("RAG retrieval (v2)")
     rag_grp.add_argument("--rag", action="store_true", help="Enable RAG v2 retrieval.")
     rag_grp.add_argument("--rag_data_dir", type=str, default="tom_harness/tools/rag_v2_data")
@@ -217,27 +237,22 @@ def main():
                          help="Use rewritten cluster data (default: True).")
     rag_grp.add_argument("--no_rag_rewritten", action="store_false", dest="rag_rewritten")
 
-    # ── Memory Playbook ──────────────────────────────────────────────────
     mem_grp = ap.add_argument_group("Memory playbook")
-    mem_grp.add_argument("--memory", action="store_true", help="Enable memory playbook injection (default: off).")
-    mem_grp.add_argument("--memory_dir", type=str, default="memory_playbook/",
-                         help="Path to playbook directory (default: memory_playbook/).")
+    mem_grp.add_argument("--memory", action="store_true")
+    mem_grp.add_argument("--memory_dir", type=str, default="memory_playbook/")
 
-    # ── Skill injection (v4) ─────────────────────────────────────────────
     skill_grp = ap.add_argument_group("Skill injection (v4)")
     skill_grp.add_argument("--skill", action="store_true",
                            help="Enable LLM-routed skill injection (22 skills).")
 
     args = ap.parse_args()
 
-    # ── resolve output paths ──────────────────────────────────────────────
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     results_path = out_dir / "results.jsonl"
-    stats_path   = out_dir / "stats.json"
-    log_path     = out_dir / "run.log"
+    stats_path = out_dir / "stats.json"
+    log_path = out_dir / "run.log"
 
-    # ── logging setup ─────────────────────────────────────────────────────
     if args.verbose and _console_handler:
         _console_handler.removeFilter(_console_filter)
 
@@ -247,21 +262,16 @@ def main():
     if results_path.exists():
         results_path.unlink()
 
-    # ── load & select samples ─────────────────────────────────────────────
-    samples = load_cogtom(data_dir=args.data_dir, lang="en")
+    # ── load samples ─────────────────────────────────────────────────────
+    if args.data_file:
+        samples = load_cogtom_file(args.data_file)
+    else:
+        samples = load_cogtom(data_dir=args.data_dir, lang="en")
     logger.info("Loaded %d total CogToM samples", len(samples))
 
-    if args.category:
-        cat_filter = {c.strip() for c in args.category.split(",")}
-    else:
-        cat_filter = None
+    cat_filter = {c.strip() for c in args.category.split(",")} if args.category else None
 
-    pool = select_samples(
-        samples,
-        categories=cat_filter,
-        offset=args.offset,
-        limit=args.limit,
-    )
+    pool = select_samples(samples, categories=cat_filter, offset=args.offset, limit=args.limit)
 
     cat_counts = defaultdict(int)
     for s in pool:
@@ -275,7 +285,7 @@ def main():
         logger.info("Nothing to run.")
         return
 
-    # ── RAG setup ─────────────────────────────────────────────────────────
+    # ── RAG setup ────────────────────────────────────────────────────────
     shared_rag: RAGv2Engine | None = None
     if args.rag:
         shared_rag = RAGv2Engine(
@@ -291,7 +301,7 @@ def main():
             logger.info("RAG data not found — running without RAG")
             shared_rag = None
 
-    # ── Memory Playbook setup ─────────────────────────────────────────────
+    # ── Memory Playbook setup ────────────────────────────────────────────
     shared_playbook: MemoryPlaybook | None = None
     if args.memory:
         shared_playbook = MemoryPlaybook(playbook_dir=args.memory_dir)
@@ -305,7 +315,7 @@ def main():
     if args.skill:
         logger.info("Skill injection enabled (v4: 22 LLM-routed skills)")
 
-    # ── run ────────────────────────────────────────────────────────────────
+    # ── run ───────────────────────────────────────────────────────────────
     llm_cache_dir = str(out_dir / "llm_cache")
     runtime_factory = lambda: build_harness(  # noqa: E731
         shared_rag=shared_rag,
@@ -321,7 +331,7 @@ def main():
             s = futs[fut]
             try:
                 rec, log_lines = fut.result(timeout=360)
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:
                 rec = {"id": s["id"], "category": s["metadata"].get("category"),
                        "subcategory": s["metadata"].get("subcategory"),
                        "answer": s["answer"],
@@ -341,7 +351,6 @@ def main():
                 logger.info("progress=%d/%d elapsed=%.1fmin running_acc=%.3f",
                             completed, len(pool), elapsed, acc_so_far)
 
-    # ── stats ──────────────────────────────────────────────────────────────
     _print_and_save_stats(results_path, stats_path, pool)
 
 
@@ -387,7 +396,7 @@ def _live_accuracy(path: Path) -> float:
                 r = json.loads(line)
                 n += 1
                 c += int(bool(r.get("correct")))
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass
     return c / n if n else 0.0
 
@@ -401,7 +410,7 @@ def _load_all(path: Path):
                 continue
             try:
                 out.append(json.loads(line))
-            except Exception:  # noqa: BLE001
+            except Exception:
                 pass
     return out
 
@@ -425,13 +434,14 @@ def _compute_stats(records):
         per_subcat[subcat]["errors"] += int(bool(r.get("error")))
 
     for d in list(per_cat.values()) + list(per_subcat.values()):
-        n = d["total"] or 1
-        d["accuracy"] = d["correct"] / n
+        valid = d["total"] - d["errors"]
+        d["accuracy"] = d["correct"] / valid if valid > 0 else 0.0
 
+    valid_total = total - errors
     return {
         "overall": {
             "total": total, "correct": correct, "errors": errors,
-            "accuracy": round(correct / total, 4) if total else 0,
+            "accuracy": round(correct / valid_total, 4) if valid_total else 0,
         },
         "per_category": dict(per_cat),
         "per_subcategory": dict(per_subcat),

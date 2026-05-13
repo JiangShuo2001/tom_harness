@@ -39,13 +39,55 @@ from .validators.base import Validator, ValidationResult
 logger = logging.getLogger(__name__)
 
 
-SYSTEM_RAW = (
+SYSTEM_BASE = (
     "You are a reading comprehension assistant. Read the story and answer "
     "the multiple-choice question.\n"
-    "First give a brief reason (2-3 sentences) for your choice, "
+)
+
+SYSTEM_SKILL_HINT = (
+    "A domain-specific reasoning skill is provided in the user message under "
+    "\"## Reasoning Skill\". Follow its workflow step-by-step before choosing "
+    "your answer.\n"
+)
+
+SYSTEM_RAG_HINT = (
+    "Background knowledge retrieved from a commonsense knowledge base is "
+    "provided under \"## Background Knowledge\". Use it as supplementary "
+    "reference when it is relevant, but always prioritize evidence from the "
+    "story itself.\n"
+)
+
+SYSTEM_PLAYBOOK_HINT = (
+    "A strategy playbook is provided under \"## Playbook\". Apply its "
+    "strategies and heuristics, and be mindful of the common mistakes it "
+    "documents.\n"
+)
+
+SYSTEM_TAIL = (
+    "First give a brief reason for your choice, "
     "then output a JSON object on its own line: "
     '{"answer": "A" | "B" | "C" | "D"}'
 )
+
+# Keep backward-compat alias for any external code referencing SYSTEM_RAW
+SYSTEM_RAW = SYSTEM_BASE + SYSTEM_TAIL
+
+
+def _build_system_prompt(
+    *,
+    has_skill: bool = False,
+    has_rag: bool = False,
+    has_playbook: bool = False,
+) -> str:
+    parts = [SYSTEM_BASE]
+    if has_skill:
+        parts.append(SYSTEM_SKILL_HINT)
+    if has_rag:
+        parts.append(SYSTEM_RAG_HINT)
+    if has_playbook:
+        parts.append(SYSTEM_PLAYBOOK_HINT)
+    parts.append(SYSTEM_TAIL)
+    return "".join(parts)
 
 _LETTER_RE = re.compile(r'"answer"\s*:\s*"([A-D])"')
 _REASON_RE = re.compile(r'^([\s\S]*?)\s*(\{[\s\S]*"answer"[\s\S]*\})\s*$')
@@ -181,11 +223,17 @@ class HarnessRuntime:
             playbook=self.playbook,
         )
 
+        system_prompt = _build_system_prompt(
+            has_skill=bool(skill_body),
+            has_rag=bool(rag_context),
+            has_playbook=bool(self.playbook),
+        )
+
         # ── 1. initial LLM call ───────────────────────────────────────────
         n_calls = 1
         reasoning = ""
         try:
-            text = self.llm.chat(SYSTEM_RAW, base_user, max_tokens=4096)
+            text = self.llm.chat(system_prompt, base_user, max_tokens=4096)
         except Exception as e:
             logger.warning("initial LLM call failed: %s", e)
             text = ""
@@ -225,7 +273,7 @@ class HarnessRuntime:
                 )
                 n_calls += 1
                 try:
-                    text = self.llm.chat(SYSTEM_RAW, retry_user, max_tokens=1024)
+                    text = self.llm.chat(system_prompt, retry_user, max_tokens=1024)
                 except Exception as e:
                     logger.warning("retry LLM call failed: %s", e)
                     break
