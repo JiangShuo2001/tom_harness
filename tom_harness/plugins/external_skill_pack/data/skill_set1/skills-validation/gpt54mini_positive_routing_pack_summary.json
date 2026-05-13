@@ -1,0 +1,24 @@
+{
+  "counts_by_skill": {
+    "skill1": 10,
+    "skill2": 10,
+    "skill3": 10,
+    "skill4": 10,
+    "skill5": 10,
+    "skill6": 3,
+    "skill7": 10,
+    "skill8": 10,
+    "skill9": 4,
+    "skill10": 10,
+    "skill11": 10,
+    "skill12": 10,
+    "skill13": 10,
+    "skill14": 10,
+    "skill15": 10
+  },
+  "total_items": 137,
+  "skills_below_target": {
+    "skill6": 3,
+    "skill9": 4
+  }
+}

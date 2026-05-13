@@ -60,13 +60,17 @@ class Scheduler:
         dataset: str = "",
     ) -> FinalResult:
         t_start = time.time()
+        logger.info("=" * 60)
+        logger.info("[Scheduler] ══ Task start ══ id=%s", task_id)
+        logger.info("[Scheduler] Question: %s", question[:200])
+        self.planner.llm.reset_cache()
         self.context.begin_task(question=question, options=options)
 
         # 1. Plan
         try:
             plan = self.planner.plan(task_id=task_id, question=question, options=options)
         except Exception as e:  # noqa: BLE001
-            logger.exception("Planning phase failed")
+            logger.exception("[Scheduler] Planning phase FAILED")
             return FinalResult(
                 task_id=task_id, answer="", success=False,
                 plan=_empty_plan(task_id), traces=[],
@@ -79,11 +83,24 @@ class Scheduler:
         exec_order = 0
 
         # 2. Execute — phase-by-phase, step-by-step
+        completed_step_ids: set[str] = set()
         while True:
             failed = False
             for phase in plan.phases:
+                logger.info("[Scheduler] ── Phase %d: %s ──", phase.phase_order, phase.phase_name)
                 for step in phase.steps:
                     exec_order += 1
+                    # B6 fix: enforce depends_on. If any declared dependency
+                    # has not yet completed, log a warning. We don't block
+                    # execution (LLM-emitted depends_on is noisy), but the
+                    # warning surfaces silent corruption to the runner log.
+                    missing = [d for d in (step.depends_on or [])
+                               if d and d not in completed_step_ids]
+                    if missing:
+                        logger.warning(
+                            f"step {step.step_id[:8]} declares depends_on={step.depends_on} "
+                            f"but {missing} are not yet completed — executing anyway"
+                        )
                     ctx = ExecutionContext(
                         plan=plan,
                         current_phase_id=phase.phase_id,
@@ -91,12 +108,14 @@ class Scheduler:
                         global_context=self.context.global_context,
                     )
                     trace = self.executor.execute_step(ctx, exec_order)
+                    if trace.step_result.status == "completed":
+                        completed_step_ids.add(step.step_id)
                     traces.append(trace)
                     if trace.step_result.status == "failed":
                         directive = self._gather_recovery_directive(step, trace, ctx)
                         if directive and directive.action == "replan" and replans < self.config.max_replans:
                             replans += 1
-                            logger.info(f"Replanning (attempt {replans}) due to {directive.failure_type}")
+                            logger.info("[Scheduler] Replanning (attempt %d) due to %s", replans, directive.failure_type)
                             plan = self._replan(
                                 question=question,
                                 options=options,
@@ -139,13 +158,18 @@ class Scheduler:
                     memory = em
             self.memory.insert(memory)
 
+        elapsed = time.time() - t_start
+        logger.info("[Scheduler] ══ Task done ══ id=%s answer=%s success=%s elapsed=%.2fs",
+                     task_id, answer, success, elapsed)
+        logger.info("=" * 60)
+
         return FinalResult(
             task_id=task_id,
             answer=answer,
             success=success,
             plan=plan,
             traces=traces,
-            elapsed_sec=time.time() - t_start,
+            elapsed_sec=elapsed,
             error=None if success else "finalize produced no answer",
             metadata={"replans": replans, "num_steps": exec_order},
         )
@@ -176,6 +200,7 @@ class Scheduler:
     ) -> Plan:
         # Tag the new plan with the failure note so the planner sees it
         self.context.record_step_result(
+            "_recovery",
             "_last_failure",
             {"step_id": failed_step.step_id, "failure_type": directive.failure_type, "note": directive.note},
         )

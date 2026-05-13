@@ -38,28 +38,53 @@ from .tools.memory import MemoryStore
 logger = logging.getLogger(__name__)
 
 
-PLANNER_SYSTEM = """You are the Planner of a Theory-of-Mind agent harness. \
-Your job: decompose the question into a multi-phase Plan that the Executor \
-can follow step by step. Obey the JSON schema exactly.
+PLANNER_SYSTEM = """You are the Planner of a Theory-of-Mind reasoning agent. \
+Your job: decompose the question into a structured multi-phase reasoning Plan \
+that the Executor can follow step by step. Output ONLY a JSON object.
 
 Principles:
-- Prefer 2-4 phases with 1-3 steps each; keep plans lean.
-- Each step may call at most one tool. Use `"tool_type": "none"` if the \
-step is pure reasoning.
-- Every tool name you mention MUST be one of those listed in AVAILABLE TOOLS.
-- When retrieved memories are provided, prefer matching their plan structure \
-if task_type aligns.
+- Prefer 2-3 phases with 1-3 steps each; keep plans lean and focused.
+- All steps are pure reasoning — no tool calls. Each step should describe \
+a specific analytical action (extract facts, track beliefs, compare options, etc.).
+- If a Strategy Guide is provided, it contains the recommended reasoning \
+approach for this type of question. Design your plan to follow that strategy \
+closely — map its key steps into your phases/steps.
+- If Retrieved Knowledge is provided, incorporate relevant social norms or \
+background knowledge into the appropriate reasoning steps.
+- If a Memory Playbook is provided, apply relevant strategies and guard \
+against the listed common mistakes.
 - `task_type` should be a short snake_case label describing the ToM \
-reasoning category (e.g. false_belief, second_order_belief, \
-knowledge_gate, aware_of_reader, faux_pas, scalar_implicature, hidden_emotion, \
-pragmatic_inference, perspective_taking, or general_tom).
+reasoning category (e.g. false_belief, second_order_belief, faux_pas, \
+scalar_implicature, hidden_emotion, pragmatic_inference, perspective_taking, \
+strategic_intent, or general_tom).
 - Output ONLY a JSON object matching the schema. No commentary."""
+
+# ── Original PLANNER_SYSTEM (tool-aware, for Plan B / full-framework mode) ──
+# PLANNER_SYSTEM = """You are the Planner of a Theory-of-Mind agent harness. \
+# Your job: decompose the question into a multi-phase Plan that the Executor \
+# can follow step by step. Obey the JSON schema exactly.
+#
+# Principles:
+# - Prefer 2-4 phases with 1-3 steps each; keep plans lean.
+# - Each step may call at most one tool. Use `"tool_type": "none"` if the \
+# step is pure reasoning.
+# - Every tool name you mention MUST be one of those listed in AVAILABLE TOOLS.
+# - When retrieved memories are provided, prefer matching their plan structure \
+# if task_type aligns.
+# - If a Memory Playbook is provided, read it carefully and apply relevant \
+# strategies and insights when designing the plan. Pay special attention to \
+# the COMMON MISTAKES TO AVOID section and ensure the plan guards against them.
+# - `task_type` should be a short snake_case label describing the ToM \
+# reasoning category (e.g. false_belief, second_order_belief, \
+# knowledge_gate, aware_of_reader, faux_pas, scalar_implicature, hidden_emotion, \
+# pragmatic_inference, perspective_taking, or general_tom).
+# - Output ONLY a JSON object matching the schema. No commentary."""
 
 
 PLANNER_USER_TEMPLATE = """## Context
 {fixed_preamble}
 
-## Retrieved Memories (from warm-start Memory Store query)
+{playbook_block}{skill_block}{rag_block}## Retrieved Memories (from warm-start Memory Store query)
 {memory_block}
 
 ## Current Question
@@ -85,13 +110,8 @@ do not include them in output):
       "steps": [
         {{
           "step_order": 1,
-          "description": "<action for this step>",
+          "description": "<specific reasoning action for this step>",
           "depends_on": [],
-          "tool": {{
-            "tool_type": "memory|skill|rag|none",
-            "tool_name": "<exact name from AVAILABLE TOOLS or empty>",
-            "tool_params": {{ ... }}
-          }},
           "expected_output_schema": "<what this step should yield>"
         }}
       ]
@@ -100,6 +120,52 @@ do not include them in output):
 }}
 
 Generate the plan now."""
+
+# ── Original PLANNER_USER_TEMPLATE (with tool field in output schema) ────────
+# PLANNER_USER_TEMPLATE = """## Context
+# {fixed_preamble}
+#
+# {playbook_block}{skill_block}{rag_block}## Retrieved Memories (from warm-start Memory Store query)
+# {memory_block}
+#
+# ## Current Question
+# {question}
+#
+# {options_block}
+#
+# ## Output Schema
+# Return a JSON object with this shape (field descriptions are for you, \
+# do not include them in output):
+#
+# {{
+#   "task_type": "<snake_case ToM category>",
+#   "expected_final_output": {{
+#     "format": "letter",
+#     "description": "single letter A/B/C/D"
+#   }},
+#   "phases": [
+#     {{
+#       "phase_name": "<short>",
+#       "phase_order": 1,
+#       "description": "<what this phase accomplishes>",
+#       "steps": [
+#         {{
+#           "step_order": 1,
+#           "description": "<action for this step>",
+#           "depends_on": [],
+#           "tool": {{
+#             "tool_type": "memory|skill|rag|none",
+#             "tool_name": "<exact name from AVAILABLE TOOLS or empty>",
+#             "tool_params": {{ ... }}
+#           }},
+#           "expected_output_schema": "<what this step should yield>"
+#         }}
+#       ]
+#     }}
+#   ]
+# }}
+#
+# Generate the plan now."""
 
 
 @dataclass
@@ -116,6 +182,9 @@ class Planner:
     task_id_prefix: str = "task"
 
     def plan(self, *, task_id: str, question: str, options: dict[str, str] | None = None) -> Plan:
+        logger.info("[Planner] ── Planning start ── task_id=%s", task_id)
+        logger.debug("[Planner] Question: %s", question[:200])
+
         # 1. Pre-plan hooks (plugins may inject preamble text, etc.)
         self.hooks.fire("before_plan", question=question)
 
@@ -137,6 +206,7 @@ class Planner:
                 plan_summary=hit["plan_summary"],
             ))
         self.context.attach_memories(retrieved_memories)
+        logger.info("[Planner] Memory warm-start: %d hits retrieved", len(memory_refs))
 
         # 3. LLM plan generation
         memory_block = _format_memory_block(memory_refs, retrieved_memories)
@@ -145,15 +215,40 @@ class Planner:
             opts = "\n".join(f"{k}. {v}" for k, v in options.items() if v)
             options_block = f"## Options\n{opts}\n"
 
+        playbook_block = ""
+        if self.context.playbook_content:
+            playbook_block = f"## Memory Playbook\n{self.context.playbook_content}\n\n"
+
+        skill_block = ""
+        if self.context.skill_content:
+            skill_block = f"## Strategy Guide\n{self.context.skill_content}\n\n"
+
+        rag_block = ""
+        if self.context.rag_context:
+            rag_block = f"## Retrieved Knowledge\n{self.context.rag_context}\n\n"
+
         user = PLANNER_USER_TEMPLATE.format(
             fixed_preamble=self.context.render_fixed_preamble(),
+            playbook_block=playbook_block,
+            skill_block=skill_block,
+            rag_block=rag_block,
             memory_block=memory_block,
             question=question,
             options_block=options_block,
         )
 
+        logger.info("[Planner] Calling LLM for plan generation...")
         plan_dict = self._generate_plan_json(user)
         plan = self._assemble_plan(task_id=task_id, plan_dict=plan_dict, memory_refs=memory_refs)
+
+        logger.info("[Planner] Plan generated: task_type=%s, %d phases, %d total steps",
+                     plan.task_type, len(plan.phases),
+                     sum(len(p.steps) for p in plan.phases))
+        for p in plan.phases:
+            logger.info("[Planner]   Phase %d: %s (%d steps)", p.phase_order, p.phase_name, len(p.steps))
+            for s in p.steps:
+                tool_info = f"{s.tool.tool_type.value}:{s.tool.tool_name}" if s.tool else "none"
+                logger.info("[Planner]     Step %d: %s [tool=%s]", s.step_order, s.description[:80], tool_info)
 
         # 4. Post-plan hooks (plugins may amend the plan)
         amendments = self.hooks.fire("after_plan", plan=plan)
@@ -161,6 +256,7 @@ class Planner:
             if isinstance(amended, Plan):
                 plan = amended
 
+        logger.info("[Planner] ── Planning done ──")
         return plan
 
     # ── internals ──────────────────────────────────────────────────────────
@@ -193,6 +289,17 @@ class Planner:
                             tool_name=rt.get("tool_name", ""),
                             tool_params=rt.get("tool_params", {}) or {},
                         )
+                        # B9 fix: validate tool_name against registry at plan
+                        # assembly time, not execution time. Unknown tools
+                        # become tool=None (effectively a pure-reasoning step)
+                        # so the executor doesn't waste a dispatch on a name
+                        # that will fail.
+                        if tool and not self.registry.has(tool.tool_type, tool.tool_name):
+                            logger.warning(
+                                f"Planner emitted unknown tool ({tool.tool_type.value}, "
+                                f"{tool.tool_name}) — converting step to pure-reasoning"
+                            )
+                            tool = None
                     except ValueError:
                         tool = None  # unknown tool_type — drop it
                 deps_raw = rs.get("depends_on", []) or []

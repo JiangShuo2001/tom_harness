@@ -1,9 +1,12 @@
-"""ToM failure-type → remedy mapping.
+"""ToM failure-type → remedy mapping (v0.2).
 
-Classifies a failed step against ToM failure taxonomy and proposes a
-recovery action (usually: replan and inject the relevant skill(s)).
+Classifies a failed step and proposes a RecoveryDirective (replan with
+injected skills). The taxonomy is grounded in an empirical analysis of
+harness-mode error cases: see REPORT_HARNESS_NOTOOLS.md and the error
+inventory in tom_harness/plugins/tom/skills/*.md for the failure-type
+rationale.
 
-The taxonomy mirrors `tom_skills.json:failure_type_to_skill_mapping`.
+Skill IDs refer to files under `plugins/tom/skills/`.
 """
 
 from __future__ import annotations
@@ -13,18 +16,29 @@ from ...schemas import ExecutionContext, ExecutionTrace, Step
 
 
 FAILURE_TO_SKILLS: dict[str, list[str]] = {
-    "knowledge_gate_bypass":    ["S01_knowledge_state_tracking", "S02_knowledge_gate_filter"],
-    "false_belief_tracking":    ["S03_false_belief_tracking"],
-    "second_order_belief":      ["S03_false_belief_tracking", "S04_second_order_belief"],
-    "double_bluff":             ["S05_double_bluff_reasoning", "S06_pragmatic_speech_act"],
-    "social_norm_violation":    ["S06_pragmatic_speech_act", "S07_audience_adaptation"],
-    "quantifier_grounding":     ["S08_quantifier_grounding"],
-    "hidden_emotion":           ["S09_emotion_behind_mask"],
-    "perspective_taking":       ["S10_perspective_integration"],
-    "desire_action_mismatch":   ["S11_desire_belief_interaction"],
-    "pragmatic_inference":      ["S06_pragmatic_speech_act"],
-    "surface_match_trap":       ["S01_knowledge_state_tracking", "S02_knowledge_gate_filter"],
-    "intention_inference":      ["S05_double_bluff_reasoning", "S11_desire_belief_interaction"],
+    # Narrative hallucination — model fabricates unsupported detail
+    "narrative_hallucination":  ["S01_evidence_ground"],
+    # Quantifier errors (Scalar Implicature)
+    "quantifier_grounding":     ["S02_quantifier_solve"],
+    # Belief-subject confusion (wrong-perspective false-belief)
+    "subject_confusion":        ["S03_subject_disambig", "S08_perception_timeline"],
+    # Persuasion over-engineering (picks complex strategy)
+    "persuasion_overengineering": ["S04_minimal_intervention"],
+    # Emotion magnification (picks most vivid option)
+    "emotion_magnification":    ["S05_emotion_moderation", "S01_evidence_ground"],
+    # Implicit-knowledge gap (faux pas)
+    "implicit_knowledge_gap":   ["S06_implicit_knowledge"],
+    # Causal-chain skipping (Strange Story / intention)
+    "causal_chain_skip":        ["S07_causal_chain"],
+    # Classical Sally-Anne false belief
+    "false_belief_tracking":    ["S08_perception_timeline", "S03_subject_disambig"],
+    "second_order_belief":      ["S08_perception_timeline", "S03_subject_disambig"],
+    # Legacy aliases preserved for backwards compat with the error
+    # classifier's older labels (still used by classify_failure below)
+    "knowledge_gate_bypass":    ["S06_implicit_knowledge"],
+    "pragmatic_inference":      ["S01_evidence_ground"],
+    "surface_match_trap":       ["S01_evidence_ground", "S06_implicit_knowledge"],
+    "intention_inference":      ["S07_causal_chain"],
 }
 
 

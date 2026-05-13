@@ -1,0 +1,4 @@
+('ToMBench', 'gpt-5.4-mini'): 180/592 = 30.4%
+('ToMBench', 'glm-5'): 152/428 = 35.5%
+('CogToM', 'gpt-5.4-mini'): 174/444 = 39.2%
+('CogToM', 'glm-5'): 2/5 = 40.0%
