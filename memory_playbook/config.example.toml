@@ -1,0 +1,8 @@
+[selector]
+provider      = "openai"
+api_key       = "${OPENAI_API_KEY}"
+model         = "gpt-4o-mini"
+# base_url    = "https://..."     # required only for provider = "custom"
+max_tokens    = 1024
+max_bullets   = 8
+use_json_mode = false

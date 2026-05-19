@@ -1,10 +1,10 @@
-"""Run the harness on ToMBench — single-shot runtime with v2 skill/RAG.
+"""Run the harness on ToMBench — single-shot runtime with v2 skill/RAG/memory.
 
 Usage examples:
   # Run 10 samples per task, no tools
   python examples/run_tombench_harness.py --limit 10
 
-  # Run with skill routing + RAG + memory playbook
+  # Run with skill routing + RAG + memory selector
   python examples/run_tombench_harness.py --limit 10 --skill --rag --memory
 
   # Run only "False Belief Task", 5 samples
@@ -12,6 +12,12 @@ Usage examples:
 
   # Run ALL samples across all tasks
   python examples/run_tombench_harness.py --all_tasks --limit 0
+
+Env vars for test model:
+  TOM_API_BASE, TOM_API_KEY, TOM_MODEL, TOM_TEMPERATURE
+
+Env vars for helper model (selector/classifier, independent of test model):
+  HELPER_API_BASE, HELPER_API_KEY, HELPER_MODEL
 
 Outputs (saved to <out_dir>/):
   - results.jsonl        per-sample records
@@ -38,8 +44,7 @@ from benchmark.load_tombench import load_tombench  # noqa: E402
 
 from tom_harness import LLMClient, build_default_runtime  # noqa: E402
 from tom_harness.routing import SkillV4Router, NoOpRouter  # noqa: E402
-from tom_harness.tools.rag_v2 import RAGv2Engine  # noqa: E402
-from tom_harness.tools.playbook import MemoryPlaybook  # noqa: E402
+from tom_harness.tools.rag_v2 import RAGv2Engine, CategoryClassifier  # noqa: E402
 
 
 class _FrameworkConsoleFilter(logging.Filter):
@@ -65,7 +70,7 @@ load_dotenv()
 def build_harness(
     *,
     shared_rag: RAGv2Engine | None = None,
-    shared_playbook: MemoryPlaybook | None = None,
+    shared_memory=None,
     cache_dir: str | None = None,
     enable_skill: bool = False,
     enable_validator: bool = True,
@@ -86,15 +91,11 @@ def build_harness(
 
     router = SkillV4Router(llm=llm) if enable_skill else NoOpRouter()
 
-    playbook_text = None
-    if shared_playbook is not None and shared_playbook.ready:
-        playbook_text = shared_playbook.content
-
     return build_default_runtime(
         llm=llm,
         router=router,
         rag_engine=shared_rag if (shared_rag is not None and shared_rag.size() > 0) else None,
-        playbook=playbook_text,
+        memory=shared_memory,
         enable_scalar_validator=enable_validator,
     )
 
@@ -192,18 +193,27 @@ def main():
     out_grp = ap.add_argument_group("output")
     out_grp.add_argument("--out_dir", default="results")
 
-    rag_grp = ap.add_argument_group("RAG retrieval (v2)")
-    rag_grp.add_argument("--rag", action="store_true", help="Enable RAG v2 retrieval.")
+    rag_grp = ap.add_argument_group("RAG retrieval (ToM rules)")
+    rag_grp.add_argument("--rag", action="store_true", help="Enable RAG retrieval.")
     rag_grp.add_argument("--rag_data_dir", type=str, default="tom_harness/tools/rag_v2_data")
     rag_grp.add_argument("--rag_index_dir", type=str, default="tom_harness/tools/rag_v2_index")
     rag_grp.add_argument("--rag_model", type=str, default="model/bge-m3")
-    rag_grp.add_argument("--rag_rewritten", action="store_true", default=True,
-                         help="Use rewritten cluster data (default: True).")
-    rag_grp.add_argument("--no_rag_rewritten", action="store_false", dest="rag_rewritten")
+    rag_grp.add_argument("--rag_category_filter", action="store_true", default=False,
+                         help="Enable category-based metadata filtering in RAG search.")
 
-    mem_grp = ap.add_argument_group("Memory playbook")
+    mem_grp = ap.add_argument_group("Memory playbook (selector-based)")
     mem_grp.add_argument("--memory", action="store_true")
-    mem_grp.add_argument("--memory_dir", type=str, default="memory_playbook/")
+    mem_grp.add_argument("--memory_playbook", type=str,
+                         default="memory_playbook/playbook/final_playbook.txt",
+                         help="Path to the playbook .txt file.")
+
+    helper_grp = ap.add_argument_group("Helper model (selector / classifier)")
+    helper_grp.add_argument("--helper_api_base", type=str, default=None,
+                            help="API base for helper model (default: HELPER_API_BASE env var).")
+    helper_grp.add_argument("--helper_api_key", type=str, default=None,
+                            help="API key for helper model (default: HELPER_API_KEY env var).")
+    helper_grp.add_argument("--helper_model", type=str, default=None,
+                            help="Model name for helper model (default: HELPER_MODEL env var).")
 
     skill_grp = ap.add_argument_group("Skill injection (v4)")
     skill_grp.add_argument("--skill", action="store_true",
@@ -245,32 +255,51 @@ def main():
         logger.info("Nothing to run.")
         return
 
+    # ── resolve helper model config ────────────────────────────────────
+    helper_api_base = args.helper_api_base or os.environ.get("HELPER_API_BASE", "")
+    helper_api_key = args.helper_api_key or os.environ.get("HELPER_API_KEY", "")
+    helper_model = args.helper_model or os.environ.get("HELPER_MODEL", "")
+
     # ── RAG setup ────────────────────────────────────────────────────────
     shared_rag: RAGv2Engine | None = None
     if args.rag:
+        classifier = None
+        if helper_api_key and helper_model:
+            classifier = CategoryClassifier(
+                api_base=helper_api_base, api_key=helper_api_key, model=helper_model,
+            )
         shared_rag = RAGv2Engine(
             data_dir=args.rag_data_dir,
             index_dir=args.rag_index_dir,
             model_name=args.rag_model,
-            use_rewritten=args.rag_rewritten,
+            use_category_filter=args.rag_category_filter,
+            classifier=classifier,
         )
         shared_rag.build_index()
         if shared_rag.size() > 0:
-            logger.info("RAG v2 enabled: %d documents indexed", shared_rag.size())
+            logger.info("RAG enabled: %d rules indexed", shared_rag.size())
         else:
             logger.info("RAG data not found — running without RAG")
             shared_rag = None
 
-    # ── Memory Playbook setup ────────────────────────────────────────────
-    shared_playbook: MemoryPlaybook | None = None
+    # ── Memory setup (selector-based) ───────────────────────────────────
+    shared_memory = None
     if args.memory:
-        shared_playbook = MemoryPlaybook(playbook_dir=args.memory_dir)
-        shared_playbook.load()
-        if shared_playbook.ready:
-            logger.info("Memory playbook enabled: %d chars loaded", shared_playbook.size())
+        if not helper_api_key or not helper_model:
+            logger.warning("Memory requires HELPER_API_KEY and HELPER_MODEL — skipping")
+        elif not Path(args.memory_playbook).exists():
+            logger.warning("Playbook file %s not found — skipping memory", args.memory_playbook)
         else:
-            logger.info("Memory playbook data not found — running without playbook")
-            shared_playbook = None
+            from memory_playbook import Memory, SelectorConfig
+            selector_cfg = SelectorConfig(
+                provider="custom",
+                api_key=helper_api_key,
+                model=helper_model,
+                base_url=helper_api_base or None,
+            )
+            shared_memory = Memory(args.memory_playbook, selector_cfg)
+            logger.info("Memory enabled: playbook=%s, selector_model=%s",
+                        args.memory_playbook, helper_model)
 
     if args.skill:
         logger.info("Skill injection enabled (v4: 22 LLM-routed skills)")
@@ -279,7 +308,7 @@ def main():
     llm_cache_dir = str(out_dir / "llm_cache")
     runtime_factory = lambda: build_harness(  # noqa: E731
         shared_rag=shared_rag,
-        shared_playbook=shared_playbook,
+        shared_memory=shared_memory,
         cache_dir=llm_cache_dir,
         enable_skill=args.skill,
     )

@@ -188,6 +188,7 @@ class HarnessRuntime:
     validators: list["Validator"] = field(default_factory=list)
     rag_engine: Any = None
     playbook: str | None = None
+    memory: Any = None
     max_retries: int = 1
 
     def answer_one(
@@ -212,21 +213,37 @@ class HarnessRuntime:
         if self.rag_engine is not None:
             try:
                 rag_context = self.rag_engine.retrieve(
-                    query=question, category=task_type
+                    query=question, category=task_type, story=story,
                 )
             except Exception as e:
                 logger.warning("RAG retrieve failed: %s", e)
 
+        playbook_text = self.playbook
+        if self.memory is not None:
+            try:
+                recall_result = self.memory.recall(question, context=story)
+                selected = recall_result.as_text()
+                if selected:
+                    playbook_text = selected
+                    logger.info(
+                        "[Memory] recall -> subtask=%s, %d bullets selected",
+                        recall_result.predicted_subtask, len(recall_result.bullets),
+                    )
+                else:
+                    logger.debug("[Memory] recall returned no relevant bullets")
+            except Exception as e:
+                logger.warning("Memory recall failed: %s", e)
+
         base_user = _build_user_prompt(
             story=story, question=question, options=options,
             skill_body=skill_body, rag_context=rag_context or None,
-            playbook=self.playbook,
+            playbook=playbook_text,
         )
 
         system_prompt = _build_system_prompt(
             has_skill=bool(skill_body),
             has_rag=bool(rag_context),
-            has_playbook=bool(self.playbook),
+            has_playbook=bool(playbook_text),
         )
 
         # ── 1. initial LLM call ───────────────────────────────────────────
@@ -305,6 +322,7 @@ def build_default_runtime(
     router: "Router",
     rag_engine: Any = None,
     playbook: str | None = None,
+    memory: Any = None,
     enable_scalar_validator: bool = True,
 ) -> HarnessRuntime:
     """Convenience factory: wires the default validator stack."""
@@ -315,4 +333,5 @@ def build_default_runtime(
     return HarnessRuntime(
         llm=llm, router=router, validators=validators,
         rag_engine=rag_engine, playbook=playbook,
+        memory=memory,
     )
