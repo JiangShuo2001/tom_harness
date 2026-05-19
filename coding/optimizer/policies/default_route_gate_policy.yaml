@@ -1,0 +1,70 @@
+route_gate_policy:
+
+  default:
+    skill: conditional
+    rag: false
+    memory: true
+    validators: []
+
+  false_belief:
+    skill: true
+    rag: false
+    memory: true
+    validators:
+      - belief_state_checker
+
+  faux_pas:
+    skill: true
+    rag: conditional
+    rag_condition: needs_social_norm
+    memory: true
+    validators:
+      - speaker_listener_awareness_checker
+
+  scalar_implicature:
+    skill: true
+    rag: false
+    memory: conditional
+    validators:
+      - scalar_consistency_checker
+
+  ambiguous_social_cue:
+    skill: true
+    rag: conditional
+    rag_condition: needs_social_norm
+    memory: true
+    validators:
+      - actor_observer_checker
+      - anti_overmentalizing_checker
+
+  knowledge_boundary:
+    skill: true
+    rag: false
+    memory: true
+    validators:
+      - belief_state_checker
+
+  skill_policies:
+
+    skill7_nonverbal_cue:
+      positive_triggers:
+        - smile gaze nod
+        - nonverbal coordination
+        - why actor smiled
+      negative_triggers:
+        - what observer thinks
+        - observer acts after others leave
+        - opportunistic action
+      fallback_skill: observer_perspective_inference
+      confidence_threshold: 0.72
+
+    skill_belief_state:
+      positive_triggers:
+        - believes
+        - thinks that
+        - false belief
+      negative_triggers:
+        - knows that
+        - is aware
+      fallback_skill: knowledge_state_tracker
+      confidence_threshold: 0.65

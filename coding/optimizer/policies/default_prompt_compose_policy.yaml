@@ -1,0 +1,28 @@
+prompt_compose_policy:
+
+  global_token_budget: 3500
+
+  priority:
+    task_story: 100
+    options: 100
+    skill: 80
+    memory: 60
+    rag: 40
+    validator_hint: 30
+    default: 20
+
+  module_budgets:
+    skill: 700
+    memory: 900
+    rag: 500
+    validator_hint: 300
+
+  rules:
+    preserve_original_story: true
+    preserve_options: true
+    drop_low_relevance_rag: true
+    rag_min_relevance: 0.72
+    memory_top_k: 3
+    skill_as_hard_constraint_threshold: 0.85
+    otherwise_skill_as_soft_hint: true
+    add_anti_overmentalizing_instruction: true

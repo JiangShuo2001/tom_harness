@@ -1,0 +1,70 @@
+{
+  "task": {
+    "sample_id": "Ambiguous_0022",
+    "story": "Tom and Lily are sitting across the room from Mark. During the meeting Tom smiles, holds Lily's gaze, and nods. Lily smiles back. Mark sees this exchange but says nothing. Later Lily leaves the room.",
+    "question": "What does Mark most likely think happened between Tom and Lily?",
+    "options": {
+      "A": "They have just confirmed a private agreement.",
+      "B": "They are making fun of him.",
+      "C": "Nothing in particular — Mark cannot infer anything.",
+      "D": "Lily is upset with Tom."
+    }
+  },
+  "route_decision": {
+    "skill_id": "skill7_nonverbal_cue",
+    "scene_tag": "ambiguous_social_cue",
+    "reasoning_type": "intention_inference",
+    "confidence": 0.81
+  },
+  "module_outputs": [
+    {
+      "module_name": "skill",
+      "content": "When the question asks about an observer's interpretation of a nonverbal exchange (smile + gaze + nod), focus on whether the observer has enough evidence to conclude coordination, OR whether the observer's vantage point limits inference. Distinguish between the actor's intent and the observer's belief.",
+      "confidence": 0.86,
+      "relevance": 0.9,
+      "risk_flags": []
+    },
+    {
+      "module_name": "memory",
+      "content": "Playbook entry — Observer-vs-actor mismatch: When a question asks what the observer thinks, do not project the actor's plan onto the observer. Prefer the option that reflects the observer's *partial* information.",
+      "confidence": 0.82,
+      "relevance": 0.85,
+      "risk_flags": []
+    },
+    {
+      "module_name": "memory",
+      "content": "Playbook entry — Anti-overmentalizing: When the story already states a direct cause, do not invent hidden motives.",
+      "confidence": 0.6,
+      "relevance": 0.55,
+      "risk_flags": []
+    },
+    {
+      "module_name": "memory",
+      "content": "Playbook entry — Commitment vs invitation arbitration (NOT applicable here, listed only to test top-k crop).",
+      "confidence": 0.3,
+      "relevance": 0.2,
+      "risk_flags": ["likely_irrelevant"]
+    },
+    {
+      "module_name": "memory",
+      "content": "Playbook entry — Speaker-listener awareness (NOT applicable here, listed only to test top-k crop).",
+      "confidence": 0.2,
+      "relevance": 0.15,
+      "risk_flags": ["likely_irrelevant"]
+    },
+    {
+      "module_name": "rag",
+      "content": "Generic article on nonverbal communication: smiling + sustained gaze can signal mutual acknowledgement.",
+      "confidence": 0.6,
+      "relevance": 0.78,
+      "risk_flags": []
+    },
+    {
+      "module_name": "rag",
+      "content": "Unrelated wikipedia paragraph about meetings and their typical agendas.",
+      "confidence": 0.4,
+      "relevance": 0.32,
+      "risk_flags": ["off_topic"]
+    }
+  ]
+}
