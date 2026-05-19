@@ -111,7 +111,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--per_task", type=int, default=20)
     ap.add_argument("--n", type=int, default=5, help="self-consistency samples per question")
-    ap.add_argument("--temperature", type=float, default=0.4)
+    ap.add_argument("--temperature", type=float,
+                    default=float(os.environ.get("TOM_TEMPERATURE", "0.4")))
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--out_dir", default="results_selfconsistency")
     args = ap.parse_args()

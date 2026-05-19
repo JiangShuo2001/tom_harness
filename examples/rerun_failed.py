@@ -40,12 +40,13 @@ def build_harness(*, shared_rag=None, shared_playbook=None, enable_skill=False):
     api_base = os.environ.get("TOM_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1")
     api_key = os.environ.get("TOM_API_KEY")
     model = os.environ.get("TOM_MODEL", "qwen3-32b")
+    temperature = float(os.environ.get("TOM_TEMPERATURE", "0.0"))
     if not api_key:
         raise SystemExit("ERROR: set the TOM_API_KEY env var")
 
     llm = LLMClient(
         api_base=api_base, api_key=api_key, model=model,
-        temperature=0.0, max_tokens=2048, timeout=120.0, max_retries=3,
+        temperature=temperature, max_tokens=2048, timeout=120.0, max_retries=3,
     )
     router = SkillV4Router(llm=llm) if enable_skill else NoOpRouter()
 

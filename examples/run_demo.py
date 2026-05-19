@@ -29,10 +29,11 @@ def main() -> None:
     api_base = os.environ.get("TOM_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1")
     api_key  = os.environ.get("TOM_API_KEY")
     model    = os.environ.get("TOM_MODEL",    "qwen3-32b")
+    temperature = float(os.environ.get("TOM_TEMPERATURE", "0.0"))
     if not api_key:
         raise SystemExit("ERROR: set the TOM_API_KEY env var (see README > Configuration)")
 
-    llm = LLMClient(api_base=api_base, api_key=api_key, model=model, temperature=0.0, max_tokens=2048)
+    llm = LLMClient(api_base=api_base, api_key=api_key, model=model, temperature=temperature, max_tokens=2048)
     llm.set_cache_dir("results/demo/llm_cache")
 
     registry  = ToolRegistry()

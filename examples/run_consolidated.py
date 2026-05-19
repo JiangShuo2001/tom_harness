@@ -59,9 +59,10 @@ def stratified(samples, per_task=20, seed=42):
 
 def build_runtime(api_base: str, api_key: str, model: str,
                   enable_validator: bool = True) -> HarnessRuntime:
+    temperature = float(os.environ.get("TOM_TEMPERATURE", "0.0"))
     llm = LLMClient(
         api_base=api_base, api_key=api_key, model=model,
-        temperature=0.0, max_tokens=1024, timeout=180.0, max_retries=3,
+        temperature=temperature, max_tokens=1024, timeout=180.0, max_retries=3,
     )
     _repo_root = Path(__file__).resolve().parent.parent
     _skill_root = Path(os.environ.get("SKILL_PACK_ROOT", str(_repo_root / "tom_harness/plugins/external_skill_pack/data")))

@@ -122,9 +122,10 @@ def main():
 
     api_base = os.environ.get("TOM_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1")
     api_key = os.environ.get("TOM_API_KEY"); model = os.environ.get("TOM_MODEL", "qwen3.5-27b")
+    temperature = float(os.environ.get("TOM_TEMPERATURE", "0.0"))
     if not api_key: raise SystemExit("set TOM_API_KEY")
     llm = LLMClient(api_base=api_base, api_key=api_key, model=model,
-                    temperature=0.0, max_tokens=1024, timeout=120.0, max_retries=3)
+                    temperature=temperature, max_tokens=1024, timeout=120.0, max_retries=3)
 
     skill_lib = SkillLib()
     router = SelectiveRouter()
