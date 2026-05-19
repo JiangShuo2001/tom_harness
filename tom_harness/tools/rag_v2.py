@@ -31,21 +31,21 @@ CATEGORY_TO_USE_RAG: dict[str, bool] = {
     'Emotion': True,
     'Intention': True,
     'Knowledge': True,
-    'Knowledge-Attention Links': True,
+    'Knowledge-Attention Links': False,       # 50.0% baseline, RAG -15pp
     'Knowledge-Pretend Play Links': True,
-    'Percepts-Knowledge Links': True,
+    'Percepts-Knowledge Links': False,        # 97.5% baseline, RAG -22.5pp
     'Discrepant Desires': True,
-    'Discrepant Emotions': True,
+    'Discrepant Emotions': False,             # 90.0% baseline, RAG -17.5pp
     'Discrepant Intentions': True,
-    'Completion of Failed Actions': True,
+    'Completion of Failed Actions': False,    # 55.0% baseline, RAG -5pp
     'Prediction of Actions': True,
-    'False Belief Task': True,
+    'False Belief Task': False,               # 97.3% baseline, RAG -6pp
     'Hidden Emotions': True,
-    'Emotion Regulation': True,
+    'Emotion Regulation': False,              # 55.0% baseline, RAG -10pp
     'Moral Emotions': True,
-    'Multiple Desires': True,
+    'Multiple Desires': False,                # 95.0% baseline, RAG neutral but high baseline
     'Faux-pas Recognition Test': True,
-    'Hinting Task Test': True,
+    'Hinting Task Test': False,               # 85.4% baseline, RAG -5.8pp
     'Strange Story Task': True,
     'Unexpected Outcome Test': True,
     'Persuasion Story Task': False,
@@ -70,6 +70,16 @@ CATEGORY_MAPPING: dict[str, str] = {
     'Persuasion Story Task': 'Persuasion Story Task',
     'Scalar Implicature Test': 'Scalar Implicature Test',
     'Unexpected Outcome Test': 'Unexpected Outcome Test',
+    'False Belief Task': 'Belief',
+    'Percepts-Knowledge Links': 'Knowledge',
+    'Prediction of Actions': 'Completion of Failed Actions',
+    'Multiple Desires': 'Discrepant Desires',
+    'Discrepant Emotions': 'Emotion Regulation',
+    'Discrepant Intentions': 'Comprehensive',
+    'Hidden Emotions': 'Emotion Regulation',
+    'Hinting Task Test': 'Comprehensive',
+    'Faux-pas Recognition Test': 'Comprehensive',
+    'Strange Story Task': 'Comprehensive',
 }
 
 ALL_CATEGORIES = sorted(CATEGORY_TO_USE_RAG.keys())
@@ -191,7 +201,7 @@ class ToMRulesV1RAG:
         data_dir: str = "./data",
         index_dir: str = "./index",
         model_name: str = "./models/bge-m3",
-        use_category_filter: bool = False,
+        use_category_filter: bool = True,
     ):
         self.data_dir = Path(data_dir)
         self.index_dir = Path(index_dir) / "tom_rules_v2"
@@ -345,7 +355,7 @@ class RAGv2Engine:
     data_dir: str = _DEFAULT_DATA_DIR
     index_dir: str = _DEFAULT_INDEX_DIR
     model_name: str = "model/bge-m3"
-    use_category_filter: bool = False
+    use_category_filter: bool = True
     classifier: CategoryClassifier | None = None
     use_rewritten: bool = False  # kept for backward compat, ignored
 

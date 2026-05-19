@@ -193,6 +193,11 @@ def process_one(runtime_factory, sample, timeout_sec: float = 180.0):
         rec["n_llm_calls"] = result.n_llm_calls
         if result.thinking:
             rec["thinking"] = result.thinking
+        if result.rag_context:
+            rec["rag_context"] = result.rag_context
+        if result.memory_bullets:
+            rec["memory_bullets"] = result.memory_bullets
+            rec["memory_subtask"] = result.memory_subtask
     except Exception as e:
         rec["error"] = f"{type(e).__name__}: {e}"
     rec["elapsed_sec"] = round(time.time() - t0, 2)
@@ -235,8 +240,10 @@ def main():
     rag_grp.add_argument("--rag_data_dir", type=str, default="tom_harness/tools/rag_v2_data")
     rag_grp.add_argument("--rag_index_dir", type=str, default="tom_harness/tools/rag_v2_index")
     rag_grp.add_argument("--rag_model", type=str, default="model/bge-m3")
-    rag_grp.add_argument("--rag_category_filter", action="store_true", default=False,
-                         help="Enable category-based metadata filtering in RAG search.")
+    rag_grp.add_argument("--rag_category_filter", action="store_true", default=True,
+                         help="Enable category-based metadata filtering in RAG search (default: on).")
+    rag_grp.add_argument("--no_rag_category_filter", action="store_false", dest="rag_category_filter",
+                         help="Disable category-based metadata filtering in RAG search.")
 
     mem_grp = ap.add_argument_group("Memory playbook (selector-based)")
     mem_grp.add_argument("--memory", action="store_true")

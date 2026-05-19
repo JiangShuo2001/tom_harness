@@ -64,7 +64,7 @@ SYSTEM_PLAYBOOK_HINT = (
 )
 
 SYSTEM_TAIL = (
-    "First give a brief reason for your choice, "
+    "First give a brief reason (2-3 sentences) for your choice, "
     "then output a JSON object on its own line: "
     '{"answer": "A" | "B" | "C" | "D"}'
 )
@@ -177,6 +177,9 @@ class RuntimeResult:
     skill_id: str | None
     n_llm_calls: int
     thinking: str = ""
+    rag_context: str = ""
+    memory_bullets: list[str] = field(default_factory=list)
+    memory_subtask: str = ""
     validator_events: list[dict] = field(default_factory=list)
 
 
@@ -219,12 +222,16 @@ class HarnessRuntime:
                 logger.warning("RAG retrieve failed: %s", e)
 
         playbook_text = self.playbook
+        memory_bullet_ids: list[str] = []
+        memory_subtask = ""
         if self.memory is not None:
             try:
                 recall_result = self.memory.recall(question, context=story)
                 selected = recall_result.as_text()
                 if selected:
                     playbook_text = selected
+                    memory_bullet_ids = recall_result.bullet_ids
+                    memory_subtask = recall_result.predicted_subtask
                     logger.info(
                         "[Memory] recall -> subtask=%s, %d bullets selected",
                         recall_result.predicted_subtask, len(recall_result.bullets),
@@ -312,7 +319,11 @@ class HarnessRuntime:
 
         return RuntimeResult(
             answer=answer, skill_id=skill_id, n_llm_calls=n_calls,
-            thinking=reasoning, validator_events=events,
+            thinking=reasoning,
+            rag_context=rag_context or "",
+            memory_bullets=memory_bullet_ids,
+            memory_subtask=memory_subtask,
+            validator_events=events,
         )
 
 
