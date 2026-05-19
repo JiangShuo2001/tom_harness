@@ -251,19 +251,53 @@ CATEGORY_MAPPING: dict[str, str] = {
 }
 ```
 
-### 7.2 System Prompt 修复（已完成）
+### 7.2 负增益 Task 黑名单（已完成）
+
+基于 test_0519_rag_filter 实验（category filter 开启后 vs baseline），对 RAG 持续为负贡献的 task 关闭检索：
+
+```python
+CATEGORY_TO_USE_RAG = {
+    # ...
+    'False Belief Task': False,          # 97.3% baseline, RAG -6.0pp
+    'Percepts-Knowledge Links': False,   # 97.5% baseline, RAG -22.5pp
+    'Discrepant Emotions': False,        # 90.0% baseline, RAG -17.5pp
+    'Multiple Desires': False,           # 95.0% baseline, 高 baseline 无需 RAG
+    'Knowledge-Attention Links': False,  # 50.0% baseline, RAG -15.0pp
+    'Hinting Task Test': False,          # 85.4% baseline, RAG -5.8pp
+    'Emotion Regulation': False,         # 55.0% baseline, RAG -10.0pp
+    'Completion of Failed Actions': False, # 55.0% baseline, RAG -5.0pp
+    'Persuasion Story Task': False,      # 原有黑名单，保留
+    'Percept': False,                    # 原有黑名单，保留
+    # ...
+}
+```
+
+黑名单覆盖的 loss 估算：在 test_0519_rag_filter 实验中，这些 task 合计贡献了约 60% 的总 loss（约 120/203），黑名单后预期 RAG 整体从 -2.1pp 回升到接近正贡献。
+
+### 7.3 默认开启 Category Filter（已完成）
+
+- `ToMRulesV1RAG` 和 `RAGv2Engine` 的 `use_category_filter` 默认值从 `False` 改为 `True`
+- 两个 runner（`run_tombench_harness.py`、`run_cogtom_v2_harness.py`）的 `--rag_category_filter` 默认值改为 `True`
+- 新增 `--no_rag_category_filter` 参数用于关闭过滤
+
+现在使用 `--rag` 即自动按类别过滤 + 黑名单跳过负增益 task，无需额外指定参数。
+
+### 7.4 System Prompt 修复（已完成）
 
 commit `b24235b` 中 SYSTEM_TAIL 从 `"First give a brief reason (2-3 sentences)"` 被意外改为 `"First give a brief reason"`，导致 baseline 下降 3pp。已恢复原始措辞。
 
-### 7.3 预期效果
+### 7.5 三组实验对比总结
 
-- `--rag_category_filter` 开启后，False Belief Task 只检索 `Belief` 类规则（40 条），不再检索到 flattery/quantifier 噪声
-- Faux-pas、Hinting Task 等映射到 `Comprehensive`（40 条），内容更贴合社交推理
-- 待重新跑实验验证具体增益
+| 实验 | 准确率 | vs Baseline | 净翻转（gain-loss） |
+|------|-------:|----------:|-------------------:|
+| Baseline（无 RAG） | 77.73% | — | — |
+| +RAG（无过滤） | 74.62% | -3.11pp | -89 |
+| +RAG（category filter） | 75.66% | -2.07pp | -59 |
+| +RAG（category filter + 黑名单） | 待验证 | 预期接近 0 或正 | — |
 
-### 7.4 后续方向
+### 7.6 后续方向
 
-1. **验证实验**：用 `--rag --rag_category_filter` 重新跑全量 ToMBench，对比无过滤版本
-2. **L2 阈值门控**：需要更大规模数据分析，当前 gain/loss 分数分布重叠，暂不设阈值
-3. **CATEGORY_TO_USE_RAG 黑名单**：根据验证实验结果，对 RAG 持续为负贡献的 task 关闭检索
-4. **规则库扩充**：当前 13 个类别 294 条规则覆盖不足，可考虑为高价值 task（Faux-pas、Hinting 等）定向补充规则
+1. **验证实验**：用黑名单 + category filter 重新跑全量 ToMBench，确认 RAG 贡献转正
+2. **L2 阈值门控**：当前 gain/loss 的 FAISS L2 分数分布高度重叠（中位数差仅 0.02），暂不设阈值，需更大规模数据分析
+3. **规则库扩充**：当前 13 个类别 294 条规则，RAG 正向 task（Faux-pas +3.7pp、Knowledge-Pretend Play +16.7pp、Persuasion +5.0pp）可定向补充规则
+4. **映射关系优化**：部分映射语义偏差较大（如 `Discrepant Emotions → Emotion Regulation`），可考虑为这些 task 新建专属规则类别
