@@ -15,7 +15,7 @@ from __future__ import annotations
 import logging
 import re
 
-from ...schemas import ExecutionContext, ExecutionTrace, Step
+from ...legacy.schemas import ExecutionContext, ExecutionTrace, Step
 
 logger = logging.getLogger(__name__)
 

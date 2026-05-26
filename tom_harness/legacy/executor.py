@@ -21,7 +21,7 @@ from typing import Any
 
 from .context import ContextManager
 from .hooks import HookRegistry
-from .llm import LLMClient
+from ..llm import LLMClient
 from .registry import ToolRegistry
 from .schemas import (
     ExecutionContext, ExecutionTrace, Observation, Reasoning, Step, StepResult,

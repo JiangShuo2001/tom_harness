@@ -2,13 +2,14 @@
 
 CANONICAL single-shot path (use this by default):
   runtime.HarnessRuntime
-    · Router      — routing/ (SkillV4Router or OraclePicksRouter)
+    · Router      — routing/ (SkillV5Router, SkillV4Router, or OraclePicksRouter)
     · RAGv2Engine — tools/rag_v2.py (optional, category-aware retrieval)
     · Validators  — validators/ (e.g. ScalarProceduralValidator)
   One LLM call per sample, optional validator-driven retry.
 
-LEGACY Plan/Execute path (kept for research scenarios):
+LEGACY Plan/Execute path (moved to tom_harness/legacy/):
   Scheduler -> Planner -> Executor -> Tool Layer
+  Import via: from tom_harness.legacy import Scheduler, Planner, ...
 """
 
 # ── Canonical (single-shot) ────────────────────────────────────────────────
@@ -17,26 +18,24 @@ from .runtime import HarnessRuntime, RuntimeResult, build_default_runtime
 from .routing import Router, RouteDecision, OraclePicksRouter, SkillV4Router
 from .validators import Validator, ValidationResult, ScalarProceduralValidator
 
-# ── Legacy (Plan/Execute) — kept for back-compat, not recommended for ToMBench
-from .schemas import (
+# ── Legacy (Plan/Execute) — re-exported for backward compatibility ─────────
+# Prefer importing directly from tom_harness.legacy instead.
+from .legacy import (
     Plan, Phase, Step, ToolCall, ToolType,
     ExecutionTrace, Memory, ExecutionContext, FinalResult,
+    Scheduler, Planner, Executor,
+    ToolRegistry, ContextManager,
 )
-from .scheduler import Scheduler
-from .planner import Planner
-from .executor import Executor
-from .registry import ToolRegistry
-from .context import ContextManager
 
 __all__ = [
     # canonical
     "LLMClient", "HarnessRuntime", "RuntimeResult", "build_default_runtime",
     "Router", "RouteDecision", "OraclePicksRouter", "SkillV4Router",
     "Validator", "ValidationResult", "ScalarProceduralValidator",
-    # legacy
+    # legacy (re-exported)
     "Plan", "Phase", "Step", "ToolCall", "ToolType",
     "ExecutionTrace", "Memory", "ExecutionContext", "FinalResult",
     "Scheduler", "Planner", "Executor",
     "ToolRegistry", "ContextManager",
 ]
-__version__ = "0.5.0"
+__version__ = "0.6.0"

@@ -33,7 +33,7 @@ import re
 from dataclasses import asdict, dataclass
 from typing import Any
 
-from ...schemas import Memory
+from ...legacy.schemas import Memory
 
 
 # ─────────────────────────────────────────────────────────────────────────────

@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from .schemas import ToolCall, ToolType
-from .tools.base import Tool, ToolResult
+from ..tools.base import Tool, ToolResult
 
 
 @dataclass

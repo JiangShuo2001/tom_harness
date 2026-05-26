@@ -29,7 +29,7 @@ from .schemas import (
     ExecutionContext, ExecutionTrace, FinalResult, Memory, Plan,
     Step, TaskDescriptor,
 )
-from .tools.memory import MemoryStore
+from ..tools.memory import MemoryStore
 
 logger = logging.getLogger(__name__)
 

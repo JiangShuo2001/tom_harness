@@ -1,11 +1,20 @@
-"""Run the harness on ToMBench — single-shot runtime with v2 skill/RAG/memory.
+"""Run the harness on ToMBench — single-shot runtime with skill/RAG/memory.
 
 Usage examples:
   # Run 10 samples per task, no tools
   python examples/run_tombench_harness.py --limit 10
 
-  # Run with skill routing + RAG + memory selector
+  # Run with skill routing (v5.1 hierarchical, default)
   python examples/run_tombench_harness.py --limit 10 --skill --rag --memory
+
+  # Use legacy v4 skill routing (22 skills)
+  python examples/run_tombench_harness.py --limit 10 --skill --skill-version v4
+
+  # Skill routing + L0 review (v5.1 chain-of-thought audit)
+  python examples/run_tombench_harness.py --limit 10 --skill --review-mode on
+
+  # Flat routing over all 72 candidates
+  python examples/run_tombench_harness.py --limit 10 --skill --route-mode flat_all
 
   # Run only "False Belief Task", 5 samples
   python examples/run_tombench_harness.py --tasks "False Belief Task" --limit 5 --skill
@@ -43,7 +52,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from benchmark.load_tombench import load_tombench  # noqa: E402
 
 from tom_harness import LLMClient, build_default_runtime  # noqa: E402
-from tom_harness.routing import SkillV4Router, NoOpRouter  # noqa: E402
+from tom_harness.routing import SkillV5Router, SkillV4Router, NoOpRouter  # noqa: E402
 from tom_harness.tools.rag_v2 import RAGv2Engine, CategoryClassifier  # noqa: E402
 
 
@@ -74,6 +83,12 @@ def build_harness(
     cache_dir: str | None = None,
     enable_skill: bool = False,
     enable_validator: bool = True,
+    route_mode: str = "hierarchical",
+    inject_mode: str = "light",
+    review_mode: str = "off",
+    lang: str = "en",
+    router_llm: LLMClient | None = None,
+    skill_version: str = "v5",
 ):
     api_base = os.environ.get("TOM_API_BASE", "https://dashscope.aliyuncs.com/compatible-mode/v1")
     api_key = os.environ.get("TOM_API_KEY")
@@ -89,7 +104,18 @@ def build_harness(
     if cache_dir:
         llm.set_cache_dir(cache_dir)
 
-    router = SkillV4Router(llm=llm) if enable_skill else NoOpRouter()
+    if enable_skill:
+        if skill_version == "v4":
+            router = SkillV4Router(llm=router_llm or llm)
+        else:
+            router = SkillV5Router(
+                llm=router_llm or llm,
+                route_mode=route_mode,
+                inject_mode=inject_mode,
+                lang=lang,
+            )
+    else:
+        router = NoOpRouter()
 
     return build_default_runtime(
         llm=llm,
@@ -97,6 +123,7 @@ def build_harness(
         rag_engine=shared_rag if (shared_rag is not None and shared_rag.size() > 0) else None,
         memory=shared_memory,
         enable_scalar_validator=enable_validator,
+        review_mode=review_mode,
     )
 
 
@@ -141,6 +168,9 @@ def process_one(runtime_factory, sample, timeout_sec: float = 180.0):
         "predicted": "",
         "correct": False,
         "skill_id": None,
+        "skill_ids": [],
+        "draft_predicted": "",
+        "review_changed": False,
         "n_llm_calls": 0,
         "elapsed_sec": 0.0,
         "error": None,
@@ -156,6 +186,9 @@ def process_one(runtime_factory, sample, timeout_sec: float = 180.0):
         rec["predicted"] = result.answer
         rec["correct"] = (result.answer == sample["answer"])
         rec["skill_id"] = result.skill_id
+        rec["skill_ids"] = result.skill_ids
+        rec["draft_predicted"] = result.draft_answer
+        rec["review_changed"] = result.review_changed
         rec["n_llm_calls"] = result.n_llm_calls
         if result.thinking:
             rec["thinking"] = result.thinking
@@ -222,9 +255,24 @@ def main():
     helper_grp.add_argument("--helper_model", type=str, default=None,
                             help="Model name for helper model (default: HELPER_MODEL env var).")
 
-    skill_grp = ap.add_argument_group("Skill injection (v4)")
+    skill_grp = ap.add_argument_group("Skill injection")
     skill_grp.add_argument("--skill", action="store_true",
-                           help="Enable LLM-routed skill injection (22 skills).")
+                           help="Enable LLM-routed skill injection.")
+    skill_grp.add_argument("--skill-version", type=str, default="v5",
+                           choices=["v4", "v5"],
+                           help="Skill library version: v5 (76 skills, default) or v4 (22 skills, legacy).")
+    skill_grp.add_argument("--route-mode", type=str, default="hierarchical",
+                           choices=["baseline", "macro_only", "micro_only", "hierarchical", "flat_all"],
+                           help="Skill routing mode for v5 (default: hierarchical). Ignored for v4.")
+    skill_grp.add_argument("--inject-mode", type=str, default="light",
+                           choices=["full", "light"],
+                           help="Skill injection verbosity (default: light). Ignored for v4.")
+    skill_grp.add_argument("--review-mode", type=str, default="off",
+                           choices=["on", "off"],
+                           help="L0 review stage after solver (default: off).")
+    skill_grp.add_argument("--lang", type=str, default="en",
+                           choices=["en", "zh"],
+                           help="Prompt language for router and review (default: en).")
 
     args = ap.parse_args()
 
@@ -308,8 +356,19 @@ def main():
             logger.info("Memory enabled: playbook=%s, selector_model=%s",
                         args.memory_playbook, helper_model)
 
+    # ── Router LLM setup (use helper model if available, else TOM_MODEL) ─
+    shared_router_llm: LLMClient | None = None
+    if args.skill and helper_api_key and helper_model:
+        shared_router_llm = LLMClient(
+            api_base=helper_api_base, api_key=helper_api_key, model=helper_model,
+            temperature=0.0, max_tokens=256, timeout=60.0, max_retries=3,
+        )
+        logger.info("Router using helper model: %s", helper_model)
+
     if args.skill:
-        logger.info("Skill injection enabled (v4: 22 LLM-routed skills)")
+        router_model_name = helper_model if shared_router_llm else os.environ.get("TOM_MODEL", "qwen3-32b")
+        logger.info("Skill injection enabled (%s: route_mode=%s, inject_mode=%s, review=%s, lang=%s, router_model=%s)",
+                    args.skill_version, args.route_mode, args.inject_mode, args.review_mode, args.lang, router_model_name)
 
     # ── run ───────────────────────────────────────────────────────────────
     llm_cache_dir = str(out_dir / "llm_cache")
@@ -318,6 +377,12 @@ def main():
         shared_memory=shared_memory,
         cache_dir=llm_cache_dir,
         enable_skill=args.skill,
+        route_mode=args.route_mode,
+        inject_mode=args.inject_mode,
+        review_mode=args.review_mode,
+        lang=args.lang,
+        router_llm=shared_router_llm,
+        skill_version=args.skill_version,
     )
     t_start = time.time()
     completed = 0
@@ -408,12 +473,30 @@ def _compute_stats(records, pool):
     errors = sum(1 for r in records if r.get("error") or not r.get("predicted"))
     per_task = defaultdict(lambda: {"total": 0, "correct": 0, "errors": 0, "avg_elapsed": 0.0})
     elapsed_sum = defaultdict(float)
+
+    routed_count = 0
+    review_changed_count = 0
+    review_helped = 0
+    review_hurt = 0
+
     for r in records:
         t = r.get("task", "unknown")
         per_task[t]["total"] += 1
         per_task[t]["correct"] += int(bool(r.get("correct")))
         per_task[t]["errors"] += int(bool(r.get("error") or not r.get("predicted")))
         elapsed_sum[t] += float(r.get("elapsed_sec", 0.0) or 0.0)
+
+        if r.get("skill_ids"):
+            routed_count += 1
+        if r.get("review_changed"):
+            review_changed_count += 1
+            draft_correct = (r.get("draft_predicted") == r.get("answer"))
+            final_correct = r.get("correct")
+            if final_correct and not draft_correct:
+                review_helped += 1
+            elif draft_correct and not final_correct:
+                review_hurt += 1
+
     for t, d in per_task.items():
         valid_n = d["total"] - d["errors"]
         d["accuracy"] = d["correct"] / valid_n if valid_n > 0 else 0.0
@@ -424,8 +507,17 @@ def _compute_stats(records, pool):
             "total": total, "correct": correct, "errors": errors,
             "accuracy": round(correct / valid_total, 4) if valid_total else 0,
         },
+        "routing": {
+            "routed": routed_count,
+            "no_skill": total - routed_count,
+        },
+        "review": {
+            "changed": review_changed_count,
+            "helped": review_helped,
+            "hurt": review_hurt,
+        },
         "per_task": dict(per_task),
-        "mode": "single_shot_v2",
+        "mode": "single_shot_v5.1",
     }
 
 

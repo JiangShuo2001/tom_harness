@@ -28,7 +28,7 @@ from typing import Any, Callable
 def _make_lock() -> threading.RLock:
     return threading.RLock()
 
-from ..schemas import Memory, ToolType
+from ..legacy.schemas import Memory, ToolType
 from .base import Tool
 
 logger = logging.getLogger(__name__)

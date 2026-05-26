@@ -28,12 +28,12 @@ from typing import Any
 
 from .context import ContextManager
 from .hooks import HookRegistry
-from .llm import LLMClient
+from ..llm import LLMClient
 from .registry import ToolRegistry
 from .schemas import (
     ExpectedFinalOutput, Memory, MemoryReference, Phase, Plan, Step, ToolCall, ToolType,
 )
-from .tools.memory import MemoryStore
+from ..tools.memory import MemoryStore
 
 logger = logging.getLogger(__name__)
 

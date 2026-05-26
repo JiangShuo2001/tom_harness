@@ -11,8 +11,8 @@ Skill IDs refer to files under `plugins/tom/skills/`.
 
 from __future__ import annotations
 
-from ...hooks import RecoveryDirective
-from ...schemas import ExecutionContext, ExecutionTrace, Step
+from ...legacy.hooks import RecoveryDirective
+from ...legacy.schemas import ExecutionContext, ExecutionTrace, Step
 
 
 FAILURE_TO_SKILLS: dict[str, list[str]] = {

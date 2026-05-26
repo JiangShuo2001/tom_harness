@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from ...hooks import HookRegistry
+from ...legacy.hooks import HookRegistry
 
 _PLUGIN_ROOT = Path(__file__).resolve().parent
 

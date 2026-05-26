@@ -18,7 +18,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
 
-from ..schemas import ToolType
+from ..legacy.schemas import ToolType
 
 
 @dataclass
