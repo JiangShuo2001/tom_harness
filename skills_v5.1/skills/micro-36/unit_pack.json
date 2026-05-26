@@ -1,0 +1,96 @@
+{
+  "frontmatter_description": "Diagnostic micro skill for inferring the unstated extra meaning a speaker communicates from context.",
+  "title": "Conversational Implicature",
+  "use_when": [
+    "Use when the question asks what extra meaning was communicated by context, beyond the literal sentence.",
+    "Use when the answer depends on the implicit information the listener is expected to infer from the situation, wording, or conversational context."
+  ],
+  "do_not_use_when": [
+    "Do not use when the task is to identify the social act being performed by the utterance, such as requesting, warning, refusing, reminding, or hinting; that is indirect speech act.",
+    "Do not use when the task is to judge whether the sentence is true, false, misleading, or a lie; that is truth/lie or misleading expression.",
+    "Do not use when the key issue is who believes what, who saw what, or what someone intends to do rather than what extra meaning was conveyed."
+  ],
+  "decision_variable": "the unstated meaning inferred from context",
+  "trigger_checklist": [
+    "The utterance is literally incomplete, too weak, or oddly phrased unless context is used.",
+    "The question asks what the speaker meant beyond the words actually said.",
+    "The answer is an inferred proposition, not the speech act itself and not the truth value of the sentence.",
+    "The listener must combine wording, shared expectations, and scene context to recover the extra message."
+  ],
+  "workflow": [
+    "Identify the literal sentence meaning first.",
+    "Ask what additional proposition a cooperative listener is meant to infer.",
+    "Use context, relevance, and conversational expectations to derive the unstated message.",
+    "Return only the implied content, not the act being performed and not whether the sentence is true."
+  ],
+  "special_case": {
+    "title": "Scalar implicature",
+    "rule": "When a weaker term is used on a natural scale, the implicature may be the stronger excluded alternative, if context supports it.",
+    "worked_example": {
+      "scene": "A parent asks, 'Did you eat all the cookies?' The child says, 'I ate some.'",
+      "question": "What is implied?",
+      "answer_logic": "Literal meaning: at least some cookies were eaten. In this context, the extra communicated meaning is that not all cookies were eaten."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-34 Literal Meaning if the question is about the explicit content of the words, not the extra message.",
+    "Exit to micro-35 Indirect Speech Act if the question is about what social action the utterance performs rather than what extra proposition it conveys.",
+    "Exit to micro-37 Truth, Lie, and Half-Truth if the question asks whether the utterance is factually true or false.",
+    "Exit to micro-38 Misleading and Selective Expression if the question is whether a true statement is steering the listener toward a false belief."
+  ],
+  "references": {
+    "route_signal": "Use when a scene asks what is communicated implicitly by an utterance, especially when the words alone do not fully answer the question.",
+    "hard_boundary": [
+      "The output is the inferred extra proposition, not the speech act being performed (that is micro-35).",
+      "The output is content, not a truth-or-falsity verdict on the literal sentence (that is micro-37).",
+      "Implicature is what a cooperative listener is meant to infer; if the inference the listener draws is a false belief the speaker counts on, route to micro-38 Misleading Expression."
+    ],
+    "shortcut_to_avoid": [
+      "Do not answer with the literal sentence restated in different words.",
+      "Do not confuse 'what was meant' with 'what action was done.'",
+      "Do not treat all context-based inference as implicature; only use it when the target is the extra communicated content."
+    ],
+    "common_failure_modes": [
+      "Confusing implicature with indirect request or warning.",
+      "Judging truthfulness instead of inferred meaning.",
+      "Giving a paraphrase of the sentence rather than the implied message.",
+      "Over-inferencing beyond what a cooperative listener would reasonably derive."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Asked whether the team finished the reports, the manager says, 'Some of the reports are done.'",
+        "why_it_matches": "Cooperatively, the listener recovers the extra proposition that not all reports are done; the diagnostic target is that implied content, which fits micro-36."
+      },
+      {
+        "case": "Asked the same question, the manager says, 'Some of the reports are done, so please bring me the rest of the file.'",
+        "why_it_matches": "Same words, but the diagnostic target is now the request being performed on B, so it routes to micro-35 Indirect Speech Act rather than to implicature."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the same words are used but the speaker is merely issuing a request, switch to indirect speech act.",
+      "If the statement could be true while still pushing the listener toward a false conclusion, switch to misleading and selective expression.",
+      "If the main question is whether the speaker lied, switch away from implicature."
+    ],
+    "generalization_note": "This skill covers conversational enrichment: the extra proposition a listener recovers from cooperative context, without changing the literal sentence or classifying the social act."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character says something that is literally true or incomplete, and the task is to infer the extra meaning the listener should read between the lines.",
+    "near_miss_pattern": "The prompt asks what the utterance is doing, such as requesting or warning, rather than what extra content it implies.",
+    "boundary_pattern": "The utterance is true but intentionally nudges the listener toward a false conclusion; this is misleading expression, not implicature alone."
+  },
+  "notes": [
+    "Keep outputs to the implied proposition only.",
+    "Treat context as evidence for an added meaning, not as a cue to rename the speech act.",
+    "Use this as a narrow diagnostic unit inside broader pragmatics and lie/misdirection routing."
+  ],
+  "id": "micro-36",
+  "level": "micro",
+  "layer": "L5",
+  "family": "language-pragmatics",
+  "core_question": "Infer what is communicated by context but not explicitly said",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

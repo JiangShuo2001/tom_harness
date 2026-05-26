@@ -1,0 +1,105 @@
+{
+  "frontmatter_description": "Infer when and how another person's emotion transmits into the observer's own emotional state.",
+  "title": "Empathy and Emotional Contagion",
+  "use_when": [
+    "Use when the question asks how one person's visible, known, or imagined emotion changes another person's own feelings.",
+    "Use when the key inference is emotional resonance, catching a mood, shared distress, sympathetic sadness, vicarious joy, or becoming tense because someone else is tense.",
+    "Use when the observer's feeling is caused by another person's emotional state rather than by the original event directly.",
+    "Use when distinguishing understanding another person's emotion from being emotionally affected by it."
+  ],
+  "do_not_use_when": [
+    "Do not use when the task only asks what the first person feels; route to the appropriate emotion appraisal unit instead.",
+    "Do not use when the observer merely identifies or labels another person's emotion without being affected by it.",
+    "Do not use when guilt, shame, pride, gratitude, blame, or moral responsibility is the deciding factor; use micro-30.",
+    "Do not use when regret, relief, disappointment, or surprise depends on comparing reality with an alternative outcome; use micro-31.",
+    "Do not use when the main issue is how someone suppresses, redirects, comforts, or manages their own emotion; use micro-33.",
+    "Do not use when the question is only about the explicit meaning of words; use micro-34."
+  ],
+  "decision_variable": "emotional transmission from another person into the self",
+  "trigger_checklist": [
+    "Is there a source person with an emotion, mood, distress, excitement, fear, sadness, or joy?",
+    "Is there a target person who perceives, learns about, imagines, or is near that emotion?",
+    "Does the question ask what the target person feels because of the source person's emotion?",
+    "Would the target person's state change if the source person's emotion were absent?",
+    "Is the answer about resonance, sympathy, contagion, or vicarious feeling rather than moral blame, counterfactual comparison, or self-regulation?"
+  ],
+  "workflow": [
+    "Identify the source person's emotional state and what evidence makes it available to the target.",
+    "Check whether the target notices, understands, or is exposed to that state strongly enough for affective transfer.",
+    "Infer the likely direction of transmission: matching emotion, softened sympathetic concern, shared excitement, anxiety spread, or emotional dampening.",
+    "Separate emotional transmission from the target's own direct appraisal of the event.",
+    "Answer in terms of the target's resulting feeling and the causal link to the other person's emotion."
+  ],
+  "special_case": {
+    "title": "Sympathy without identical emotion",
+    "rule": "Empathy does not always copy the source emotion exactly; the target may feel concern, sadness, tenderness, or anxiety in response to another person's pain or fear.",
+    "worked_example": {
+      "scene": "Maya sees her friend trembling before a speech. Maya is not giving a speech, but she starts to feel tense and worried for her friend.",
+      "question": "Why does Maya feel tense?",
+      "answer_logic": "Maya's tension is caused by perceiving her friend's fear. The relevant variable is emotional transmission into Maya, not Maya's own direct risk or responsibility."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-30 if the target's emotion depends mainly on judging who caused harm, who deserves blame, or whether a norm was violated.",
+    "Exit to micro-31 if the target's emotion depends mainly on comparing what happened with what could have happened.",
+    "Exit to micro-33 if the target already has an emotion and the question asks how they manage or change it.",
+    "Exit to micro-34 if the only required answer is what an utterance literally says.",
+    "Exit to another emotion unit if the target's feeling is caused directly by their own goal success, loss, threat, or appraisal rather than by another person's emotion."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when a person's emotional state is socially transmitted to another person and the diagnostic question is how the second person's own state is affected.",
+    "hard_boundary": [
+      "Understanding another person's emotion is not enough; the target must be emotionally affected.",
+      "Moral evaluation is not empathy unless the other person's emotion is the causal bridge into the target's feeling.",
+      "Counterfactual comparison is outside this unit unless another person's emotion is what transmits to the target.",
+      "Emotion regulation is outside this unit once the focus shifts from catching an emotion to managing it."
+    ],
+    "shortcut_to_avoid": [
+      "Do not assume every observer feels the same emotion as the source; exposure, relationship, attention, and context matter.",
+      "Do not answer only with the source person's feeling when the question asks about the observer's affected state."
+    ],
+    "common_failure_modes": [
+      "Confusing cognitive perspective-taking with emotional contagion.",
+      "Treating sympathy as guilt or responsibility when no blame appraisal is present.",
+      "Ignoring that the target may feel concern rather than an exact copy of the source emotion.",
+      "Attributing the target's feeling to the original event instead of to the other person's displayed or known emotion."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A child sees another child crying after dropping an ice cream and begins to feel sad too.",
+        "why_it_matches": "The child's sadness is transmitted from the other child's visible distress."
+      },
+      {
+        "case": "A child sees another child crying, realizes the child is sad, and reports, 'He feels bad,' but remains cheerful.",
+        "why_it_matches": "This does not match micro-32; it is emotion recognition without emotional transmission into the observer."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the observer feels bad because they caused the other person's pain, route to moral emotion rather than empathy unless the question specifically asks about catching or sharing the pain.",
+      "If the observer feels relieved because someone else avoided danger, check whether the relief comes from counterfactual comparison or from empathic response to the person's relief.",
+      "If the observer stays calm while comforting someone, do not infer contagion unless the scene shows their own emotion changing.",
+      "If a crowd becomes excited because a few people cheer, this can be contagion when the question asks about mood spreading."
+    ],
+    "generalization_note": "This unit applies across close relationships, crowds, teams, caregiving, conflict, and online interaction whenever another person's emotion becomes input to the target's own emotional state."
+  },
+  "validation_seed": {
+    "positive_pattern": "Person A shows or expresses strong emotion; Person B notices and begins to feel a related emotion because of A's state.",
+    "near_miss_pattern": "Person B correctly identifies Person A's emotion but does not feel affected by it.",
+    "boundary_pattern": "Person B feels guilt, regret, relief, or uses coping strategies; the deciding variable is moral appraisal, counterfactual comparison, or regulation rather than emotional transmission."
+  },
+  "notes": [
+    "Keep the unit focused on affective transfer into the self.",
+    "The target emotion may match, echo, soften, or transform the source emotion, but it must be caused by the source person's emotional state.",
+    "This micro unit can support macro emotion routes when deeper explanation is needed, but it is not a whole-scene emotion prototype."
+  ],
+  "id": "micro-32",
+  "level": "micro",
+  "layer": "L4",
+  "family": "emotion-appraisal",
+  "core_question": "Determine how another person's emotion affects the self",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

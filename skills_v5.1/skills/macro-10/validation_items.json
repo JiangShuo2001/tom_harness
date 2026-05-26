@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-10",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Two roommates are choosing dinner. Maya wants Thai food, and Leo says he does not care much either way.",
+      "question": "What will they most likely choose?",
+      "options": [
+        "Thai food",
+        "Italian food",
+        "Skip dinner and stay home",
+        "Order dessert only"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct preference conflict with one clearly stronger preference; the stronger preference should drive the joint choice."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "Two siblings are splitting one cookie. Both want it, but the older sibling already offered to let the younger one have it.",
+      "question": "Who gets the cookie?",
+      "options": [
+        "The older sibling",
+        "The younger sibling",
+        "They split it evenly",
+        "Neither gets it"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "A simple allocation under conflicting wants, with a role-based cue favoring one side."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Two coworkers disagree about whether to ask their boss for Friday off. One wants to request it directly, and the other wants to sound more polite and indirect.",
+      "question": "What is the main issue here?",
+      "options": [
+        "Which day off they should take",
+        "How to phrase the request",
+        "Who will get the day off",
+        "Whether the boss is lying"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This looks like disagreement, but the target is persuasion and wording, not the final choice under preference conflict."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Nina promised to cover her shift on Saturday, but now her friend asks what she will do because the concert is on the same night.",
+      "question": "What is most likely to happen next?",
+      "options": [
+        "She will cover the shift because of the promise",
+        "She will choose the concert because she prefers it",
+        "They will split the shift",
+        "They will negotiate a trade based on who wants what more"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The key driver is prior commitment, not preference conflict, so this is a boundary case."
+    }
+  ]
+}

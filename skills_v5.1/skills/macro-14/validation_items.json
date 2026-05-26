@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-14",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A clear box shows 8 candies on the top layer, and the box looks about one-third full.",
+      "question": "About how many candies are likely in the whole box?",
+      "options": [
+        "8",
+        "24",
+        "60",
+        "120"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Direct quantity estimate from partial observation."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "A new app has 2 reviews, and both are 5 stars. Similar apps usually get mixed reviews over time.",
+      "question": "How likely is the app to end up broadly well liked?",
+      "options": [
+        "Almost certain",
+        "Somewhat likely",
+        "About even",
+        "Very unlikely"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Tests sample-to-base-rate update and avoids overreading a tiny sample."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "A store sold 30 umbrellas on a rainy morning.",
+      "question": "Why did umbrella sales increase?",
+      "options": [
+        "Because it rained",
+        "Because 30 is the exact total stock",
+        "Because the clerk counted wrong",
+        "Because customers preferred blue umbrellas"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Looks quantitative, but the real task is causal attribution, not estimation."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A speaker says, 'There were about 20 people at the meeting.'",
+      "question": "What does 'about 20' mean here?",
+      "options": [
+        "Exactly 20",
+        "Roughly 20",
+        "The speaker was lying",
+        "The speaker meant a different meeting"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Boundary case: the issue is phrase meaning, not estimating a hidden count."
+    }
+  ]
+}

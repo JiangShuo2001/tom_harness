@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-08",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A worker tells the manager, 'I was not at the office yesterday,' even though they were there for several hours and know it.",
+      "question": "What best describes the utterance?",
+      "options": [
+        "A direct lie",
+        "An indirect request",
+        "A neutral omission with no deception",
+        "A persuasive but truthful statement"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is the clearest match: the words are false, and the speaker knows they are false."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "A staff member says, 'The report is on my desk,' while knowing they have not finished the report and expect the manager to assume it is done.",
+      "question": "What best describes the utterance?",
+      "options": [
+        "A harmless joke",
+        "Technically true but misleading",
+        "A direct warning",
+        "A refusal"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This tests the key half-truth pattern: the words can be literally correct, yet the framing is meant to mislead."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "A friend says, 'You might want to check the brakes before the trip,' because they noticed a problem and want the other person to be careful.",
+      "question": "What best describes the utterance?",
+      "options": [
+        "A cover story",
+        "A lie",
+        "An indirect warning, not a deception case",
+        "A technically true misdirection"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This is a common shortcut trap: the wording is indirect, but the main function is a warning, not misleading truth-status play."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A salesperson says, 'This plan should save you money,' while honestly believing it and trying to persuade the customer to choose it.",
+      "question": "What best describes the utterance?",
+      "options": [
+        "A direct lie",
+        "A cover story",
+        "Pure deception by omission",
+        "Persuasion without a truth-status issue"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "This stays outside the unit because the main issue is persuasion, not whether the speaker lied or misled through selective disclosure."
+    }
+  ]
+}

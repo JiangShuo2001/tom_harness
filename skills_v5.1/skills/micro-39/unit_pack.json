@@ -1,0 +1,102 @@
+{
+  "frontmatter_description": "Infer the social motive behind why a speaker chose those words, tone, or phrasing.",
+  "title": "Speaker Motivation",
+  "use_when": [
+    "Use when the question asks why a speaker said something in that way.",
+    "Use when the main target is a social motive such as politeness, face-saving, testing, avoidance, ingratiation, or softening.",
+    "Use when the utterance form matters more than the literal content.",
+    "Use when the speaker may be managing relationship, image, tension, or risk through wording."
+  ],
+  "do_not_use_when": [
+    "Do not use when the question is mainly about whether the statement is true, false, deceptive, or a half-truth.",
+    "Do not use when the main issue is how to influence the listener's belief, attitude, or behavior; that is persuasion strategy.",
+    "Do not use when the main issue is adapting the message to the listener's age, expertise, identity, or comprehension level; that is audience calibration.",
+    "Do not use when the question asks what the speaker literally means or what indirect request is being made; that is indirect language."
+  ],
+  "decision_variable": "the speaker's social motive for the utterance",
+  "trigger_checklist": [
+    "Is the question asking why the speaker chose this wording, tone, or timing?",
+    "Is the best answer a motive like politeness, caution, testing, saving face, or ingratiation?",
+    "Can the content be true, but the reason for saying it is still social?",
+    "Would changing the wording change the social effect even if the factual content stayed the same?"
+  ],
+  "workflow": [
+    "Identify the utterance and its social setting.",
+    "Ask what interpersonal goal the speaker may be serving.",
+    "Prefer a motive explanation over a content judgment.",
+    "Choose the motive that best explains the wording, tone, or restraint.",
+    "If the case is really about truth, deception, audience fit, or persuasion, exit to the correct neighboring skill."
+  ],
+  "special_case": {
+    "title": "True statement, social motive",
+    "rule": "A statement can be factually true and still belong here if the question is why it was said that way.",
+    "worked_example": {
+      "scene": "A colleague says, 'That report is fine,' even though they think it is only average, because they do not want to embarrass the writer in front of the group.",
+      "question": "Why did the colleague say it that way?",
+      "answer_logic": "The decision variable is the social motive: politeness and face-saving. The unit does not ask whether the report was truly fine."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-37 or micro-38 if the answer depends on truth status, deception, or whether the listener is being misled.",
+    "Exit to micro-41 if the core task is to change the listener's belief, attitude, or behavior.",
+    "Exit to micro-40 if the core task is to fit the listener's age, status, expertise, or identity.",
+    "Exit to micro-35 or micro-36 if the question is really about the intended request, warning, complaint, or refusal hidden in the words."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the prompt asks for the speaker's motive behind a particular utterance, especially for politeness, face management, avoidance, testing, or ingratiation.",
+    "hard_boundary": [
+      "Truth or lie judgment",
+      "Persuasion strategy",
+      "Audience calibration",
+      "Indirect meaning or implied request"
+    ],
+    "shortcut_to_avoid": [
+      "Do not confuse 'why said this way' with 'is it true'.",
+      "Do not turn any social phrasing into persuasion unless the goal is clearly to change the listener.",
+      "Do not infer audience adaptation just because the wording is careful or simple."
+    ],
+    "common_failure_modes": [
+      "Answering with truth status instead of motive.",
+      "Treating polite wording as persuasion.",
+      "Treating hedging as audience calibration without evidence.",
+      "Treating indirect speech as speaker motivation when the question asks for the literal intended meaning."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A host says, 'Please take the last slice,' while actually hoping the guest will feel welcomed and comfortable.",
+        "why_it_matches": "The question is about the social motive behind the wording: politeness and hospitality."
+      },
+      {
+        "case": "A salesperson says, 'Most experts already use this model,' to convince a customer to buy it.",
+        "why_it_matches": "Near miss: the wording is chosen to change the listener's decision, so the central variable is the influence tactic. Route to persuasion strategy."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the same sentence is true, false, or misleading, but the question asks why it was said, stay here.",
+      "If the same sentence is chosen to make a child understand it, route to audience calibration.",
+      "If the same sentence is chosen to convince someone to act, route to persuasion strategy.",
+      "If the same sentence is chosen to hide facts or create a false impression, route to lie or misleading expression.",
+      "If the same sentence is a disguised request or refusal, route to indirect language."
+    ],
+    "generalization_note": "This unit generalizes to any utterance where the key variable is the speaker's social reason for choosing that form, not the factual content or the listener's comprehension."
+  },
+  "validation_seed": {
+    "positive_pattern": "The question asks why the speaker chose a polite, cautious, flattering, avoidant, or testing form of speech.",
+    "near_miss_pattern": "The question asks whether the statement is true, deceptive, or meant to persuade.",
+    "boundary_pattern": "The question asks whether the wording was adapted for a novice, child, expert, or out-group listener."
+  },
+  "notes": [
+    "Keep the answer as a motive label, not a long theory.",
+    "Prefer relationship-management explanations over content judgments when the prompt asks why."
+  ],
+  "id": "micro-39",
+  "level": "micro",
+  "layer": "L5",
+  "family": "language-pragmatics",
+  "core_question": "Infer why a speaker says something, such as politeness, face-saving, testing, avoidance, or ingratiation",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-17",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A coworker accidentally spills coffee on a teammate's report and the teammate is visibly upset.",
+      "question": "What should the coworker do next?",
+      "options": [
+        "Apologize, take responsibility, and offer to replace or help fix the report",
+        "Explain that it was an accident and move on without addressing the upset",
+        "Ask the teammate to split the blame because both were using the desk",
+        "Wait for the teammate to calm down before saying anything"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct repair after accidental harm; the core move is acknowledgment plus restitution."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A friend says a text sounded rude, but the sender meant it as a joke and no one is actually hurt yet.",
+      "question": "Which response best fits the situation?",
+      "options": [
+        "Apologize for causing offense and offer to phrase it better",
+        "Insist there is nothing to repair because the wording was correct",
+        "Negotiate a new plan for how often to text each other",
+        "Focus on clarifying the joke so the misunderstanding is cleared up"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "This is a live misunderstanding, not relationship damage requiring apology and reconciliation."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Two roommates disagree about how to divide chores for the month and each wants a fairer split.",
+      "question": "What is the best kind of response?",
+      "options": [
+        "Apologize and offer compensation for past hurt",
+        "Work out a compromise or joint plan on the chores",
+        "Ask for forgiveness for breaking the relationship",
+        "Focus on repairing trust after an insult"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is bargaining over terms, not apology or relationship repair after harm."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "After making a harsh comment at dinner, a person says, 'I was just being honest,' and wants to know what to do now.",
+      "question": "What should they do?",
+      "options": [
+        "Double down on the truth of the comment",
+        "Explain that the listener misunderstood the tone",
+        "Acknowledge the hurt, apologize, and try to repair the relationship",
+        "Ignore it because honesty excuses the reaction"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Tests the common shortcut of using explanation instead of repair after offense."
+    }
+  ]
+}

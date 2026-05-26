@@ -1,0 +1,120 @@
+{
+  "frontmatter_description": "Direct-route macro for judging trust, reputation, identity, role, and relationship decisions from long-term interaction history.",
+  "title": "Trust, Relationship, and Long-Term Interaction",
+  "use_when": [
+    "Use when the question depends on a person's reputation, reliability, loyalty, role, or history with others.",
+    "Use when past interactions change how the character should be judged now.",
+    "Use when long-term relationship context matters more than a single statement, single event, or one-time credibility cue.",
+    "Use when the scene asks who to trust, how to interpret behavior in a relationship, or how history should affect future interaction."
+  ],
+  "do_not_use_when": [
+    "Do not use when the core issue is a live misunderstanding that should be clarified immediately in conversation.",
+    "Do not use when the main issue is apology, compensation, or repairing damage after an offense.",
+    "Do not use when the case is mainly about spatial perspective, quantity estimation, or a one-off belief update without relationship history.",
+    "Do not use when the task is only to judge whether one statement is true from a single source of evidence."
+  ],
+  "decision_variable": "how long-term history affects trust, reputation, identity, role, and relationship judgment",
+  "direct_route_rule": "Route immediately when trust, reputation, identity, role, or long-term relational history matters.",
+  "expandable_micro_ids": [
+    "micro-18",
+    "micro-44",
+    "micro-45",
+    "micro-46",
+    "micro-47",
+    "micro-56"
+  ],
+  "trigger_checklist": [
+    "The scene mentions past behavior, repeated interaction, or a known track record.",
+    "The answer depends on whether someone is trustworthy, loyal, reliable, or credible over time.",
+    "A relationship label, social role, or reputation changes the interpretation of the current event.",
+    "The question is about how to treat someone now based on history, not just the current utterance.",
+    "There is a distinction between temporary behavior and stable relational pattern."
+  ],
+  "workflow": [
+    "Identify the long-term relationship variable: trust, loyalty, reputation, identity, or role.",
+    "Collect the history signal: repeated actions, prior promises, known patterns, and social standing.",
+    "Weigh history over isolated surface cues unless the scene explicitly overrides history.",
+    "Infer the most reasonable relationship judgment or action based on accumulated evidence.",
+    "If the case is actually about a narrower sub-skill such as credibility, apology, or live clarification, exit to the relevant micro or neighboring macro."
+  ],
+  "special_case": {
+    "title": "Mixed history with one new event",
+    "rule": "When a single new event conflicts with a long record, the long-term pattern usually sets the baseline unless the scene states a decisive rupture, verified betrayal, or formal role change.",
+    "worked_example": {
+      "scene": "A coworker has been dependable for years but misses one deadline after a family emergency.",
+      "question": "Should their reliability be judged as bad now?",
+      "answer_logic": "Use the long-term record as the main signal. The one missed deadline is a temporary exception, not enough by itself to replace the established trust pattern."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to macro-08 / micro-37 if the task is really about whether one statement is true or false from a single source.",
+    "Exit to macro-17 if the scene is a repair conversation, apology, or reconciliation after harm.",
+    "Exit to macro-16 if the main issue is clarifying a misunderstanding in real time.",
+    "Exit to macro-19 if the question is about first impression only and no relationship history is available.",
+    "Exit to macro-01 / macro-07 / macro-20 if another macro better captures the core (false belief, indirect meaning, or power-distance communication).",
+    "Add micro-18 when single-source credibility within a longer relationship is the deciding factor.",
+    "Add micro-44 when fairness or reciprocity history controls the judgment.",
+    "Add micro-45 when long-term reliability or reputation must be diagnosed.",
+    "Add micro-46 when the role or status structure of the relationship matters.",
+    "Add micro-47 when group identity changes how history is read.",
+    "Add micro-56 when causal attribution across the history is required."
+  ],
+  "references": {
+    "route_signal": "Long-term history, reputation, loyalty, trustworthiness, role, or identity determines the answer.",
+    "hard_boundary": [
+      "Single-source credibility is not enough by itself.",
+      "A one-off lie or one-off mistake does not automatically make this a relationship-history case.",
+      "If the scene is mainly about apology or damage repair, it belongs outside this macro.",
+      "If the scene is mainly about live clarification of misunderstanding, it belongs outside this macro."
+    ],
+    "shortcut_to_avoid": [
+      "Do not answer from the most recent event alone.",
+      "Do not treat trust as a pure truth-checking problem.",
+      "Do not ignore the established relationship baseline.",
+      "Do not collapse role, reputation, and trust into generic belief reasoning."
+    ],
+    "common_failure_modes": [
+      "Overweighting a single new action and forgetting the track record.",
+      "Confusing reputation judgment with literal truth assessment.",
+      "Routing apology or reconciliation scenes here when repair is the real target.",
+      "Treating role-based trust as mere familiarity rather than a long-term pattern."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A manager must decide whether to assign a sensitive task to an employee who has been reliable for years.",
+        "why_it_matches": "The answer depends on long-term trust and reputation, not a one-off statement."
+      },
+      {
+        "case": "A manager just met a new contractor and must decide whether to assign a sensitive task based only on a single recommendation letter.",
+        "why_it_matches": "This is a near miss: there is no track record, only single-source credibility, so it routes to macro-19 or micro-18 rather than to long-term relationship judgment."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the scene gives only one statement from a stranger, this macro should usually not be used.",
+      "If the scene is about whether to apologize, compensate, or reconcile after offense, leave this macro.",
+      "If the scene asks what someone means by a remark, do not solve it here unless trust history is the main reason."
+    ],
+    "generalization_note": "This macro generalizes to any scene where accumulated interaction history changes trust, reputation, role expectations, or relationship judgment, even when the wording differs from benchmark-style prompts."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character must decide how much to trust or rely on someone based on a repeated history of behavior, reputation, loyalty, or role.",
+    "near_miss_pattern": "A character must interpret one ambiguous statement or one isolated action without any meaningful relationship history.",
+    "boundary_pattern": "A relationship has been harmed and the scene is mainly about apology, repair, or reconciliation rather than judgment from long-term history."
+  },
+  "notes": [
+    "This is a direct scene prototype, not a micro bundle.",
+    "Use micro expansions only for diagnosis or boundary repair when the scene turns on a narrower subcase.",
+    "The core answer logic is historical: stable pattern first, isolated event second.",
+    "Preserve the distinction between trust over time and single-event credibility."
+  ],
+  "id": "macro-15",
+  "level": "macro",
+  "layer": "macro",
+  "family": "relationships",
+  "core_question": "how long-term history affects trust, reputation, and relationship judgment",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

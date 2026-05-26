@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-52",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A junior engineer notices a serious flaw in the manager's proposed rollout during a team meeting.",
+      "question": "What is the best communication move?",
+      "options": [
+        "State that the manager is wrong and should change the plan immediately",
+        "Raise the concern respectfully and suggest a follow-up discussion after the meeting",
+        "Ignore it because junior staff should not speak up",
+        "Tell the whole team to vote on the plan instead"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "The scene is about choosing a hierarchy-safe way to challenge upward, with escalation or deferred discussion preferred over blunt confrontation."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Two coworkers at the same level disagree on how to divide a shared project and need a workable plan.",
+      "question": "What kind of communication is most appropriate?",
+      "options": [
+        "Ask the manager to decide because one person outranks the other",
+        "Negotiate a compromise directly with the peer",
+        "Withdraw from the project without discussion",
+        "Send an approval request to the CEO"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is bilateral negotiation between equals, not hierarchy-sensitive communication."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "A new hire is introduced as the operations lead, and the question asks who has authority over the team.",
+      "question": "What is the correct answer?",
+      "options": [
+        "The operations lead has decision authority",
+        "The best move is to ask permission before speaking",
+        "The safest move is to escalate to a higher manager",
+        "The proper response is to challenge the title"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This asks for role recognition, not a communication strategy under hierarchy."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "An employee is preparing for a promotion interview and wants to sound polished and confident.",
+      "question": "What is the main skill being tested?",
+      "options": [
+        "Impression management",
+        "Escalation through proper channels",
+        "Deference to authority",
+        "Withdrawal from conflict"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The main issue is self-presentation, not choosing a move across a power gap."
+    }
+  ]
+}

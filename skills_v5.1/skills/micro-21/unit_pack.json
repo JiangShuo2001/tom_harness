@@ -1,0 +1,99 @@
+{
+  "frontmatter_description": "Diagnose whether one goal is a higher-level aim, a subgoal, or a local step within a goal structure.",
+  "title": "Goal Hierarchy",
+  "use_when": [
+    "Use when the question asks whether a goal is long-term, short-term, or local relative to another goal.",
+    "Use when you need to identify which stated goal is a means to a higher goal and which is the end goal.",
+    "Use when the task is to map the hierarchy among goals without choosing between them."
+  ],
+  "do_not_use_when": [
+    "Do not use when the question asks which goal will win, which desire is stronger, or what the character will choose.",
+    "Do not use when the main issue is preference, intention, action prediction, or commitment priority.",
+    "Do not use when the scene is about resolving conflict between goals rather than classifying their levels."
+  ],
+  "decision_variable": "which goal is superordinate versus subordinate",
+  "trigger_checklist": [
+    "There are two or more goals, plans, or aims mentioned.",
+    "The question asks for level, nesting, or means-end relation.",
+    "One goal appears to support another goal or larger purpose.",
+    "No direct choice between competing goals is required."
+  ],
+  "workflow": [
+    "List every stated goal, plan, or objective.",
+    "Ask whether one goal serves another goal or stands as the final aim.",
+    "Classify each goal as long-term, short-term, or local.",
+    "Answer with the hierarchy only, not with the chosen action."
+  ],
+  "special_case": {
+    "title": "Subgoal inside a plan",
+    "rule": "If a small action is part of a larger plan, treat it as a local or short-term goal only when the question asks for level, not when it asks which action will happen next.",
+    "worked_example": {
+      "scene": "A student studies for a quiz so that she can pass the class.",
+      "question": "Which goal is higher-level?",
+      "answer_logic": "Passing the class is the higher-level goal; studying for the quiz is the subordinate goal that serves it."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-25 Goal-Conflict Arbitration if the question asks which goal wins or is weighted higher.",
+    "Exit to micro-24 Commitment Priority if a binding promise, plan, or schedule sets the priority.",
+    "Exit to micro-23 Action Prediction if the scene requires predicting the next action from goals.",
+    "Exit to micro-22 Intention Recognition if the issue is inferring the immediate purpose behind a current behavior.",
+    "Exit to micro-19 or micro-20 if the issue is mental-state reading of the character's own or another person's desire or preference."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when a case asks how goals are nested or whether a goal is a means versus an end.",
+    "hard_boundary": [
+      "The target is the means-end structure among goals, not which goal wins (that is micro-25).",
+      "The target is structural level, not the choice forced by a binding promise or schedule (that is micro-24).",
+      "The target is hierarchy, not the immediate purpose of a present behavior (that is micro-22).",
+      "The target is goal nesting, not the next observable action (that is micro-23)."
+    ],
+    "shortcut_to_avoid": [
+      "Do not treat the goal that gets mentioned first as the higher-level goal.",
+      "Do not infer hierarchy from which goal feels more important unless the relation is explicitly asked.",
+      "Do not use the final action as evidence of the top-level goal without checking the stated plan structure."
+    ],
+    "common_failure_modes": [
+      "Confusing a subtask with the main objective.",
+      "Answering which goal the character will pursue instead of which goal is higher-level.",
+      "Equating short-term with low value and long-term with preference without textual support.",
+      "Merging goal hierarchy with intention or action prediction."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A person buys ingredients so he can make dinner for his family.",
+        "why_it_matches": "The question can ask which goal is the higher-level aim, with buying ingredients as a subgoal."
+      },
+      {
+        "case": "A girl writes a reminder so she will not forget the meeting.",
+        "why_it_matches": "The reminder is a local means; not forgetting the meeting is the broader goal."
+      }
+    ],
+    "boundary_stress_test": [
+      "If two goals compete, do not rank them here; route to preference or commitment.",
+      "If the story asks what the person will do next, do not answer hierarchy.",
+      "If the only clue is that one goal happens earlier in time, that is not enough to prove it is higher-level."
+    ],
+    "generalization_note": "Use this unit only for means-end structure among goals; it does not decide choice, value, or behavior."
+  },
+  "validation_seed": {
+    "positive_pattern": "One goal is clearly a step or instrument for another goal, and the question asks which is higher-level.",
+    "near_miss_pattern": "Two goals are mentioned and the question asks which one the character will choose.",
+    "boundary_pattern": "The character has conflicting wants, but the question asks for the more important one."
+  },
+  "notes": [
+    "This unit supports diagnosis inside broader goal-action scenes, but only for hierarchy, not selection.",
+    "Keep the answer structural: superordinate goal, subordinate goal, or local step.",
+    "If the scene asks why an action was done, route to intention recognition instead."
+  ],
+  "id": "micro-21",
+  "level": "micro",
+  "layer": "L3",
+  "family": "goal-action",
+  "core_question": "Distinguish long-term, short-term, and local goals",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

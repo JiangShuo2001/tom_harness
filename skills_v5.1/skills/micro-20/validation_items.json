@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-20",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Mina remembers that Jordan always picks spicy noodles over mild ones. When she orders lunch for him, she chooses the spicy option.",
+      "question": "Does Mina know what Jordan prefers?",
+      "options": [
+        "Yes",
+        "No",
+        "Only Jordan's goal, not his taste",
+        "Cannot tell"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct match: Mina represents another person's taste from prior choices."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Tara says she wants the blueberry muffin and buys one for herself.",
+      "question": "Does Tara know what Ben prefers?",
+      "options": [
+        "Yes",
+        "No",
+        "Only Ben's goal, not his taste",
+        "Cannot tell"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "Near-miss: the scene shows Tara's own preference, not her model of Ben's preference."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Owen thinks Priya asked for a jacket because she wanted to stay warm on the walk.",
+      "question": "Does Owen know what Priya prefers?",
+      "options": [
+        "Yes",
+        "No",
+        "Yes, because he knows her purpose",
+        "Cannot tell"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Boundary case: the cue is about intention behind an action, not Priya's preference."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Nadia likes green tea herself, but when buying for her sister she picks black tea because her sister always chooses black tea.",
+      "question": "Does Nadia know what her sister prefers?",
+      "options": [
+        "Yes",
+        "No",
+        "She only knows her own preference",
+        "Cannot tell"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Tests the shortcut trap: do not collapse Nadia's own taste into her sister's separate preference."
+    }
+  ]
+}

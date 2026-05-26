@@ -1,0 +1,115 @@
+{
+  "frontmatter_description": "Route here when spoken words are intended to convey an indirect request, warning, complaint, refusal, reminder, or invitation beyond their literal wording.",
+  "title": "Indirect Language and Conversational Meaning",
+  "use_when": [
+    "The speaker means something beyond the literal sentence, and the task is to infer the intended social meaning.",
+    "The utterance functions as a request, warning, complaint, refusal, reminder, invitation, or soft criticism rather than plain factual description.",
+    "The key question is what the listener is supposed to understand from the way it was said."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is whether the statement is true or deceptive; route to lies, half-truths, or misdirection instead.",
+    "Do not use when the main issue is the speaker's hidden emotion rather than the communicative intent.",
+    "Do not use when the core task is audience adaptation, persuasion strategy, or choosing the best way to influence a listener.",
+    "Do not use when the scene is a straightforward literal statement with no implied social meaning."
+  ],
+  "decision_variable": "what the speaker really wants the listener to understand",
+  "direct_route_rule": "Route immediately when spoken words mean a request, warning, complaint, refusal, reminder, or invitation beyond literal text.",
+  "expandable_micro_ids": [
+    "micro-34",
+    "micro-35",
+    "micro-36",
+    "micro-39",
+    "micro-48"
+  ],
+  "trigger_checklist": [
+    "The literal words are incomplete, softened, or socially indirect.",
+    "The scene asks for the intended meaning, not the literal sentence meaning.",
+    "A request, warning, complaint, refusal, reminder, or invitation is being conveyed indirectly.",
+    "The listener must infer what is meant from context, tone, or shared expectations.",
+    "The utterance is not primarily about whether it is true or false."
+  ],
+  "workflow": [
+    "Identify the literal utterance.",
+    "Ask what social act the speaker is performing through that utterance.",
+    "Use context, relationship, and situational need to infer the intended meaning.",
+    "Prefer the indirect communicative function over the literal wording.",
+    "State the intended message in plain language."
+  ],
+  "special_case": {
+    "title": "Polite indirect request",
+    "rule": "If a question or statement is phrased politely but clearly functions as a request, answer with the requested action or the intended request, not the literal sentence meaning.",
+    "worked_example": {
+      "scene": "A guest says, 'It is quite warm in here,' while looking at the closed window.",
+      "question": "What does the guest really want the host to understand?",
+      "answer_logic": "The literal sentence is about temperature, but the social meaning is a polite request to open the window or cool the room."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to macro-08 if the central issue is truthfulness, deception, or selective disclosure.",
+    "Exit to macro-05 if the central issue is emotion inference from expression rather than communicative intent.",
+    "Exit to macro-09 if the central issue is how to persuade, advise, or adapt to the listener.",
+    "Exit to macro-04 if the carrier of meaning is a nonverbal cue rather than spoken words.",
+    "Add micro-34 when the literal meaning must be pinned down before the indirect meaning is read.",
+    "Add micro-35 when the utterance functions as a request, warning, refusal, or invitation in disguise.",
+    "Add micro-36 when context-driven implicature must be computed.",
+    "Add micro-39 when the puzzle is why the speaker phrased it indirectly (motive).",
+    "Add micro-48 when the indirect wording protects a private or sensitive disclosure."
+  ],
+  "references": {
+    "route_signal": "A speaker says one thing but clearly intends the listener to infer a different social action or practical meaning.",
+    "hard_boundary": [
+      "Not about whether the utterance is factually true.",
+      "Not about hidden feeling unless the feeling is only a clue to the intended message.",
+      "Not about optimizing persuasion strategy or audience calibration.",
+      "Not about nested belief or false-belief reasoning unless needed only as context."
+    ],
+    "shortcut_to_avoid": [
+      "Do not overcall this macro for any nonliteral sentence; some nonliteral cases are lies, sarcasm with truth-status questions, or persuasion problems.",
+      "Do not answer from literal semantics alone when the scene clearly signals an intended social meaning.",
+      "Do not confuse indirectness with emotional concealment."
+    ],
+    "common_failure_modes": [
+      "Answering the literal sentence instead of the intended meaning.",
+      "Routing sarcasm or irony to emotion when the task is really conversational meaning.",
+      "Routing a deceptive statement here when the core is truth value or misleading effect.",
+      "Treating a polite request as a factual comment."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A person says, 'Can you pass the salt?' at dinner.",
+        "why_it_matches": "The literal form is a question about ability, but the intended meaning is a request."
+      },
+      {
+        "case": "A person says, 'I already finished my part,' while in fact they only completed half and want the listener to think it is fully done.",
+        "why_it_matches": "This is a near miss: the wording is selected to create a false impression of the facts, so truth status is the central issue and it routes to macro-08 instead."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the utterance is indirect but the question asks whether it is true, shift to lies or misdirection.",
+      "If the utterance is indirect but the main challenge is tailoring it to the listener, shift to persuasion or advice.",
+      "If the utterance hides feeling without changing the social act, shift to hidden emotion.",
+      "If the utterance is a live misunderstanding that needs repair, this macro can still be used for the meaning inference, but the repair macro may become the better direct route."
+    ],
+    "generalization_note": "Use this macro as the reusable prototype for indirect speech acts across requests, warnings, complaints, refusals, reminders, invitations, and soft criticism; micro ids are only for diagnosis, repair, and boundary explanation."
+  },
+  "validation_seed": {
+    "positive_pattern": "The speaker uses literal words that clearly function as a request, warning, complaint, refusal, reminder, or invitation in context.",
+    "near_miss_pattern": "The utterance is partly misleading or selectively true, so the main issue is truth status rather than indirect meaning.",
+    "boundary_pattern": "The utterance is socially indirect, but the key task is to adapt the message to the listener's beliefs, motives, or expertise."
+  },
+  "notes": [
+    "This macro is a direct scene prototype, not just a bundle of micro skills.",
+    "Use the micro expansions only when needed for finer diagnosis or explanation.",
+    "Keep the answer centered on intended conversational meaning rather than literal wording."
+  ],
+  "id": "macro-07",
+  "level": "macro",
+  "layer": "macro",
+  "family": "language",
+  "core_question": "what the speaker really wants the listener to understand",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

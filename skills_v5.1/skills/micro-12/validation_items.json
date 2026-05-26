@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-12",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Mina puts her ring in the desk drawer and leaves the room. While she is away, Leo moves the ring to the jewelry box.",
+      "question": "What is the best classification for Mina's belief about the ring now?",
+      "options": [
+        "False belief",
+        "First-order belief that matches reality",
+        "Second-order belief",
+        "Appearance-reality only"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Mina has an outdated belief about the ring's location after an unseen change."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Ben checks the train board and sees that the 6:10 train is delayed. Later, nothing changes and the train is still delayed.",
+      "question": "What is the best classification for Ben's belief about the train now?",
+      "options": [
+        "False belief",
+        "First-order belief that matches reality",
+        "Second-order belief",
+        "Appearance-reality only"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is close to the target, but Ben's belief matches reality, so it is not a false belief."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Tara says, 'I think Noah believes the meeting starts at 3.'",
+      "question": "What is the best classification for Tara's statement?",
+      "options": [
+        "False belief",
+        "First-order belief that matches reality",
+        "Second-order belief",
+        "Appearance-reality only"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This is about one person's belief about another person's belief, which is nested and out of scope."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A box looks full from the outside, but it is actually empty.",
+      "question": "What is the best classification if no character's belief is being asked about?",
+      "options": [
+        "False belief",
+        "First-order belief that matches reality",
+        "Second-order belief",
+        "Appearance-reality only"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "This is a likely shortcut trap: the scene has a reality mismatch, but no character belief is queried."
+    }
+  ]
+}

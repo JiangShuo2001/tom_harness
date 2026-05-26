@@ -1,0 +1,105 @@
+{
+  "unit_id": "micro-33",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "After Tara is criticized in front of the team, she feels her face burn. In the restroom, she tells herself the comment was about the report, not her worth, takes slow breaths, and decides to revise one section.",
+      "question": "How is Tara managing her emotion?",
+      "options": [
+        "She is reappraising the criticism and calming herself to reduce embarrassment.",
+        "She is only identifying that she feels embarrassed.",
+        "She is trying to make the team feel guilty.",
+        "She is hiding her embarrassment without changing it internally."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct match because Tara uses self-talk, breathing, and problem-focused redirection to regulate her own emotion."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Jon is angry when a customer insults him. He smiles politely and says, 'I understand,' because his manager is standing nearby. Inside, he keeps replaying the insult and feels just as furious.",
+      "question": "What is the best interpretation of Jon's response?",
+      "options": [
+        "He is calming himself through reappraisal.",
+        "He is masking his anger outwardly, not regulating it internally.",
+        "He is absorbing the customer's emotion.",
+        "He is feeling relief because the situation could have been worse."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This tests the boundary between public display control and internal emotion regulation."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Nina misses her train by one minute. A few minutes later she learns the train broke down in a tunnel. She feels relieved because missing it spared her from being stuck underground.",
+      "question": "What is the main emotional process in Nina's reaction?",
+      "options": [
+        "She is distracting herself from anxiety.",
+        "She is suppressing disappointment.",
+        "She is feeling relief from comparing what happened with a worse alternative.",
+        "She is using self-comfort to manage shame."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This should route away because the decisive clue is counterfactual relief, not a coping strategy."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "After snapping at her brother, Priya feels guilty. She thinks, 'I was exhausted, but that does not excuse it,' makes tea, and writes a short apology so she can stop spiraling.",
+      "question": "How is Priya managing her guilt?",
+      "options": [
+        "She is regulating guilt through balanced self-talk, self-comfort, and a repair plan.",
+        "She is deciding whether her brother caused the conflict.",
+        "She is merely stating the literal meaning of an apology.",
+        "She is copying her brother's emotional state."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This covers the special case of private composure after moral discomfort."
+    },
+    {
+      "id": "case_5",
+      "pattern": "near_miss",
+      "scene": "Mark says, 'Could you lower your voice?' during a tense meeting. The question asks what Mark is doing with that utterance in the conversation.",
+      "question": "Which answer best fits the asked focus?",
+      "options": [
+        "He is making an indirect request for someone to speak more quietly.",
+        "He is reappraising his anxiety to feel safer.",
+        "He is soothing himself through distraction.",
+        "He is rationalizing his anger."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is inspired by the shortcut of treating any anxiety-reducing context as emotion regulation; here the focus is the speech act."
+    }
+  ]
+}

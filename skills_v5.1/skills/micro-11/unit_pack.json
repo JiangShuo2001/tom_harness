@@ -1,0 +1,108 @@
+{
+  "frontmatter_description": "Determine a single character's current belief about the facts from that character's own evidence and perspective.",
+  "title": "First-Order Belief",
+  "use_when": [
+    "Use when the question asks what one character believes, thinks is true, expects to be true, or assumes about the current facts.",
+    "Use when the answer depends on the character's subjective representation of reality, not on the narrator's true state alone.",
+    "Use when the belief may be true, false, uncertain, outdated, or incomplete, but the task is to state the character's own model of the situation.",
+    "Use inside a larger false-belief, search-location, trust, or communication scene when the local diagnostic step is: what does this one person believe right now?"
+  ],
+  "do_not_use_when": [
+    "Do not use when the main question is whether the belief conflicts with reality; route to False Belief if the discrepancy itself is the target.",
+    "Do not use when the target variable is what the character remembers, forgot, or misremembers after prior exposure; route to Memory, Forgetting, and Misremembering.",
+    "Do not use when the issue is whether the character has background expertise, cultural knowledge, or conceptual competence needed to interpret something; route to Knowledge Boundary.",
+    "Do not use when the question asks what X thinks Y believes, knows, expects, or will do based on Y's belief; route to Second-Order or Recursive Belief.",
+    "Do not use when the answer is primarily about desire, intention, emotion, deception motive, or moral evaluation rather than factual belief."
+  ],
+  "decision_variable": "the character's current factual belief",
+  "trigger_checklist": [
+    "A specific character is the belief holder.",
+    "The question asks what that character believes, thinks, assumes, expects, or would say is true.",
+    "There is evidence about what the character perceived, was told, inferred, or failed to observe.",
+    "The answer can be framed as a factual proposition from that character's point of view.",
+    "No nested mind-reading is required beyond the target character's own belief."
+  ],
+  "workflow": [
+    "Identify the target believer and freeze the scene at the time asked about.",
+    "List only the information available to that character before that time: direct perception, testimony, prior assumptions, and obvious inferences.",
+    "Exclude facts the narrator or other characters know but the target did not observe or learn.",
+    "Construct the simplest factual proposition the character would currently treat as true, likely, or unknown.",
+    "If reality differs from that proposition, note the belief as the character's belief without making discrepancy the main variable.",
+    "Answer in the character's perspective, using uncertainty when the character has insufficient evidence."
+  ],
+  "special_case": {
+    "title": "Belief Without Error",
+    "rule": "A first-order belief does not need to be false; if the character's available evidence matches reality, still state the character's subjective belief rather than routing only because the belief is correct.",
+    "worked_example": {
+      "scene": "Maya sees Leo put the blue notebook in the drawer. No one moves it afterward. Later, Maya returns to the room.",
+      "question": "Where does Maya think the blue notebook is?",
+      "answer_logic": "Maya directly saw the notebook placed in the drawer and received no later evidence of a move, so her current factual belief is that the notebook is in the drawer. This is first-order belief even though it is also true."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-12 False Belief if the requested answer is about the mismatch between belief and actual state, such as 'why is X wrong?' or 'where will X mistakenly look?'",
+    "Exit to micro-13 Second-Order or Recursive Belief if the question embeds another person's mental state, such as 'What does A think B believes?'",
+    "Exit to micro-09 Memory, Forgetting, and Misremembering if the decisive issue is retention, forgetting, or distorted recall after earlier exposure.",
+    "Exit to micro-10 Knowledge Boundary if the decisive issue is whether the character has the background competence to understand a term, custom, profession, clue, or symbol.",
+    "Exit to perception or attention units if the character's belief cannot be assessed until deciding what the character could see, hear, or notice."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the scene requires reconstructing one character's current factual model of the world from that character's own access to evidence.",
+    "hard_boundary": [
+      "The unit answers only first-order factual belief: what X believes about the world.",
+      "It does not evaluate whether X's belief is false unless that is only a supporting observation.",
+      "It does not model one person's belief about another person's belief.",
+      "It does not decide background knowledge, memory retention, intention, preference, or emotion as the primary variable."
+    ],
+    "shortcut_to_avoid": [
+      "Do not answer from the narrator's omniscient facts; filter through the target character's evidence.",
+      "Do not automatically label every belief question as false belief; first determine whether the target is simply asking for the character's own representation.",
+      "Do not infer that a character knows a later event merely because the reader knows it."
+    ],
+    "common_failure_modes": [
+      "Confusing actual location or actual facts with the character's believed facts.",
+      "Overrouting to false belief whenever an unseen change occurs, even when the prompt only asks what the character currently believes.",
+      "Treating a lack of background expertise as a belief problem instead of a knowledge-boundary problem.",
+      "Missing that the character may be uncertain rather than holding a definite belief.",
+      "Accidentally answering what another character thinks the target believes."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Nina hears that the meeting is in Room 4 and has not heard any update. The question asks, 'Where does Nina think the meeting is?'",
+        "why_it_matches": "The target is Nina's own current factual belief based on information available to her."
+      },
+      {
+        "case": "Nina hears that the meeting is in Room 4, but it was moved to Room 6 without her knowledge. The question asks, 'Is Nina wrong about the meeting room?'",
+        "why_it_matches": "This should exit to False Belief because the requested variable is the conflict between Nina's belief and reality."
+      }
+    ],
+    "boundary_stress_test": [
+      "If X saw the original event but missed the later change, answer what X still believes, unless the prompt asks specifically about the error-reality gap.",
+      "If X was told a fact by an unreliable person but has no reason to doubt it, represent X's belief from X's perspective; do not substitute the speaker's reliability judgment unless asked.",
+      "If X lacks the specialized knowledge to interpret a clue, do not invent a belief from the clue; route to Knowledge Boundary.",
+      "If X once knew the fact but may have forgotten it, resolve memory state before using first-order belief.",
+      "If the prompt says 'What does A think B will believe?' route away to recursive belief."
+    ],
+    "generalization_note": "First-order belief is the basic theory-of-mind operation of separating a character's subjective factual model from reality and from other minds; it applies across object-location tasks, conversations, plans, rumors, and everyday misunderstandings."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character receives or observes some information, misses other information, and the question asks what that same character thinks is true now.",
+    "near_miss_pattern": "A character's belief differs from reality and the question asks whether, how, or why the character is mistaken.",
+    "boundary_pattern": "The prompt asks what one person thinks another person believes, or whether the character has the background knowledge needed to understand a fact."
+  },
+  "notes": [
+    "Preserve the distinction between belief content and truth status.",
+    "The answer may be 'the character does not know' or 'the character is uncertain' when the available evidence does not support a definite belief.",
+    "This micro unit can be used as a diagnostic substep inside classic false-belief macros, but it remains broader than false belief."
+  ],
+  "id": "micro-11",
+  "level": "micro",
+  "layer": "L2",
+  "family": "belief-models",
+  "core_question": "Determine what X believes the facts are",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

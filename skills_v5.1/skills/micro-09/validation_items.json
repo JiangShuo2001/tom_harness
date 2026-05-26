@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-09",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Nina heard the new locker code on Monday. On Tuesday, she cannot repeat the code when asked.",
+      "question": "What does this most directly test?",
+      "options": [
+        "Whether Nina believes the code is false now",
+        "Whether the heard code is still retained in memory",
+        "Whether Nina was paying attention to the speaker",
+        "Whether Nina knows what a locker code is"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Prior exposure is established, and the task asks about current recall, so this is a direct memory-retention case."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Omar was in the room when the teacher wrote a number on the board, but he spent the whole time texting and never looked up. Later he cannot repeat the number.",
+      "question": "What is the best explanation for the failure?",
+      "options": [
+        "Forgetting after encoding",
+        "Misremembering through reconstruction",
+        "Failure of attention, not memory",
+        "A change in Omar's belief"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This is a common shortcut trap: the detail was never properly noticed, so it should not be scored as forgetting."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Leah never saw the ingredient list. After tasting the soup, she says, 'I think it has garlic.'",
+      "question": "What skill best fits this case?",
+      "options": [
+        "First-order belief from current evidence",
+        "Memory retention after prior exposure",
+        "Knowledge boundary about cooking terms",
+        "Event-order updating across time"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "There is no prior-memory test here; the statement is a present belief, not recall."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Mina saw a red umbrella on Monday. On Thursday she says it was blue because the umbrella now reminds her of a friend's blue coat.",
+      "question": "What kind of memory error is this?",
+      "options": [
+        "Attention failure",
+        "Knowledge gap",
+        "Accurate recall",
+        "Reconstructed misremembering"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "She had prior exposure, but the current memory has been distorted by reconstruction and mistaken association."
+    }
+  ]
+}

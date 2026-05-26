@@ -1,0 +1,100 @@
+{
+  "frontmatter_description": "Diagnose how a character weights competing goals when more than one desire is active.",
+  "title": "Goal-Conflict Arbitration",
+  "use_when": [
+    "Use when the question asks which of two or more active goals matters more to the character.",
+    "Use when the task is to identify the weighting rule behind a choice among competing wants, motives, or aims.",
+    "Use when the scene does not depend on a prior commitment, fixed schedule, or explicit obligation."
+  ],
+  "do_not_use_when": [
+    "Do not use when the question is really about the next action the character will take; use action prediction instead.",
+    "Do not use when an existing commitment, ongoing plan, or invitation sets the priority; use commitment priority instead.",
+    "Do not use when the issue is emotion from success, loss, threat, or blame; use an emotion-appraisal skill instead.",
+    "Do not use when the question is about intention recognition, persuasion, or social meaning rather than goal weighting."
+  ],
+  "decision_variable": "which goal gets greater weight in the character's prioritization rule",
+  "trigger_checklist": [
+    "Two or more goals are active at the same time.",
+    "The question asks which goal wins, outweighs, or dominates.",
+    "No fixed commitment already settles the choice.",
+    "The answer depends on priority, salience, urgency, reward, cost, or value tradeoff."
+  ],
+  "workflow": [
+    "Identify all competing goals that are active in the scene.",
+    "Check what the question asks to compare: priority, strength, urgency, payoff, or moral cost.",
+    "Infer the weighting rule the character is using.",
+    "Choose the goal that the rule makes dominant."
+  ],
+  "special_case": {
+    "title": "Tie or near-tie between goals",
+    "rule": "If the scene gives no commitment and no explicit priority cue, use the strongest stated incentive, threat, or immediate payoff to break the tie.",
+    "worked_example": {
+      "scene": "Dana wants to leave early to meet a friend, but also wants to finish a task before the meeting.",
+      "question": "Which goal wins?",
+      "answer_logic": "Compare the active goals and look for the stronger stated weight. If the task has a deadline or major cost, it outweighs the meeting; if not, the social plan may win. The key variable is the weighting rule, not the exact action sequence."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit immediately to micro-23 Action Prediction if the question asks what the character will do next rather than how goals are weighted.",
+    "Exit immediately to micro-24 Commitment Priority if an existing obligation, plan, or invitation determines the answer.",
+    "Exit immediately to micro-21 Goal Hierarchy if the question asks how local goals nest under broader goals rather than which one outweighs the other.",
+    "Exit immediately to an emotion-appraisal unit (micro-26 to micro-31) if the scene is about how the character feels about gain, loss, threat, blame, or success.",
+    "Exit immediately to micro-22 or a belief unit if the scene is about intention reading or belief inference without active goal competition."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the answer depends on how a character compares competing goals, not on a fixed commitment or a predicted next move.",
+    "hard_boundary": [
+      "Goal-Conflict Arbitration weights two active wants; if a binding promise or schedule pre-resolves the choice, route to micro-24 Commitment Priority.",
+      "It outputs which goal is weighted higher, not the next observable behavior; behavioral output is micro-23 Action Prediction.",
+      "It is about goal weighting at the desire level, not feeling about the outcome; emotion is micro-26 to micro-31.",
+      "It treats goals as parallel competitors, not as nested means-and-ends; nesting is micro-21 Goal Hierarchy."
+    ],
+    "shortcut_to_avoid": [
+      "Do not infer the most visible action and treat it as the whole goal structure.",
+      "Do not assume a schedule or obligation unless the scene explicitly gives one.",
+      "Do not convert a motivation question into an emotion question."
+    ],
+    "common_failure_modes": [
+      "Confusing goal weighting with next-step prediction.",
+      "Using commitment priority when the scene only shows general desire conflict.",
+      "Reading emotion as if it were the main cause of the choice.",
+      "Answering with personality labels instead of the active weighting rule."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A character wants to study and also wants to go to a party, with no deadline or promise involved.",
+        "why_it_matches": "This is direct competition between goals, so the task is to infer which goal gets more weight."
+      },
+      {
+        "case": "A character promised to help a friend but now also wants to rest.",
+        "why_it_matches": "This looks similar, but the promise introduces commitment priority, which is outside this unit."
+      }
+    ],
+    "boundary_stress_test": [
+      "If removing the commitment would change the answer, this is not Goal-Conflict Arbitration.",
+      "If the question can be answered by naming the next action alone, it belongs elsewhere.",
+      "If the key clue is an emotion word rather than a goal tradeoff, leave this unit."
+    ],
+    "generalization_note": "This unit covers general goal tradeoffs across everyday, moral, social, and self-protective motives, as long as no prior commitment resolves the choice."
+  },
+  "validation_seed": {
+    "positive_pattern": "The character faces two active goals and the answer depends on which goal is weighted more strongly.",
+    "near_miss_pattern": "The character has two goals, but one is already governed by a promise, schedule, or standing obligation.",
+    "boundary_pattern": "The question asks what the character will do next, not how the character ranks the goals."
+  },
+  "notes": [
+    "Keep the unit focused on goal weighting, not full planning.",
+    "Use only when the scene lacks a prior commitment that settles the conflict.",
+    "This micro skill should support diagnosis inside broader goal-and-action routes."
+  ],
+  "id": "micro-25",
+  "level": "micro",
+  "layer": "L3",
+  "family": "goal-action",
+  "core_question": "Determine how a character chooses among conflicting goals",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-13",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Lena stands facing a wall. A poster is on the wall to Lena's left, and a clock is on Lena's right.",
+      "question": "What is on Lena's left?",
+      "options": [
+        "The poster",
+        "The clock",
+        "The floor",
+        "Behind Lena"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct left-right viewpoint judgment from the target's frame."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "Maya stands across a table facing Noah. On Noah's side, a red cup is on Noah's left and a blue cup is on Noah's right.",
+      "question": "Which cup is on Maya's left?",
+      "options": [
+        "The red cup",
+        "The blue cup",
+        "Both cups",
+        "Neither cup"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Tests the reader-viewpoint trap by requiring reversal across the table."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Eli saw his keys on the kitchen counter, then left the room. While he was gone, Sam moved the keys into a drawer.",
+      "question": "When Eli comes back, where will he first look for the keys?",
+      "options": [
+        "On the kitchen counter",
+        "In the drawer",
+        "In the car",
+        "On the sofa"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a false-belief case, not a current visual perspective case."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "In a silent library, Ben answers his phone on speaker while other people are reading.",
+      "question": "Is Ben acting socially appropriately?",
+      "options": [
+        "Yes",
+        "No",
+        "Left",
+        "Right"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Boundary case: the key issue is social norm violation, not spatial viewpoint."
+    }
+  ]
+}

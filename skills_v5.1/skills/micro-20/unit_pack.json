@@ -1,0 +1,96 @@
+{
+  "frontmatter_description": "Micro skill for judging whether a character represents another person's likes, wants, or taste.",
+  "title": "Other Preference",
+  "use_when": [
+    "Use when the question asks whether a character knows what another person likes, wants, prefers, or would choose.",
+    "Use when the answer depends on the character's model of someone else's preference, not their own.",
+    "Use when the scene is about preference attribution across people, such as knowing what a friend, partner, customer, or child would want."
+  ],
+  "do_not_use_when": [
+    "Do not use when the question is about the character's own preference.",
+    "Do not use when the main issue is what action the person is trying to accomplish rather than what they like.",
+    "Do not use when the question is about belief, intention, emotion, or source reliability instead of preference."
+  ],
+  "decision_variable": "the character's representation of another person's preference",
+  "trigger_checklist": [
+    "A person other than the target character is the one whose likes or wants matter.",
+    "The scene asks what the character thinks that other person prefers.",
+    "The question can be answered by comparing the model of the other's preference against available cues or history.",
+    "No action-purpose inference is required beyond identifying what the other person wants."
+  ],
+  "workflow": [
+    "Identify whose preference is being asked about.",
+    "Check whether the character has a representation of that other person's likes or wants.",
+    "Use explicit evidence, prior choices, stated likes, or stable taste to judge the character's model.",
+    "Ignore the character's own preference unless it is directly relevant as a contrast."
+  ],
+  "special_case": {
+    "title": "Preference versus intention",
+    "rule": "If the cue shows why someone acted, choose intention recognition; if the cue shows what they like or want, choose other preference.",
+    "worked_example": {
+      "scene": "Alex remembers that Priya always chooses tea over coffee when offered both.",
+      "question": "Does Alex know what Priya prefers?",
+      "answer_logic": "Yes. The key variable is Alex's representation of Priya's taste, not Alex's own choice and not Priya's immediate purpose for acting."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-19 Self Preference if the question asks what the character themselves wants or likes.",
+    "Exit to micro-22 Intention Recognition if the main task is to infer the purpose behind an action, gaze, gesture, or request.",
+    "Exit to micro-23 Action Prediction if the answer required is the other person's next behavior rather than the character's representation of their taste.",
+    "Exit to a belief, emotion, or source-credibility unit if the relevant cue is about trust, belief, emotion, or deception rather than preference."
+  ],
+  "references": {
+    "route_signal": "Use when the scene asks whether one person understands another person's likes, wants, or preferred option.",
+    "hard_boundary": [
+      "The target variable is another person's preference, not self preference.",
+      "The answer should not depend on action purpose or belief revision.",
+      "The skill is about representing taste or desire, not predicting the next move."
+    ],
+    "shortcut_to_avoid": [
+      "Do not assume any mention of wanting automatically means intention; check whether the content is about liking versus doing.",
+      "Do not collapse other preference into self preference when the same option appears for both people.",
+      "Do not infer preference from emotional tone alone unless the scene explicitly links it to what the person likes or wants."
+    ],
+    "common_failure_modes": [
+      "Confusing another person's preference with the character's own preference.",
+      "Treating a wish or desire as an action plan.",
+      "Answering with the most likely action instead of the represented liking."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Mina knows that Jordan likes spicy food, so she orders the spicier dish for him.",
+        "why_it_matches": "The question is whether Mina represents Jordan's preference."
+      },
+      {
+        "case": "Mina herself likes spicy food and orders it for lunch.",
+        "why_it_matches": "This is self preference, not understanding someone else's preference."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the same person says both 'I want this' and 'I am doing this,' ask whether the question is about preference or intention.",
+      "If two people prefer different options, verify that the task is about one person's model of the other's taste, not about conflict or negotiation.",
+      "If the scene includes praise, habit, or repeated choice, check whether those cues are evidence for preference or for a separate goal."
+    ],
+    "generalization_note": "This skill covers stable or momentary likes, wants, and choices as long as the central variable is one person's understanding of another person's preference."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character chooses, recommends, or predicts an option because they know another person's taste.",
+    "near_miss_pattern": "A character reveals what they personally like or wants for themselves.",
+    "boundary_pattern": "A character infers why someone acted, which belongs to intention recognition instead of other preference."
+  },
+  "notes": [
+    "Keep the variable narrow: preferred option as represented by someone else.",
+    "Treat liking, wanting, and choice as equivalent only when they function as preference in the scene.",
+    "Use this skill for diagnosis and explanation, not for broad social scene interpretation."
+  ],
+  "id": "micro-20",
+  "level": "micro",
+  "layer": "L3",
+  "family": "goal-action",
+  "core_question": "Determine whether a character understands what someone else likes or wants",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

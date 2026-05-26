@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-48",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A friend asks you to repeat another friend's private medical diagnosis to a coworker who is curious.",
+      "question": "What should you do?",
+      "options": [
+        "Keep the diagnosis private",
+        "Share it because the coworker asked",
+        "Share only part of it",
+        "Post it later if nobody objects"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct disclosure-boundary decision about a private fact and an outside audience."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "You already told someone a secret that was meant to stay private, and now the person is upset.",
+      "question": "What is the main issue now?",
+      "options": [
+        "Whether it was allowed to share",
+        "How to apologize and repair trust",
+        "How to make the secret sound less serious",
+        "Whether to tell even more people"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "The boundary has already been crossed, so this unit should exit to repair."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "You are updating your online bio and want to leave out an embarrassing detail so you seem more polished.",
+      "question": "Does this unit fit the main decision?",
+      "options": [
+        "Yes, because it is about privacy boundaries",
+        "No, this is self-presentation, not disclosure",
+        "Yes, because it is about repairing harm",
+        "No, because it is only about role hierarchy"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a likely shortcut error: controlling image is not the same as deciding what may be disclosed."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "A parent wants to post that their child got a big award and include a private health detail because the news is positive and harmless.",
+      "question": "What is the best judgment?",
+      "options": [
+        "Share it because positive details are fine",
+        "Keep the health detail private unless the child agreed",
+        "Share it only with coworkers",
+        "Treat it as an apology issue"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "A flattering detail can still be private, so the disclosure boundary still controls."
+    }
+  ]
+}

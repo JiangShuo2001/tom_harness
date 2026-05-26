@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-51",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Two teammates want the same conference slot. One agrees to present later if the other shares the slides and handles setup.",
+      "question": "What is the best social-cognitive interpretation?",
+      "options": [
+        "They are negotiating a compromise through reciprocal concessions.",
+        "One teammate is simply persuading the other to comply.",
+        "They are repairing hurt feelings after a mistake.",
+        "One teammate is using authority to issue a request."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Both sides change terms and gain part of what they want, which is bilateral concession."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A friend keeps pushing another friend to join a road trip, listing all the reasons it would be fun. The other friend keeps saying no and does not offer any trade or change in terms.",
+      "question": "What is the best social-cognitive interpretation?",
+      "options": [
+        "They are negotiating a joint plan.",
+        "This is mainly persuasion, not negotiation.",
+        "This is apology and repair after harm.",
+        "This is a hierarchy-based command situation."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "It is a disagreement, but only one side is trying to sway the other; there is no reciprocal adjustment."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "After missing a birthday dinner, one person says sorry and asks how to make it up. The other says they need time to cool off before talking again.",
+      "question": "What is the best social-cognitive interpretation?",
+      "options": [
+        "A bilateral negotiation over a shared plan.",
+        "A simple trade-off where both sides concede.",
+        "A repair process focused on apology and hurt feelings.",
+        "A choice about public image or impression management."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "The main work is restoring trust after a social hurt, not designing a compromise."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "A manager changes the meeting time so a parent employee can leave early, and the employee agrees to cover the next morning's briefing.",
+      "question": "What is the best social-cognitive interpretation?",
+      "options": [
+        "A joint compromise with mutual adjustment.",
+        "A one-sided persuasion attempt.",
+        "A command that the employee must obey.",
+        "A case of image management rather than agreement-making."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The plan becomes acceptable because both sides shift terms and trade benefits."
+    }
+  ]
+}

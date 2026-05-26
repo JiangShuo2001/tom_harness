@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-30",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Tia realizes she broke her promise to return a book on time. She apologizes and says it was her fault.",
+      "question": "Which moral emotion is most supported?",
+      "options": [
+        "guilt",
+        "pride",
+        "gratitude",
+        "anger"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Self-blame for a norm violation points directly to guilt."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Ben misses the train and worries he will be late to class. No one blames him.",
+      "question": "Which moral emotion is most supported?",
+      "options": [
+        "guilt",
+        "anger",
+        "gratitude",
+        "none of these"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "The upset comes from an event outcome, not from blame, duty, or wrongdoing."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Sara hides her smile during the award dinner because her family told her not to show excitement in public.",
+      "question": "What is the main reason for her behavior?",
+      "options": [
+        "display rules",
+        "guilt",
+        "gratitude",
+        "pride"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is about masking emotion, not inferring a moral emotion."
+    },
+    {
+      "id": "case_4",
+      "pattern": "near_miss",
+      "scene": "Owen gets irritated when the store closes early and ruins his plans. No one wronged him.",
+      "question": "Which moral emotion is most supported?",
+      "options": [
+        "anger",
+        "guilt",
+        "pride",
+        "none of these"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "This targets the common shortcut of labeling any upset as anger, even without wrongdoing."
+    }
+  ]
+}

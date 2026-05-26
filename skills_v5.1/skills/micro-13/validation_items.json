@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-13",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Lina saw the note under the mat. Noah later moved it to the mailbox, but Lina did not see the move.",
+      "question": "What does Lina think Noah believes about the note?",
+      "options": [
+        "Noah thinks the note is still under the mat.",
+        "Noah thinks the note is in the mailbox.",
+        "Noah knows Lina saw the note.",
+        "Lina thinks the note is in the mailbox."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct second-order belief: outer thinker Lina, inner thinker Noah."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Lina saw the note under the mat. Noah later moved it to the mailbox, but Lina did not see the move.",
+      "question": "What does Noah believe about the note?",
+      "options": [
+        "It is still under the mat.",
+        "It is in the mailbox.",
+        "Lina believes it is in the mailbox.",
+        "Lina believes it is still under the mat."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Near-miss first-order belief; no nested belief is asked for."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Lina saw the note under the mat. Noah later moved it to the mailbox, but Lina did not see the move.",
+      "question": "Where is the note really?",
+      "options": [
+        "Under the mat",
+        "In the mailbox",
+        "Lina thinks it is in the mailbox",
+        "Noah thinks it is under the mat"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Boundary case about reality only; not a recursive belief task."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Pia saw the ring on the shelf. After Pia left, Drew put it in the box. Pia did not see the move.",
+      "question": "What does Drew think Pia believes about the ring?",
+      "options": [
+        "Pia believes it is still on the shelf.",
+        "Pia believes it is in the box.",
+        "Drew believes Pia saw the move.",
+        "Pia knows it is in the box."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Tests the common shortcut of answering from reality instead of Drew's model of Pia's belief."
+    }
+  ]
+}

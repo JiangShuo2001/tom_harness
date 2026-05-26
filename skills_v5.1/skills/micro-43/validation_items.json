@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-43",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A worker was told to carry a laptop carefully, then ran down the hall and knocked coffee onto it, ruining the keyboard.",
+      "question": "Who is blameworthy for the damage?",
+      "options": [
+        "The worker, because they caused the harm through careless action",
+        "No one, because any accident removes blame",
+        "The laptop owner, because they owned the device",
+        "It cannot be judged because there was no intent"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct harm plus warning and careless causation makes this a clear blame case."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "At dinner, someone makes an awkward joke that embarrasses a guest, but nothing is broken, lost, or injured.",
+      "question": "Is this a blame-for-harm case?",
+      "options": [
+        "Yes, because any awkward comment counts as harm",
+        "No, this is mainly a tact or offense issue, not harmful responsibility",
+        "Yes, because the guest felt uncomfortable",
+        "No, because the speaker has a good reputation"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a near-miss that looks social, not a real harm-and-responsibility judgment."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Two roommates argue about whether one should pay more for utilities because they used the shower longer than usual.",
+      "question": "What is the main issue here?",
+      "options": [
+        "Who is blameworthy for injury or damage",
+        "Whether someone acted cruelly",
+        "Whether the costs should be shared fairly",
+        "Whether one roommate is generally reliable"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This is about fairness and reciprocity, not causal blame for harm."
+    },
+    {
+      "id": "case_4",
+      "pattern": "near_miss",
+      "scene": "A child runs through a room, drops a vase, and it breaks. No one had told the child the vase was fragile or that the area was off-limits.",
+      "question": "Should the child be blamed for the broken vase?",
+      "options": [
+        "Yes, because harm happened",
+        "Yes, because all accidents are blameworthy",
+        "No, not unless there is evidence of recklessness or clear carelessness",
+        "No, because the vase belonged to someone else"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This checks the shortcut that outcome alone proves blame; the accident is not automatically culpable."
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-01",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Nina puts her phone in the kitchen drawer and leaves the room. While she is gone, Mark moves the phone to the hall table. Nina comes back and says she needs her phone.",
+      "question": "Where will Nina look first?",
+      "options": [
+        "In the kitchen drawer",
+        "On the hall table",
+        "In her bedroom",
+        "In Mark's pocket"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct first-order false-belief search after an unseen move."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Owen leaves his keys on the counter. While he is away, Priya moves them into a coat pocket. Owen sees Priya do it through the open doorway before he returns.",
+      "question": "Where will Owen look first for his keys?",
+      "options": [
+        "On the counter",
+        "In the coat pocket",
+        "In the car",
+        "In the sink"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Near miss: the character witnessed the change, so the old belief should not be preserved."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Tara puts a folder in the top desk drawer and leaves. Later, Sam moves it to the filing cabinet, but Tara also gets a text message saying, 'I moved your folder to the filing cabinet.' She reads the message before coming back.",
+      "question": "Where will Tara look first?",
+      "options": [
+        "In the top desk drawer",
+        "In the filing cabinet",
+        "On the printer",
+        "Under the desk"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Boundary case: the move was unseen, but reliable updating evidence removes the false belief."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Lena puts her umbrella by the front door and leaves. While she is away, the umbrella is moved to the car trunk. Lena comes back and asks where it is. The narrator also says the umbrella is really in the trunk.",
+      "question": "Where will Lena think the umbrella is?",
+      "options": [
+        "By the front door",
+        "In the car trunk",
+        "In the kitchen",
+        "At her office"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Includes the common shortcut trap: ignore the real location and use Lena's outdated belief."
+    }
+  ]
+}

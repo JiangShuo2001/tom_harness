@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-26",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Nina studied for weeks and just learned she passed the exam she needed.",
+      "question": "How does Nina most likely feel?",
+      "options": [
+        "Happy",
+        "Afraid",
+        "Angry",
+        "Sad"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "A clear goal success directly supports the basic emotion appraisal of happiness."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "Omar thought his wallet was stolen, then found it in his backpack.",
+      "question": "How does Omar most likely feel?",
+      "options": [
+        "Relieved",
+        "Disappointed",
+        "Jealous",
+        "Bored"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Threat removed is a direct fit for relief."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Priya wants to go to her friend's party and also finish a class assignment. The two plans overlap, and the question asks what she will do next.",
+      "question": "What is the best answer to this question?",
+      "options": [
+        "She will attend the party",
+        "She will finish the assignment",
+        "She will feel happy",
+        "This is an action-choice question, not an emotion inference"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "This is a near-miss because the task is about choosing an action, not appraising emotion."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Eli secretly dislikes being praised in public. When he wins first place, he smiles in front of the class, but the question asks what he really feels.",
+      "question": "What is the best answer to this question?",
+      "options": [
+        "Happy",
+        "His true feeling is hidden",
+        "Angry",
+        "Proud"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a boundary case because public display and hidden feeling are central, so basic appraisal alone is not enough."
+    }
+  ]
+}

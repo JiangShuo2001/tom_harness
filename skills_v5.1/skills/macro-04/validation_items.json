@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-04",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "During a crowded meeting, Lena catches Omar's eye, tilts her head toward the door, and raises her eyebrows without speaking.",
+      "question": "What is Lena most likely trying to communicate to Omar?",
+      "options": [
+        "She wants Omar to notice the door or step outside with her.",
+        "She is literally asking whether the door is broken.",
+        "She feels a strong emotion but is not communicating anything.",
+        "She believes Omar has never seen the door before."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The main evidence is a nonverbal glance and head gesture used as a social signal."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Maya says, 'I guess nobody needs help cleaning up,' while looking at the pile of dishes. She keeps her hands at her sides.",
+      "question": "What does Maya probably mean?",
+      "options": [
+        "She is indirectly asking others to help clean up.",
+        "She is signaling with a gesture that the dishes are dangerous.",
+        "She is trying to hide where the dishes are.",
+        "She is using a wink to make a private joke."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a hard near-miss because the inference depends on indirect spoken language, not a nonverbal cue."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "After losing the contest, Noah looks down, his shoulders slump, and his eyes fill with tears. No one is asking him to respond.",
+      "question": "What is Noah most likely feeling?",
+      "options": [
+        "Disappointed or sad.",
+        "He is inviting someone to leave the room.",
+        "He is warning a teammate to stay quiet.",
+        "He is secretly agreeing to a plan."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The cue is nonverbal, but the question asks for emotion rather than the social message of the cue."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "At dinner, Chris starts to mention a surprise party. Dana quickly widens her eyes and presses one finger to her lips while glancing at the guest of honor.",
+      "question": "What is Dana most likely signaling to Chris?",
+      "options": [
+        "Stop talking because the surprise should stay secret.",
+        "She is only showing that she feels surprised.",
+        "She is asking Chris to speak louder.",
+        "She thinks the guest of honor cannot hear anything."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This targets the shortcut of treating a facial expression as pure emotion instead of a communicative warning."
+    }
+  ]
+}

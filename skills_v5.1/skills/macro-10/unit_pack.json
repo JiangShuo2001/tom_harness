@@ -1,0 +1,123 @@
+{
+  "frontmatter_description": "Direct-route prototype for choosing an action or allocation when different people want different outcomes.",
+  "title": "Preference Conflict and Joint Decision",
+  "use_when": [
+    "Use when the scene asks what action, choice, or allocation should be selected under conflicting preferences.",
+    "Use when two or more people want different things and the key question is which option will be chosen, not how the bargaining unfolds.",
+    "Use when a shared decision, split resource, or next move must be determined from competing wants or priorities.",
+    "Use when the answer depends on preference strength, commitment, ownership, role, or joint benefit under conflict."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main question is persuasion, audience adaptation, or one-way influence rather than a choice under preference conflict.",
+    "Do not use when the main question is whether an utterance is true, deceptive, or misleading.",
+    "Do not use when the main question is what happens next because of prior commitments or task sequencing rather than preference conflict itself.",
+    "Do not use when the main question is whether a remark caused embarrassment, offense, or social harm.",
+    "Do not use when the scene is primarily about negotiation mechanics, concessions, or bargaining process rather than the final choice or allocation."
+  ],
+  "decision_variable": "which action, option, or allocation should be chosen when preferences conflict",
+  "direct_route_rule": "Route immediately when divergent desire, shared desire, or preference-based action prediction is asked.",
+  "expandable_micro_ids": [
+    "micro-19",
+    "micro-20",
+    "micro-21",
+    "micro-23",
+    "micro-25",
+    "micro-44"
+  ],
+  "trigger_checklist": [
+    "At least two agents have different wants, goals, or preferred outcomes.",
+    "The question asks for a choice, allocation, or predicted selection.",
+    "The answer depends on whose preference matters most, how preferences combine, or what compromise is most likely.",
+    "The scene is about the result of conflicting wants, not the detailed bargaining conversation.",
+    "A shared plan, joint action, or distribution decision is being made."
+  ],
+  "workflow": [
+    "Identify the decision target: action, allocation, or joint plan.",
+    "List each relevant person's preference, constraint, or commitment.",
+    "Check whether one preference clearly dominates by role, ownership, urgency, or strength.",
+    "If preferences are balanced, infer the most jointly acceptable compromise or split.",
+    "If the question asks what someone will do, choose the option most consistent with their strongest operative preference.",
+    "State the final chosen action or allocation directly."
+  ],
+  "special_case": {
+    "title": "Compromise with unequal preference strength",
+    "rule": "When one person cares much more than the other and the scene asks for the likely outcome, favor the option that best satisfies the stronger preference unless the story gives a clear reason for equal sharing or role-based override.",
+    "worked_example": {
+      "scene": "Two friends are deciding where to eat. One is indifferent, but the other strongly wants pasta and has already suggested a nearby pasta place.",
+      "question": "Where will they probably go?",
+      "answer_logic": "The stronger preference controls the joint decision, so they will probably go to the pasta place."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to macro-09 if the main issue is how to phrase, frame, or persuade rather than the final choice.",
+    "Exit to macro-08 if the task is whether someone is lying, half-telling, or misleading in wording.",
+    "Exit to macro-11 if the key variable is what happens next because of prior commitments, schedules, or invitations.",
+    "Exit to macro-12 if the scene is mainly about embarrassment, offense, or face threat from a remark.",
+    "Exit to macro-18 if both sides must trade concessions to reach a joint plan rather than have one preference win.",
+    "Add micro-19 when each party's own preference must be diagnosed.",
+    "Add micro-20 when modeling the other party's preference is needed.",
+    "Add micro-21 when the choice depends on subordinate-vs-superordinate goal structure.",
+    "Add micro-23 when the next-action prediction needs explicit treatment.",
+    "Add micro-25 when general goal-conflict arbitration rules apply.",
+    "Add micro-44 when fairness or reciprocity norms shape the acceptable allocation."
+  ],
+  "references": {
+    "route_signal": "A scene with competing wants where the question is what gets chosen, who gets the resource, or what joint action is most likely.",
+    "hard_boundary": [
+      "Negotiation process and concessions are central instead of the final decision.",
+      "Truthfulness, deception, or indirect meaning is central.",
+      "Commitment scheduling or next-action priority is central without a real preference conflict.",
+      "Social embarrassment or apology is the main issue."
+    ],
+    "shortcut_to_avoid": [
+      "Do not convert every disagreement into bargaining analysis.",
+      "Do not overcomplicate with hidden-belief reasoning when the answer is just the likely preference-based choice.",
+      "Do not treat planning language as automatically separate from the actual choice.",
+      "Do not assume equal compromise when the story clearly signals a dominant preference or constraint."
+    ],
+    "common_failure_modes": [
+      "Answering the process of negotiation instead of the final chosen option.",
+      "Using persuasion or pragmatics when the scene is really about allocation.",
+      "Ignoring one person's stronger preference and forcing a symmetric compromise.",
+      "Confusing preference conflict with commitment priority or follow-through.",
+      "Missing simple role-based or ownership-based resolution."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Two coworkers must decide which lunch spot to pick, and one strongly prefers sushi while the other does not care.",
+        "why_it_matches": "The scene is about the chosen option under unequal preferences, so the dominant preference selects the joint outcome."
+      },
+      {
+        "case": "Two coworkers both want Friday off and trade shift coverage and timing offers until they agree on a swap.",
+        "why_it_matches": "This is a near miss: both sides give and adjust through concessions, so it routes to macro-18 (negotiation) rather than to a winner-by-preference outcome."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the scene includes offers, counteroffers, and concessions, ask whether the real answer is the final allocation or the bargaining process.",
+      "If the scene includes a schedule conflict, ask whether the key issue is commitment priority rather than preference conflict.",
+      "If the scene includes a misleading remark about desire, ask whether truth status or indirect meaning is actually the target.",
+      "If the scene involves a social misstep or apology, route away from this macro."
+    ],
+    "generalization_note": "Use this macro whenever a scene can be solved by mapping competing preferences onto a final choice, even if the specific setting is a meal, trip, game, task, gift, or shared resource."
+  },
+  "validation_seed": {
+    "positive_pattern": "Two or more characters want different outcomes, and the question asks which choice, allocation, or joint plan will likely be selected.",
+    "near_miss_pattern": "Characters debate, persuade, or bargain, but the real question is how to make the request appealing or how the conversation is phrased.",
+    "boundary_pattern": "A character must act next because of a prior promise, schedule, or invitation, with little real conflict over preferences."
+  },
+  "notes": [
+    "This macro solves the scene directly from preference structure rather than from micro-level diagnosis alone.",
+    "The micro expansions are optional for explanation, diagnosis, and boundary repair.",
+    "Keep the answer focused on the final choice or allocation, not the discussion around it."
+  ],
+  "id": "macro-10",
+  "level": "macro",
+  "layer": "macro",
+  "family": "decision-conflict",
+  "core_question": "what action or allocation should be chosen when preferences conflict",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

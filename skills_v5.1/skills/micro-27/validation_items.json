@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-27",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Lena is told that her article was rejected by a famous magazine. Most writers in her group would be upset, but Lena feels relieved because the magazine wanted major changes that would have removed the personal story she cared about most.",
+      "question": "Why does Lena feel relieved instead of disappointed?",
+      "options": [
+        "She appraises the rejection as protecting a value that matters more to her than publication.",
+        "She is pretending to be relieved so the other writers will not pity her.",
+        "She does not understand that the article was rejected.",
+        "She feels ordinary disappointment because rejection is a failure."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct match: the negative event produces a genuine positive emotion because Lena's personal value changes the appraisal."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Omar smiles and congratulates his rival after losing the final match. Later, alone in the locker room, he cries and says he felt crushed but did not want to look bitter in public.",
+      "question": "What best explains Omar's smile after the loss?",
+      "options": [
+        "He genuinely feels happy because losing helped him reach a personal goal.",
+        "He is following a public display rule while his true feeling is disappointment.",
+        "He is amused because he expected to lose by more points.",
+        "He is proud because the rival's win proves Omar trained well."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a near-miss: the unusual expression is not the true emotion, so it belongs to hidden emotion or display rules rather than atypical emotion."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Nina stays calm when the alarm sounds in the lab. Her visitor is confused, but Nina knows the alarm is a scheduled drill and that no chemicals are leaking.",
+      "question": "Why is Nina calm?",
+      "options": [
+        "Her calmness is an atypical emotion caused by a private love of danger.",
+        "Her calmness is ordinary once her factual knowledge that it is only a drill is considered.",
+        "She is secretly terrified but trained to hide fear.",
+        "She is choosing between two competing goals and has not decided what to do."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a boundary case: the emotion only seems odd because the observer lacks Nina's knowledge, so the belief context must be resolved first."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "After a harsh critique from a respected composer, Theo leaves the room proud. Other students expected him to be embarrassed, but Theo says the composer only gives detailed criticism to students she thinks are serious musicians.",
+      "question": "Why is Theo proud rather than embarrassed?",
+      "options": [
+        "He sees the criticism as a sign of respect and serious recognition.",
+        "He is hiding embarrassment behind a confident expression.",
+        "He thinks the composer praised him without any criticism.",
+        "He is proud because criticism is normally pleasant for everyone."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This tests the shortcut of assuming criticism must cause embarrassment; Theo's status-based appraisal makes the pride genuine."
+    }
+  ]
+}

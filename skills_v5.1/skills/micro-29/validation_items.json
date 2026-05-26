@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-29",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A nurse is frightened during a busy emergency, but she speaks in a steady voice and keeps a calm face so the patients do not panic.",
+      "question": "Why does she control her expression this way?",
+      "options": [
+        "She feels no fear at all.",
+        "Her professional role requires calm, reassuring display.",
+        "She wants to hide that she is angry at the patients.",
+        "She is trying to trick the patients into leaving."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Direct match: the answer depends on a role-based display rule, not just the nurse's inner feeling."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "During a meeting, Kim smiles when her boss praises her work. The question asks what Kim is actually feeling inside.",
+      "question": "What is Kim most likely feeling?",
+      "options": [
+        "Relieved and pleased",
+        "Ashamed",
+        "Jealous",
+        "Terrified"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Near-miss: there is a visible smile, but the task only asks for the hidden emotion, not a social display rule."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Ava breaks a vase at her friend's house and immediately apologizes with a guilty look.",
+      "question": "Why does Ava feel upset?",
+      "options": [
+        "She thinks the friend deserved it",
+        "She feels responsible for the damage",
+        "She is trying to look polite for a photo",
+        "She is hiding excitement about the vase"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Boundary case: the central issue is guilt and responsibility, so it should route away from this unit."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "After losing the final match, the captain smiles, shakes hands, and congratulates the winners while the crowd watches.",
+      "question": "Why does he smile?",
+      "options": [
+        "He is secretly happy to have lost",
+        "Sportsmanship and public expectations call for a respectful display",
+        "He has forgotten the score",
+        "He is making fun of the other team"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is the likely wrong-shortcut case: the visible smile is not true happiness, but a rule-governed public display."
+    }
+  ]
+}

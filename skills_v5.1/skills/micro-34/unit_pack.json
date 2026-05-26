@@ -1,0 +1,106 @@
+{
+  "frontmatter_description": "Determines the explicit semantic content of an utterance without inferring the speaker's hidden intention, emotional state, or contextual implication.",
+  "title": "Literal Meaning",
+  "use_when": [
+    "Use when the question asks what a sentence, phrase, sign, message, or spoken utterance explicitly says.",
+    "Use when the answer can be found by parsing the actual words and their conventional meanings.",
+    "Use when the task is to distinguish the stated content from what the speaker may have intended, implied, hinted, or caused the listener to feel.",
+    "Use when checking whether a statement is literally compatible with a fact, instruction, label, or description."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main question is what social action the utterance performs, such as requesting, warning, refusing, reminding, or inviting; route to Indirect Speech Act.",
+    "Do not use when the main question is what extra meaning is communicated by context but not said; route to Conversational Implicature.",
+    "Do not use when the main question is whether the speaker is lying, concealing, persuading, or strategically wording the message.",
+    "Do not use when the main question is how the listener feels, how the speaker regulates emotion, or how emotion spreads between people.",
+    "Do not use if the answer requires adding unstated motives, assumptions about politeness, audience reaction, or relationship history."
+  ],
+  "decision_variable": "explicit semantic content",
+  "trigger_checklist": [
+    "Is there a quoted or clearly identifiable utterance?",
+    "Is the question asking what the words say rather than why they were said?",
+    "Can the answer be produced from grammar, word meaning, reference, and stated facts alone?",
+    "Would the answer remain the same even if the speaker had a different hidden motive?",
+    "Are contextual facts needed only to resolve reference, such as who 'she' or 'that box' refers to, not to infer a hidden message?"
+  ],
+  "workflow": [
+    "Identify the exact utterance or written message to interpret.",
+    "Resolve ordinary references using only stated context, such as names, pronouns, time, place, and objects.",
+    "Paraphrase the utterance in direct, explicit terms without adding motives or social functions.",
+    "Check whether the paraphrase includes only what is semantically asserted, asked, commanded, or described.",
+    "If the question asks what the speaker is doing socially or what is implied beyond the words, stop and route out."
+  ],
+  "special_case": {
+    "title": "Literal question form versus intended request",
+    "rule": "When an utterance is phrased as a question, first report the literal question it asks; do not convert it into a request unless the task asks for the social action.",
+    "worked_example": {
+      "scene": "During dinner, Alex says, 'Can you pass the salt?'",
+      "question": "What does Alex's sentence literally ask?",
+      "answer_logic": "Literally, the sentence asks whether the listener is able to pass the salt. Interpreting it as a request to pass the salt belongs to Indirect Speech Act, not Literal Meaning."
+    }
+  },
+  "boundary_exit_rule": [
+    "If the target answer uses words like 'means that she wants,' 'is hinting,' 'is asking indirectly,' 'is implying,' or 'really means,' exit to a pragmatic unit.",
+    "If the answer depends on the listener's private knowledge, relationship history, politeness norms, or likely reaction, exit this unit unless those facts are only resolving a reference.",
+    "If the issue is truthfulness, deception, omission, or misleading wording, exit to a lie, half-truth, or misdirection unit.",
+    "If the issue is emotional impact or emotion management rather than sentence content, exit to the relevant emotion unit."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the diagnostic target is the utterance's explicitly stated meaning, independent of hidden intention or pragmatic effect.",
+    "hard_boundary": [
+      "Literal Meaning stops at what the words conventionally encode.",
+      "It does not infer what the speaker wants the listener to do.",
+      "It does not infer what the speaker privately believes or feels.",
+      "It does not infer unstated conclusions from conversational norms unless the question asks only for explicit content.",
+      "It does not judge whether the utterance is socially appropriate, persuasive, deceptive, or emotionally comforting."
+    ],
+    "shortcut_to_avoid": [
+      "Do not automatically replace a polite question with the likely request it performs.",
+      "Do not treat the most socially plausible interpretation as the literal meaning.",
+      "Do not add unstated causal, emotional, or moral conclusions just because they are likely in the scene."
+    ],
+    "common_failure_modes": [
+      "Answering the implied request instead of the literal question.",
+      "Confusing explicit denial with hidden reluctance.",
+      "Treating sarcasm, politeness, or tact as part of the literal sentence content.",
+      "Using the speaker's likely motive to rewrite what the sentence says.",
+      "Overusing context to infer more than reference resolution."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A sign says, 'The museum closes at 6 p.m.' The question asks what the sign says.",
+        "why_it_matches": "The answer is the explicit posted content: the museum closes at 6 p.m."
+      },
+      {
+        "case": "A guard points to the sign and says, 'The museum closes at 6 p.m.' while visitors are still inside. The question asks what the guard is trying to get them to do.",
+        "why_it_matches": "This is a near neighbor, not this unit: the explicit content is about closing time, but the requested answer concerns an indirect warning or request to leave."
+      }
+    ],
+    "boundary_stress_test": [
+      "If an utterance is literally false but politely useful, keep literal content separate from social function.",
+      "If an utterance is literally a question but conventionally used as a request, answer only the question form unless asked for intention.",
+      "If context makes a hidden meaning obvious, do not include it in the literal paraphrase.",
+      "If a word is ambiguous, use stated context only to choose its reference or sense; do not infer a broader unstated message."
+    ],
+    "generalization_note": "Across benchmark and real-world cases, this unit is the semantic baseline: first state what the utterance explicitly encodes, then route elsewhere if the task requires pragmatic, emotional, deceptive, or relational interpretation."
+  },
+  "validation_seed": {
+    "positive_pattern": "A quoted utterance is provided and the question asks what it explicitly says or whether a paraphrase matches the words.",
+    "near_miss_pattern": "A quoted utterance is provided but the question asks what the speaker is hinting, requesting, warning, or implying.",
+    "boundary_pattern": "The literal words are clear, but the socially intended meaning differs from the wording, such as a polite request, sarcasm, or tactful understatement."
+  },
+  "notes": [
+    "This unit can be used as a first pass before Indirect Speech Act or Conversational Implicature, but it should not absorb their conclusions.",
+    "Keep the output paraphrase narrow: explicit assertion, explicit question, explicit command, or explicit description.",
+    "Context may identify referents but should not be used to import hidden motives."
+  ],
+  "id": "micro-34",
+  "level": "micro",
+  "layer": "L5",
+  "family": "language-pragmatics",
+  "core_question": "Determine what an utterance explicitly says",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # 全量 ToMBench 消融实验：8 种模块组合 (skill × rag × memory)
+# Uses skills_v5.1 pipeline (hierarchical routing with fallback + strip_id)
 #
 # 用法:
 #   bash examples/run_ablation.sh                     # 全量数据
@@ -27,9 +28,6 @@ NAMES=(
     "2_skill"
     "3_rag"
     "4_memory"
-    "5_skill_rag"
-    "6_skill_memory"
-    "7_rag_memory"
     "8_skill_rag_memory"
 )
 FLAGS=(
@@ -37,9 +35,6 @@ FLAGS=(
     "--skill"
     "--rag"
     "--memory"
-    "--skill --rag"
-    "--skill --memory"
-    "--rag --memory"
     "--skill --rag --memory"
 )
 

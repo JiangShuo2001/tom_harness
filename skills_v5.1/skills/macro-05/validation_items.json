@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-05",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Nora receives a sweater she clearly hates. She thanks her aunt with a big smile, then folds it with a flat face after the aunt leaves.",
+      "question": "How does Nora really feel?",
+      "options": [
+        "grateful",
+        "disappointed",
+        "jealous",
+        "relieved"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "A polite display masks the private feeling, so the true emotion is disappointment."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "After losing a race to her best friend, Mina cheers the loudest and hugs her friend, but later sits alone looking stung.",
+      "question": "How does Mina really feel?",
+      "options": [
+        "proud",
+        "jealous",
+        "amused",
+        "calm"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "The outward support hides a more private, atypical reaction."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "When Tom hears a crash in the next room, he turns pale and backs away because he thinks someone broke in.",
+      "question": "What is Tom feeling?",
+      "options": [
+        "fear",
+        "embarrassment",
+        "guilt",
+        "gratitude"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This looks emotionally vivid, but it is a straightforward fear response to a perceived threat, not a hidden-feeling mismatch."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "After his car rolls into a mailbox, Eli keeps saying, 'That was my fault,' and avoids eye contact.",
+      "question": "What is Eli mainly feeling about the damage?",
+      "options": [
+        "guilty",
+        "disappointed",
+        "relieved",
+        "amused"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is responsibility-based emotion, so it falls outside the hidden-emotion macro."
+    }
+  ]
+}

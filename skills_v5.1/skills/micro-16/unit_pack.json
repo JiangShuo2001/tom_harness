@@ -1,0 +1,100 @@
+{
+  "frontmatter_description": "Use this unit to judge whether a fact is openly shared and mutually known by both parties.",
+  "title": "Common Knowledge",
+  "use_when": [
+    "Use when the question asks whether both people know the same fact and each knows that the other knows it.",
+    "Use when the key issue is whether a fact is publicly shared rather than privately held.",
+    "Use when mutual awareness of shared knowledge is the target, not who believes what about a future action."
+  ],
+  "do_not_use_when": [
+    "Do not use when the task is about what one person thinks another person will do or believe; that is second-order belief or action prediction.",
+    "Do not use when the issue is whether someone saw, heard, remembered, or learned the fact; that is perception, memory, or evidence availability.",
+    "Do not use when the issue is whether the fact is true, misleading, or from a reliable source; that is source credibility or belief update.",
+    "Do not use when only one person knows the fact, or when the sharedness is not established.",
+    "Do not infer common knowledge from mere co-presence (same room, same meeting) without an explicit mutual-awareness marker such as a public announcement, joint acknowledgement, or visible eye contact during the disclosure."
+  ],
+  "decision_variable": "whether the fact is mutually known as public shared knowledge",
+  "trigger_checklist": [
+    "A mutual-awareness marker is present: public announcement, explicit acknowledgement, eye contact during disclosure, or joint witnessing with confirmation.",
+    "Both parties received the same disclosure event, not merely the same fact through separate channels.",
+    "Each party can recognize that the other received it (visibility, audibility, or explicit confirmation).",
+    "The question asks about shared awareness, not about the content of the fact.",
+    "Co-presence alone (same room, same meeting) is not enough; a marker must make the sharedness recognizable to each party."
+  ],
+  "workflow": [
+    "Identify the fact in question.",
+    "Check whether both parties received or witnessed the same disclosure.",
+    "Verify whether each party can reasonably know that the other has the same information.",
+    "If mutual awareness is explicit, classify as common knowledge.",
+    "If only one direction of belief is asked, switch to second-order belief instead."
+  ],
+  "special_case": {
+    "title": "Public announcement creates shared knowledge",
+    "rule": "A public statement can create common knowledge only if the scene makes mutual awareness salient, not merely because both people were in the room.",
+    "worked_example": {
+      "scene": "A manager announces the meeting time to the whole team in front of everyone.",
+      "question": "Do both workers know the meeting time and know that the other knows it?",
+      "answer_logic": "Yes, because the announcement was public and the shared disclosure makes mutual awareness explicit."
+    }
+  },
+  "boundary_exit_rule": [
+    "If the question becomes what one person expects another person to do, use second-order belief or action prediction.",
+    "If the question becomes whether someone noticed or learned the fact, use perception, memory, or evidence availability.",
+    "If the question becomes whether the source is trustworthy, use source credibility.",
+    "If mutual awareness is not established, stop and do not infer common knowledge."
+  ],
+  "references": {
+    "route_signal": "Use when the scene asks whether a fact is publicly shared and mutually known by both parties.",
+    "hard_boundary": [
+      "Not for private belief, hidden belief, or guessing.",
+      "Not for predicting behavior from belief.",
+      "Not for credibility, rumor, or update from new evidence.",
+      "Not for appearance-reality contrasts."
+    ],
+    "shortcut_to_avoid": [
+      "Do not assume common knowledge just because both people heard the same words once.",
+      "Do not convert shared information into second-order prediction unless the question explicitly asks what one person thinks about the other's belief."
+    ],
+    "common_failure_modes": [
+      "Confusing mutual knowledge with second-order belief.",
+      "Overcalling common knowledge from a public event without explicit mutual awareness.",
+      "Answering with who is right instead of who knows what.",
+      "Using source reliability when the task is only about sharedness."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A teacher tells the whole class the test is tomorrow, and everyone heard it.",
+        "why_it_matches": "The question is about whether the information is openly shared by all and mutually available."
+      },
+      {
+        "case": "A child privately tells one friend a secret, and the other friend does not hear it.",
+        "why_it_matches": "This is not common knowledge because the fact is not mutually known."
+      }
+    ],
+    "boundary_stress_test": [
+      "Publicly announced, but one person was distracted and missed it: do not call this common knowledge.",
+      "Both people know the fact, but the question asks what one expects the other to do: route to second-order belief instead."
+    ],
+    "generalization_note": "This unit tracks public sharedness of information, not belief depth, not source quality, and not memory of how the fact was learned."
+  },
+  "validation_seed": {
+    "positive_pattern": "A fact is announced openly to both parties, and the task asks whether each knows the other knows it.",
+    "near_miss_pattern": "One person thinks the other will act on the fact, but the scene does not ask whether the fact is mutually known.",
+    "boundary_pattern": "A person heard a rumor and may believe it, but shared public awareness is not established."
+  },
+  "notes": [
+    "Keep the focus on mutual knowledge status, not the content of the fact.",
+    "This unit is narrower than second-order belief and should not absorb prediction tasks.",
+    "Public disclosure matters only when it creates explicit mutual awareness."
+  ],
+  "id": "micro-16",
+  "level": "micro",
+  "layer": "L2",
+  "family": "belief-models",
+  "core_question": "Determine whether both parties know something and know that the other knows it",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

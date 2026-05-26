@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-16",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Sam says, 'Meet me at the bank at 3.' Lee pauses and asks, 'Do you mean the river bank or the office bank?' Sam replies, 'The office bank.'",
+      "question": "Which skill best fits this scene?",
+      "options": [
+        "Immediate clarification of a live misunderstanding",
+        "Apology and relationship repair after offense",
+        "Persuasion or negotiation",
+        "Truth-testing or deception detection"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct in-the-moment ambiguity repair with no harm."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "In a meeting, Dana says, 'We should drop the launch.' Kai assumes she means cancel the project and starts pushing back. Dana immediately adds, 'I mean drop the word launch from the slide title, not cancel anything.'",
+      "question": "Which skill best fits this scene?",
+      "options": [
+        "Immediate clarification of a live misunderstanding",
+        "Apology and relationship repair after offense",
+        "Strategic persuasion in a disagreement",
+        "Long-term trust repair"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is close to a boundary case because it looks like conflict, but it is only a real-time meaning correction."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "After Jordan makes a mocking comment, Priya says, 'That was hurtful. I want an apology.' Jordan starts to explain, but the main issue is the offense, not confusion about meaning.",
+      "question": "Which skill best fits this scene?",
+      "options": [
+        "Immediate clarification of a live misunderstanding",
+        "Apology and relationship repair after offense",
+        "Reference tracking with no harm",
+        "Neutral paraphrase for shared meaning"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a hard boundary: the scene has moved from clarification to harm repair."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Mia says, 'I left the file on the table.' Ben asks, 'Which table, the kitchen one or the meeting room one?' Mia answers, 'The meeting room one.'",
+      "question": "What should Ben do next?",
+      "options": [
+        "Ask a neutral clarifying question",
+        "Apologize for causing offense",
+        "Argue about what Mia really believes",
+        "Ignore the ambiguity and guess"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This checks the common shortcut error of treating a simple referent ambiguity as something more serious."
+    }
+  ]
+}

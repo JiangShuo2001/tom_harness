@@ -1,0 +1,102 @@
+{
+  "frontmatter_description": "Infers guilt, shame, pride, anger, or gratitude from a moral, norm-based, or responsibility-based appraisal.",
+  "title": "Moral Emotion",
+  "use_when": [
+    "Use when the question asks which moral emotion someone feels after judging responsibility, blame, credit, obligation, fairness, harm, or thanks.",
+    "Use when the emotion depends on whether the person sees themselves or another as responsible, deserving, at fault, benefitted, or norm-violating.",
+    "Use when the key clue is a moral appraisal rather than a basic feeling trigger like pain, loss, surprise, or fear.",
+    "Use when the answer requires inferring guilt, shame, pride, anger, or gratitude from a social or moral evaluation."
+  ],
+  "do_not_use_when": [
+    "Do not use when the task is only to detect hidden emotion without needing the moral reason behind it.",
+    "Do not use when the task is about display rules, politeness, or why emotion is masked rather than which moral emotion is felt.",
+    "Do not use when the emotion is regret, relief, disappointment, or pleasant surprise from a comparison with an alternative outcome.",
+    "Do not use when the emotion is a basic affect caused by direct events with no norm, blame, credit, or obligation appraisal.",
+    "Do not use when the question is about empathy or emotional contagion from another person's feeling."
+  ],
+  "decision_variable": "the responsibility or norm appraisal behind the emotion",
+  "trigger_checklist": [
+    "Is there blame, fault, credit, duty, fairness, harm, apology, or thanks in the scene?",
+    "Does the person evaluate themselves or someone else as responsible or deserving?",
+    "Is the emotion better explained by moral standing than by raw outcome or physical event?",
+    "Would the answer change if the responsibility or norm judgment changed?"
+  ],
+  "workflow": [
+    "Identify the moral appraisal: blame, credit, obligation, violation, harm, or benefit.",
+    "Determine whose responsibility is being evaluated: self, other person, or group.",
+    "Map that appraisal to the likely moral emotion: guilt or shame for self-blame, pride for credit, anger for wrongdoing by another, gratitude for received benefit.",
+    "Check that the explanation depends on the moral evaluation, not just on general mood or display."
+  ],
+  "special_case": {
+    "title": "Mixed appraisal with one dominant moral driver",
+    "rule": "If multiple feelings are possible, choose the one most directly caused by the responsibility or norm judgment. Use this unit only when a moral appraisal is the main driver, even if a basic emotion is also present.",
+    "worked_example": {
+      "scene": "A student breaks a class rule and feels bad because they know they caused trouble for the teacher.",
+      "question": "What emotion is most directly supported?",
+      "answer_logic": "The key variable is self-blame for a norm violation. That supports guilt, not just sadness or fear."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-28 Hidden Emotion if the main task is to infer what someone feels beneath a mask, and the moral reason is not being asked for.",
+    "Exit to micro-29 Emotional Disguise and Display Rules if the main task is why the person is hiding or showing emotion in public.",
+    "Exit to micro-31 Counterfactual Emotion if the core comparison is what happened versus what might have happened.",
+    "Exit to micro-26 Basic Emotion Appraisal if there is no responsibility, norm, or value appraisal in the scene.",
+    "Exit to micro-32 Empathy and Emotional Contagion if the emotion is caused by absorbing another person's feeling rather than by a moral judgment."
+  ],
+  "references": {
+    "route_signal": "Route here when emotion inference depends on moral responsibility or norm evaluation rather than on simple event-based affect.",
+    "hard_boundary": [
+      "The deciding cue must be a responsibility, blame, credit, fairness, or norm-violation appraisal; pure outcome affect belongs to micro-26.",
+      "The target is the moral emotion itself (guilt, shame, pride, anger, gratitude), not the inner-versus-outer mismatch (micro-28) or display rule (micro-29).",
+      "The target is moral appraisal of the actor or recipient, not regret or relief from comparing reality with an alternative outcome (micro-31).",
+      "The target is feeling produced by judging responsibility, not feeling caught from another person's emotion (micro-32)."
+    ],
+    "shortcut_to_avoid": [
+      "Do not infer guilt whenever someone looks sad.",
+      "Do not infer pride whenever someone succeeds.",
+      "Do not confuse anger at inconvenience with anger at wrongdoing."
+    ],
+    "common_failure_modes": [
+      "Replacing moral appraisal with generic negative emotion.",
+      "Mistaking shame for embarrassment when no norm violation is judged.",
+      "Choosing gratitude from politeness instead of from perceived benefit or help.",
+      "Answering with outcome-based emotion when the scene is actually about blame or credit."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A person breaks a promise to a friend and feels terrible because they accept it was their fault.",
+        "why_it_matches": "Self-attributed responsibility for a norm violation is the deciding cue, which fixes the emotion as guilt."
+      },
+      {
+        "case": "A person feels terrible after the same outcome but blames the friend's bad scheduling, not themselves.",
+        "why_it_matches": "Same event, but the responsibility appraisal flips to the other person; the emotion shifts to anger, showing that the moral attribution, not the outcome, drives the label."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the same event happened but no one was blamed or credited, would the answer change?",
+      "If the person felt the same way but had no moral reason for it, would this still fit?",
+      "If the question asks only whether the person is upset, this unit is too specific."
+    ],
+    "generalization_note": "This unit generalizes across scenes where moral appraisal shapes emotion, including blame, credit, duty, fairness, harm, apology, and appreciation, without depending on any benchmark-specific story."
+  },
+  "validation_seed": {
+    "positive_pattern": "The character judges a choice as wrong, deserved, helpful, or owed, and the emotion follows that judgment.",
+    "near_miss_pattern": "The character is visibly upset or pleased, but no blame, credit, obligation, or fairness appraisal is stated.",
+    "boundary_pattern": "The character hides emotion, but the question is about the concealment or expression rule rather than the moral feeling itself."
+  },
+  "notes": [
+    "Keep the unit centered on the appraisal-to-emotion link, not on general emotion recognition.",
+    "Treat guilt and shame as self-directed moral emotions, pride as self-credit, anger as other-blame, and gratitude as benefit appraisal.",
+    "If the scene uses a social norm but asks about expression style, hand off to display-rules units."
+  ],
+  "id": "micro-30",
+  "level": "micro",
+  "layer": "L4",
+  "family": "emotion-appraisal",
+  "core_question": "Infer guilt, shame, pride, anger, or gratitude from responsibility, norm, or value appraisal",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

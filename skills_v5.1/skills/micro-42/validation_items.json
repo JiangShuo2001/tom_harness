@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-42",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "At a work lunch with several coworkers, Dana says, 'I heard Mark was rejected for that promotion again,' while Mark is sitting at the table.",
+      "question": "Was Dana's remark a social faux pas?",
+      "options": [
+        "Yes, because it publicly exposed a sensitive topic likely to embarrass Mark.",
+        "No, because the information might be true.",
+        "No, because coworkers are allowed to discuss promotions.",
+        "This is mainly about whether Dana owes Mark compensation."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct match: the judgment turns on tact, public embarrassment, and inappropriate disclosure."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A scientist explains a complex paper to middle school students using simple analogies and avoids technical jargon.",
+      "question": "Is this a faux pas because the scientist changed the wording for the audience?",
+      "options": [
+        "Yes, because changing wording for an audience is always socially awkward.",
+        "No, this is audience calibration, not a tact breach.",
+        "Yes, because simple language is offensive in formal settings.",
+        "This is mainly about who caused harm to the students."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This tests the hard boundary with audience calibration: the issue is fitting the message to listeners, not embarrassment or offense."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "During a reunion, Alex makes a joke about Priya's divorce. Priya leaves upset. The question is whether Alex is morally blameworthy and should be held responsible for causing emotional harm.",
+      "question": "Which unit should handle the main issue?",
+      "options": [
+        "Faux pas and offense, because any awkward joke belongs there.",
+        "Audience calibration, because Priya was present.",
+        "Harm and responsibility, because the question asks about blame and responsibility for harm.",
+        "Negotiation, because relationships involve reciprocity."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "The scene contains a tact breach, but the explicit question shifts to blame and responsibility, which is outside this unit."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "At a formal dinner, a guest bluntly says, 'This soup is bland,' while the host is serving the meal.",
+      "question": "Was the guest's comment socially inappropriate in that setting?",
+      "options": [
+        "Yes, because the blunt criticism violates dinner-table tact and may embarrass the host.",
+        "No, because honest opinions can never be faux pas.",
+        "No, because only intentional insults count as faux pas.",
+        "This is mainly about persuading the host to change the recipe."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This targets a likely wrong shortcut: truthfulness or lack of intent does not prevent a remark from being a faux pas."
+    }
+  ]
+}

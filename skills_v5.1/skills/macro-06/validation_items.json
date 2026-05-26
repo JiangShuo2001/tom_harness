@@ -1,0 +1,105 @@
+{
+  "unit_id": "macro-06",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Nina promised to lock the lab freezer before leaving. She got a reminder on her phone, ignored it, and the samples thawed overnight.",
+      "question": "How are Nina's feelings and others' judgment best described?",
+      "options": [
+        "She should feel guilty and others may blame her because she had a duty and ignored a preventable risk.",
+        "She should only feel surprised because the samples thawed when she was not present.",
+        "She should feel ashamed only because people will see the loss, not because she had any responsibility.",
+        "No one should judge her because she did not intend the samples to thaw."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct match: harm followed from a known duty, preventable risk, and negligence, so guilt and blame are central."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Omar sees a stranger trip on a loose brick across the street. Omar had never been there before, did not cause the loose brick, and could not have warned the person in time.",
+      "question": "What is Omar most likely to feel?",
+      "options": [
+        "Guilt, because any bad outcome near him makes him responsible.",
+        "Empathic concern or sadness, but not strong guilt or blame.",
+        "Shame, because the accident happened in public.",
+        "Responsibility, because he noticed the accident after it happened."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This tests the shortcut of inferring guilt from a bad outcome alone. Omar had no causal role, duty, knowledge, or control."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "After a vase breaks, Mia says to her roommate, 'Well, that was careful,' while staring at the shattered glass. The question is only asking what Mia means by the remark.",
+      "question": "Which unit should handle the main task?",
+      "options": [
+        "Moral emotion and responsibility judgment, because a bad thing happened.",
+        "Indirect utterance interpretation, because the task is to decode the sarcastic meaning of Mia's words.",
+        "Nonverbal cue interpretation, because Mia stared at the glass.",
+        "General hidden emotion, because Mia might secretly feel sad."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a hard boundary: although the scene involves possible blame, the stated task is mainly interpreting an indirect sarcastic utterance."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Priya used a shared office card to buy lunch for herself, thinking no one would notice. Her coworker later had to explain the missing funds to the manager.",
+      "question": "What judgment is most appropriate?",
+      "options": [
+        "Priya is blameworthy because she knowingly broke a fairness rule and caused trouble for someone else.",
+        "Priya is not blameworthy because the amount may have been small.",
+        "Priya should only feel embarrassed if the manager finds out, not guilty for the act itself.",
+        "The coworker is equally responsible because he was questioned by the manager."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The answer depends on intentional norm violation, unfair benefit, harm to another person, and responsibility."
+    },
+    {
+      "id": "case_5",
+      "pattern": "boundary",
+      "scene": "Leo bumps into a shelf during an earthquake, and a display falls. He immediately apologizes to the shop owner even though the shaking caused the accident.",
+      "question": "What does Leo's apology most likely show?",
+      "options": [
+        "Full guilt, because apologizing always proves responsibility.",
+        "Sympathy and repair, while strong blame is reduced because the event was outside his control.",
+        "Shame only, because other customers saw him.",
+        "Deception, because apologies after accidents are usually false."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This boundary case tests the shortcut that apology proves full responsibility. The apology may support repair without making Leo culpable for an uncontrollable accident."
+    }
+  ]
+}

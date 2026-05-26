@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-15",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A project lead must decide whether to give a confidential client account to an assistant who has been careful and loyal for years but missed one report after a family emergency.",
+      "question": "What is the best judgment?",
+      "options": [
+        "Trust the long record and treat the missed report as an exception.",
+        "Treat the assistant as unreliable because of one mistake.",
+        "Focus on whether the assistant should apologize first.",
+        "Decide only from the most recent report."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Tests that long-term trust outweighs a single new lapse."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "A landlord has trusted a tenant for six years. The tenant pays rent one day late because a bank transfer failed.",
+      "question": "Should the tenant's reliability be downgraded now?",
+      "options": [
+        "Yes, one late payment means the tenant is no longer dependable.",
+        "No, the long track record still supports trust.",
+        "Yes, but only because the landlord feels offended.",
+        "It cannot be judged without a new statement from the tenant."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is the classic shortcut trap: do not let one incident override a stable history."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Two coworkers have no history together. One says, 'I handled it yesterday,' and the other is unsure whether the remark is serious or a joke.",
+      "question": "What is the main issue?",
+      "options": [
+        "Judging the speaker's long-term trustworthiness.",
+        "Clarifying the meaning of the current statement.",
+        "Deciding whether an apology is needed.",
+        "Weighing a reputation built over many years."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a near-miss: it is live clarification, not long-term relational judgment."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A friend damaged a borrowed bike and offers to replace the parts and apologize. The owner is deciding what response is fair.",
+      "question": "What is the main issue?",
+      "options": [
+        "Whether the friend has a strong reputation over time.",
+        "How to repair the harm and reconcile after the offense.",
+        "Whether the bike was borrowed legally.",
+        "Whether one mistake changes the friend's identity."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is outside the unit because the core is apology and repair, not long-term trust judgment."
+    }
+  ]
+}

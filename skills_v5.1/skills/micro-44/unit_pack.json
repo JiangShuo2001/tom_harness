@@ -1,0 +1,95 @@
+{
+  "frontmatter_description": "Diagnose whether a distribution, repayment, or favor exchange is fair, balanced, and reciprocal.",
+  "title": "Fairness and Reciprocity",
+  "use_when": [
+    "Use when the main question is whether resources, burdens, favors, or obligations are fairly balanced.",
+    "Use when the scene asks if someone is taking advantage, freeloading, overpaying, or not repaying a favor.",
+    "Use when the answer depends on reciprocity rather than on making a new deal or settling conflict."
+  ],
+  "do_not_use_when": [
+    "Do not use when the task is to design or negotiate a better deal; that is negotiation, not fairness judgment.",
+    "Do not use when the issue is blame for harm, apology, or fault; that is responsibility or repair.",
+    "Do not use when the issue is trustworthiness over time, role hierarchy, or social tact; those are separate units.",
+    "Do not use when the key question is simply whether someone should feel embarrassed or offended."
+  ],
+  "decision_variable": "whether the exchange or obligation is balanced and reciprocal",
+  "trigger_checklist": [
+    "Is someone giving more, paying more, or carrying more than the other side?",
+    "Is there an expected return favor, repayment, or shared burden?",
+    "Does the scene hinge on equal treatment, proportional payoff, or unfair advantage?",
+    "Is the main question about whether the imbalance is justified or exploitative?"
+  ],
+  "workflow": [
+    "Identify the two sides of the exchange: what each person gave, owes, or received.",
+    "Compare the exchange for balance, reciprocity, or one-sided benefit.",
+    "Check whether any imbalance is clearly justified by prior favors, agreement, or role-based obligation.",
+    "Answer with fairness judgment, not with a proposed compromise or apology plan."
+  ],
+  "special_case": {
+    "title": "Implicit favor debt",
+    "rule": "Use this unit when no explicit contract exists but one person clearly owes a return favor or shared burden by social norm.",
+    "worked_example": {
+      "scene": "Sam always drives Lee to work, but Lee never offers gas money or helps when Sam needs a ride.",
+      "question": "Is Lee being fair?",
+      "answer_logic": "The key variable is reciprocity: Lee receives repeated benefit without comparable return, so the exchange is unfair."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to negotiation if the question is how to divide something acceptably or what compromise to offer.",
+    "Exit to harm/responsibility if the question is who caused damage or who deserves blame.",
+    "Exit to trust/reputation if the question is whether someone is generally reliable over time.",
+    "Exit to faux pas if the issue is social awkwardness, tact, or offense rather than exchange balance."
+  ],
+  "references": {
+    "route_signal": "Route here when the answer depends on whether one side has received more than it has given back.",
+    "hard_boundary": [
+      "Do not use for compromise design.",
+      "Do not use for blame assignment.",
+      "Do not use for social embarrassment."
+    ],
+    "shortcut_to_avoid": [
+      "Avoid assuming every imbalance is exploitation.",
+      "Avoid using apology language unless repair is explicitly asked.",
+      "Avoid using trust history unless the scene is about reliability over time."
+    ],
+    "common_failure_modes": [
+      "Confusing fairness with kindness.",
+      "Confusing reciprocity with loyalty.",
+      "Confusing unequal roles with unfairness."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A person repeatedly accepts help but never returns it.",
+        "why_it_matches": "The question is whether the exchange is reciprocal."
+      },
+      {
+        "case": "A person must decide whether to offer a lower price to keep the conversation going.",
+        "why_it_matches": "The question is about bargaining and deal design, not fairness judgment."
+      }
+    ],
+    "boundary_stress_test": [
+      "The scene includes a proposal for a new split: do not stay here if the question is what the best split should be.",
+      "The scene includes an apology after harm: do not stay here if the question is blame or repair."
+    ],
+    "generalization_note": "This unit covers norm-based reciprocity judgments across money, favors, effort, repayment, and burden-sharing without extending into deal-making or moral blame."
+  },
+  "validation_seed": {
+    "positive_pattern": "A person repeatedly receives a benefit or support and gives nothing comparable back; ask whether the exchange is fair.",
+    "near_miss_pattern": "Two people disagree on how to split a bill and must choose an acceptable compromise.",
+    "boundary_pattern": "Someone causes damage and the question is who is responsible and whether an apology is due."
+  },
+  "notes": [
+    "Keep the judgment anchored to balance, repayment, and reciprocity.",
+    "If the scene shifts to plan-making, apology, or blame, route out immediately."
+  ],
+  "id": "micro-44",
+  "level": "micro",
+  "layer": "L6",
+  "family": "norms-relationships",
+  "core_question": "Evaluate distribution, fairness, repayment, and taking advantage",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

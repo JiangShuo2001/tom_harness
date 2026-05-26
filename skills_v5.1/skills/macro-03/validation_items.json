@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-03",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A box is labeled \"cookies.\" Mia watches Raj take the cookies out and put crayons inside. Later, Eli only sees the closed box.",
+      "question": "What will Eli think is inside the box?",
+      "options": [
+        "crayons",
+        "cookies",
+        "pencils",
+        "paper"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Direct appearance-reality match: Eli has only the label and surface appearance, not the hidden switch."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "A jar has a jam label on it. Priya sees her brother switch the jam for peanut butter and close it again.",
+      "question": "What is really inside the jar now?",
+      "options": [
+        "jam",
+        "peanut butter",
+        "honey",
+        "syrup"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Tests objective reality despite misleading packaging and a witnessed substitution."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Sam leaves the room. While Sam is gone, Zoe moves the toy bear from the basket to the drawer. Sam comes back and asks where the bear is.",
+      "question": "Where will Sam look first?",
+      "options": [
+        "basket",
+        "drawer",
+        "shelf",
+        "closet"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a false-belief search-location task, a near miss that should route to macro-01 instead."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "During a talk, a student says, \"Fine, go ahead\" and gives a quick wink.",
+      "question": "What is the wink mainly meant to signal?",
+      "options": [
+        "honest agreement",
+        "secret meaning",
+        "surprise at the room",
+        "confusion about the topic"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "The key evidence is a nonverbal cue, so this is a boundary case for macro-04 rather than appearance-reality."
+    }
+  ]
+}

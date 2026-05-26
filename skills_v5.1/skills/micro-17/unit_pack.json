@@ -1,0 +1,100 @@
+{
+  "frontmatter_description": "Diagnose whether a character is unsure, guessing, doubting, or only partly convinced.",
+  "title": "Uncertain Belief",
+  "use_when": [
+    "Use when the task asks how sure the character is, not what they think is true.",
+    "Use when the character is guessing, doubting, hedging, or only partly convinced.",
+    "Use when confidence level must be judged separately from the content of the belief."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is whether new evidence should change the belief; use evidence updating instead.",
+    "Do not use when the main issue is whether a source is trustworthy, credible, or deceptive; use source credibility instead.",
+    "Do not use when the main issue is whether two people share knowledge or know that the other knows; use common knowledge instead.",
+    "Do not use when the task asks what the person wants or prefers; use preference or goal skills instead."
+  ],
+  "decision_variable": "the character's subjective certainty",
+  "trigger_checklist": [
+    "Is the question about how sure, unsure, or hesitant the person is?",
+    "Does the scene include words like guess, think maybe, not sure, doubt, probably, maybe, or partially believe?",
+    "Is the belief content already known, while the remaining issue is the strength of conviction?",
+    "Would the answer change if the person were more or less confident without changing the evidence?"
+  ],
+  "workflow": [
+    "Identify the proposition the character is considering.",
+    "Look for explicit confidence markers, hesitation, or self-reported doubt.",
+    "Separate certainty from evidence strength and source trustworthiness.",
+    "Judge the degree of conviction: confident, uncertain, guessing, or skeptical.",
+    "If the question asks why certainty changed, exit to evidence or credibility skills."
+  ],
+  "special_case": {
+    "title": "Partial belief without full commitment",
+    "rule": "When a character accepts a claim only tentatively, the answer is still uncertain belief even if they act as if it may be true.",
+    "worked_example": {
+      "scene": "Mina says, 'I think the meeting is at 3, but I am not fully sure.'",
+      "question": "How certain is Mina?",
+      "answer_logic": "She does not have full conviction. The key variable is her subjective certainty, so the correct diagnosis is partial confidence, not the meeting time or the reliability of her source."
+    }
+  },
+  "boundary_exit_rule": [
+    "If the question asks whether the belief should become stronger or weaker after new information, exit to evidence updating.",
+    "If the question asks whether a report, rumor, or speaker is reliable, exit to source credibility.",
+    "If the question asks what someone knows about another person's knowledge, exit to common knowledge or nested belief.",
+    "If the question asks what the person prefers, wants, or intends, exit to goal-action skills."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the scene centers on a character's level of conviction, doubt, or guessing rather than on truth, evidence, or source quality.",
+    "hard_boundary": [
+      "This unit does not judge whether the belief is correct.",
+      "This unit does not judge whether the evidence is strong.",
+      "This unit does not judge whether the source is reliable.",
+      "This unit does not track whether other people know the same fact."
+    ],
+    "shortcut_to_avoid": [
+      "Do not confuse uncertainty with false belief; a wrong belief can still be held confidently.",
+      "Do not confuse doubt with distrust; distrust belongs to source credibility.",
+      "Do not use answer choices about evidence strength when the prompt asks about confidence only."
+    ],
+    "common_failure_modes": [
+      "Treating 'maybe' as low evidence instead of low certainty.",
+      "Answering with the fact content instead of the degree of conviction.",
+      "Attributing uncertainty to a bad source when the text only shows hesitation.",
+      "Mixing up partial belief with disbelief."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A person says, 'I think the keys might be in the drawer, but I am not sure.'",
+        "why_it_matches": "The relevant variable is the character's reduced subjective certainty, judged independently of the actual key location."
+      },
+      {
+        "case": "A person initially thinks the keys are in the drawer, then their roommate reports having moved them to the box.",
+        "why_it_matches": "Near miss: the belief shifts because new evidence arrives, so route to Evidence-Availability Updating rather than diagnosing certainty level."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the person has weak evidence but sounds fully confident, still prefer source or evidence skills only if the question asks why the belief should change.",
+      "If the person has strong evidence but says 'I am not sure,' this unit remains correct because the target is certainty, not accuracy.",
+      "If the question asks both what the person believes and how sure they are, answer certainty here only when certainty is the asked-for variable."
+    ],
+    "generalization_note": "This skill generalizes to any case where confidence is explicitly or implicitly graded, including hedging, tentative acceptance, and self-reported doubt."
+  },
+  "validation_seed": {
+    "positive_pattern": "The character expresses hedging, guessing, or partial conviction, and the task asks how sure they are.",
+    "near_miss_pattern": "The character changes belief because of new evidence or a more credible source.",
+    "boundary_pattern": "The character and another person both know a fact and know that the other knows it."
+  },
+  "notes": [
+    "Keep the diagnosis on certainty alone.",
+    "Use this skill for confidence level even when the belief content is already clear.",
+    "When in doubt between certainty and credibility, ask whether the prompt is about how sure the person feels or why the information should be trusted."
+  ],
+  "id": "micro-17",
+  "level": "micro",
+  "layer": "L2",
+  "family": "belief-models",
+  "core_question": "Determine whether X is guessing, doubting, or only partially convinced",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

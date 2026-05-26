@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-11",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Maya sees Leo put the blue notebook in the drawer. No one moves it afterward. Later, Maya returns to the room.",
+      "question": "Where does Maya think the blue notebook is?",
+      "options": [
+        "In the drawer",
+        "On the shelf",
+        "In Leo's bag",
+        "She does not know"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct first-order belief from Maya's own observation with no later update."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Nina saw the key under the red mat. After she left, Ben moved it to the flowerpot without telling her.",
+      "question": "Where will Nina mistakenly look first for the key?",
+      "options": [
+        "Under the red mat",
+        "In the flowerpot",
+        "In Ben's pocket",
+        "She will not look anywhere"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a false-belief prompt about mistaken search, so it should not be routed as plain first-order belief."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Priya hears that Ben thinks the meeting starts at 9. Priya has not heard any later correction about Ben's view.",
+      "question": "What does Priya think Ben believes about the meeting time?",
+      "options": [
+        "Ben believes it starts at 9",
+        "Priya believes it starts at 9",
+        "Ben believes it starts at 10",
+        "Ben does not have any belief"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is second-order belief, a hard boundary outside the unit."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Omar studied the box code earlier, then hit his head and now cannot recall it. He is asked what he believes opens the box.",
+      "question": "What does Omar believe opens the box now?",
+      "options": [
+        "The code he studied earlier",
+        "He cannot remember the code",
+        "The box opens with a key",
+        "His friend knows the code"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "The decisive issue is forgetting, so this should route to memory rather than first-order belief."
+    }
+  ]
+}

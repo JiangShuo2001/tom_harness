@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-19",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Lena is offered tea or coffee. She says, 'I always pick tea when both are here.'",
+      "question": "What does Lena prefer?",
+      "options": [
+        "Tea",
+        "Coffee",
+        "She prefers neither",
+        "The question cannot be answered"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct self-preference shown by a repeated voluntary choice."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "Noah does not speak, but every time he can choose, he goes to the park instead of staying home.",
+      "question": "What does Noah most likely want to do?",
+      "options": [
+        "Stay home",
+        "Go to the park",
+        "He wants both equally",
+        "He wants whatever his friend wants"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Preference is inferred from consistent voluntary choice, not from a stated plan."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Mia says, 'I think Ben would rather have apples than oranges.'",
+      "question": "What is Mia expressing here?",
+      "options": [
+        "Her own food preference",
+        "Ben's preference",
+        "A group decision",
+        "A firm fact about apples"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Tests the common mistake of treating another person's preference as self-preference."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Ravi is choosing a route for the team. He says the longer route is better because it is safer for everyone, even though he personally likes the shortcut.",
+      "question": "Which route will Ravi choose?",
+      "options": [
+        "The longer route",
+        "The shortcut",
+        "Whichever route he likes best",
+        "The route his friend likes"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is about goal and safety priority, not Ravi's own preference."
+    }
+  ]
+}

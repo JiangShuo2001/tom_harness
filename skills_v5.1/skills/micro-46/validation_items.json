@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-46",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "After class, a student jokes with her professor and asks whether she may turn in the paper two days late.",
+      "question": "What role structure best describes the interaction?",
+      "options": [
+        "Peer-to-peer friendship",
+        "Teacher/student with evaluator authority",
+        "Client/service provider",
+        "Parent/child"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Friendly tone does not remove the professor's formal academic authority."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "A nurse tells a patient how to take the prescribed medicine and checks whether the patient has questions.",
+      "question": "Which role structure matters most?",
+      "options": [
+        "Expert/care provider and dependent patient",
+        "Two peers coordinating",
+        "Boss/employee",
+        "Host/guest"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a clear expert-to-dependent care relationship."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "At a meeting, an older attendee speaks confidently and tells a junior analyst to change the slides, but the attendee has no official title in the team.",
+      "question": "What role structure is most defensible?",
+      "options": [
+        "Manager/subordinate",
+        "Expert/novice",
+        "Peer or unclear, with no formal authority shown",
+        "Host/guest"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This tests a likely shortcut: do not infer authority from age or confidence alone."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A teacher asks a student to help restart the classroom projector before class.",
+      "question": "What should the student say to avoid seeming disrespectful?",
+      "options": [
+        "The teacher/student hierarchy is the main issue",
+        "The student should give a tactful reply",
+        "This is a communication-strategy question, not role diagnosis",
+        "The scene is about privacy"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This is a boundary case because it asks what to say, not what role structure exists."
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-22",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "During a team presentation, Nina notices that the slide still shows an old price. While the client is looking down at notes, Nina catches Omar's eye and taps the incorrect number on her printed copy.",
+      "question": "Why does Nina tap the number while looking at Omar?",
+      "options": [
+        "To draw Omar's attention to the pricing error before it is discussed",
+        "To predict that Omar will change the slide after the meeting",
+        "To show that she prefers printed copies over slides",
+        "To remind herself to review the whole budget later"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The observable gesture is directed at another person, and the answer is the immediate communicative purpose of the cue."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Sam points at a puddle spreading across the cafe floor while looking at the waiter. The waiter sees the puddle and starts walking toward the counter where cleaning supplies are kept.",
+      "question": "What will the waiter most likely do next?",
+      "options": [
+        "Clean up the spill or get supplies to do so",
+        "Point at the puddle to communicate concern",
+        "Signal Sam to stop talking",
+        "Decide that Sam dislikes the cafe"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Although a gesture is present, the question asks for the waiter's likely next action, so this is action prediction rather than intention recognition."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Lena promised her sister she would babysit tonight. Later, her friends invite her to a concert at the same time. Lena checks the calendar and sighs.",
+      "question": "Which reason should determine what Lena does tonight?",
+      "options": [
+        "Her prior promise to babysit conflicts with the new invitation",
+        "Her sigh is meant to warn her friends to be quiet",
+        "Her gaze is intended to make someone notice the calendar",
+        "Her friends' stable preference for concerts"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The key issue is a conflict between an existing commitment and a new option, not the immediate purpose of a single observable cue."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "At dinner, Malik sees that his younger brother is about to mention the hidden birthday cake while their mother is sitting nearby. Malik widens his eyes and gives a tiny shake of his head at his brother.",
+      "question": "What is Malik trying to do with the look and head shake?",
+      "options": [
+        "Warn his brother not to reveal the surprise",
+        "Show romantic interest in his brother",
+        "Predict that his mother will leave the room",
+        "Express that he dislikes birthday cake in general"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This tests a likely wrong shortcut: treating facial cues as generic emotion or romance instead of using context and target to infer the immediate warning."
+    }
+  ]
+}

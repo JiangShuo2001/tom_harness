@@ -1,0 +1,99 @@
+{
+  "frontmatter_description": "Identify the cause of an outcome without switching to blame, responsibility, or moral judgment.",
+  "title": "Causal Attribution",
+  "use_when": [
+    "Use when the question asks what person, event, or condition caused an outcome.",
+    "Use when the task is to identify the causal source of a result, change, or event.",
+    "Use when the scene asks what led to, triggered, produced, or made something happen.",
+    "Use when the answer should name the cause even if no one is being judged."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is who is at fault, responsible, guilty, or deserving blame.",
+    "Do not use when the question is about moral evaluation, apology, fault assignment, or deserved punishment.",
+    "Do not use when the task is predicting beliefs, intentions, emotions, or actions rather than naming a cause.",
+    "Do not use when the main issue is probability, typicality, quantity update, or evidence strength instead of causation."
+  ],
+  "decision_variable": "the cause of the result",
+  "trigger_checklist": [
+    "Ask: what directly produced the outcome?",
+    "Look for an explicit causal link such as because, due to, led to, caused by, or resulted from.",
+    "Separate cause from blame: an accidental cause is still a cause.",
+    "Prefer the stated causal factor in the scene over a moral or legal judgment."
+  ],
+  "workflow": [
+    "Identify the outcome that needs explanation.",
+    "Find the person, event, or condition the scene links to that outcome.",
+    "Return the causal factor, not the blamed person unless causation is the actual question."
+  ],
+  "special_case": {
+    "title": "Accidental cause is still a cause",
+    "rule": "If someone caused the outcome by accident, answer with the causal action or condition, not with blame language.",
+    "worked_example": {
+      "scene": "A vase falls after the shelf was loosened by a vibration from the washing machine.",
+      "question": "What caused the vase to fall?",
+      "answer_logic": "The causal attribution is the loosened shelf and vibration, because the question asks for the cause of the outcome, not who should be blamed."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-43 if the question asks who is responsible, at fault, guilty, or should apologize.",
+    "Exit to micro-30 / macro-06 if the answer depends on moral blame, intention, negligence, or social judgment rather than cause.",
+    "Exit to micro-22 if the scene asks the immediate purpose behind an act (intention), not the cause of an outcome.",
+    "Exit to micro-54 / micro-55 if the main task is estimating likelihood or updating quantities instead of naming a cause.",
+    "Exit to micro-15 if the focus is how new evidence updates a belief, rather than what produced the outcome."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the prompt asks for the causal source of an outcome, change, or event.",
+    "hard_boundary": [
+      "Causation is not the same as responsibility.",
+      "A cause can be an event or condition, not just a person.",
+      "Blame, fault, guilt, and apology are out of scope unless they are explicitly part of the causal question."
+    ],
+    "shortcut_to_avoid": [
+      "Do not jump from 'who caused it' to 'who is bad.'",
+      "Do not replace causal attribution with moral blame or legal responsibility.",
+      "Do not infer intention when only cause is asked."
+    ],
+    "common_failure_modes": [
+      "Answering with the blamed person instead of the actual causal factor.",
+      "Confusing cause with intent or motive.",
+      "Treating an accidental cause as irrelevant because it is not blameworthy.",
+      "Overextending into responsibility judgments or repair behavior."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A child drops a cup because the table shakes when a truck passes.",
+        "why_it_matches": "The question is about the cause of the drop, so the causal factor is the shaking table, not blame."
+      },
+      {
+        "case": "A person forgets a promise and the friend feels hurt.",
+        "why_it_matches": "If the question asks what caused the hurt, the forgotten promise is the cause; if it asks who should apologize, that is a different unit."
+      }
+    ],
+    "boundary_stress_test": [
+      "If a person caused harm accidentally, can you still identify the cause without judging fault?",
+      "If several events contribute, can you name the direct cause that the scene highlights?",
+      "If the question sounds like blame, check whether it actually asks for causal origin instead."
+    ],
+    "generalization_note": "This unit covers causal explanation across physical, social, and event-based scenes, but only when the answer variable is the cause itself rather than blame, intention, or responsibility."
+  },
+  "validation_seed": {
+    "positive_pattern": "A scene asks what directly caused an outcome, and the correct answer is a person, event, or condition that produced it.",
+    "near_miss_pattern": "A scene involves harm or error, but the question is really about who is at fault or should apologize.",
+    "boundary_pattern": "A scene asks why something happened, but the true task is to judge responsibility or blame."
+  },
+  "notes": [
+    "Keep the causal answer concrete and observable when possible.",
+    "If the scene offers both a cause and a blame target, follow the question wording and choose the causal factor only when causation is asked.",
+    "Do not infer moral status from causation."
+  ],
+  "id": "micro-56",
+  "level": "micro",
+  "layer": "L7",
+  "family": "quantity-probability",
+  "core_question": "Identify which person, event, or condition caused an outcome",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

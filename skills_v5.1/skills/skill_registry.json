@@ -1,0 +1,2134 @@
+{
+  "library_name": "skills_v5",
+  "micro_units": [
+    {
+      "id": "micro-01",
+      "level": "micro",
+      "layer": "L0",
+      "family": "meta-control",
+      "title": "Task Routing",
+      "core_question": "Identify the mental or social variable that the question is really asking for",
+      "decision_variable": "the psychological or social variable required by the question",
+      "use_when": [
+        "Use when you need to identify the mental or social variable that the question is really asking for.",
+        "Use when the answer depends on the psychological or social variable required by the question."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not solve the substantive problem; it only selects the capability entry point."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-02",
+      "level": "micro",
+      "layer": "L0",
+      "family": "meta-control",
+      "title": "Evidence-Chain Construction",
+      "core_question": "Separate textual evidence, inference, and commonsense completion",
+      "decision_variable": "which evidence supports the conclusion",
+      "use_when": [
+        "Use when you need to separate textual evidence, inference, and commonsense completion.",
+        "Use when the answer depends on which evidence supports the conclusion."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not compare competing explanations; it organizes evidence sources."
+      ],
+      "boundary_neighbors": [
+        "micro-01",
+        "micro-03",
+        "micro-04"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-03",
+      "level": "micro",
+      "layer": "L0",
+      "family": "meta-control",
+      "title": "Multiple-Explanation Competition",
+      "core_question": "Preserve and compare several plausible interpretations",
+      "decision_variable": "which explanation best accounts for the available evidence",
+      "use_when": [
+        "Use when you need to preserve and compare several plausible interpretations.",
+        "Use when the answer depends on which explanation best accounts for the available evidence."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not make a value judgment; it selects among explanations."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-04",
+      "level": "micro",
+      "layer": "L0",
+      "family": "meta-control",
+      "title": "Anti-Bias Check",
+      "core_question": "Prevent perspective bias, outcome bias, and moral-intuition shortcuts",
+      "decision_variable": "whether the current reasoning is being distorted by the solver's perspective or intuitive reaction",
+      "use_when": [
+        "Use when you need to prevent perspective bias, outcome bias, and moral-intuition shortcuts.",
+        "Use when the answer depends on whether the current reasoning is being distorted by the solver's perspective or intuitive reaction."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not generate new explanations; it checks existing ones."
+      ],
+      "boundary_neighbors": [
+        "micro-03",
+        "micro-05",
+        "micro-11",
+        "micro-22",
+        "micro-26"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-05",
+      "level": "micro",
+      "layer": "L1",
+      "family": "perception-memory-knowledge",
+      "title": "Sensory Access",
+      "core_question": "Determine who can see, hear, touch, smell, or otherwise perceptually access what",
+      "decision_variable": "whether the character can contact the information through a sensory channel",
+      "use_when": [
+        "Use when you need to determine who can see, hear, touch, smell, or otherwise perceptually access what.",
+        "Use when the answer depends on whether the character can contact the information through a sensory channel."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not judge whether the character noticed it; only whether it was perceptually available."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-06",
+      "level": "micro",
+      "layer": "L1",
+      "family": "perception-memory-knowledge",
+      "title": "Spatial Perspective Transformation",
+      "core_question": "Determine what is visible from another person's position",
+      "decision_variable": "the spatial relation visible from the target perspective",
+      "use_when": [
+        "Use when you need to determine what is visible from another person's position.",
+        "Use when the answer depends on the spatial relation visible from the target perspective."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not judge belief; only viewpoint visibility."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-07",
+      "level": "micro",
+      "layer": "L1",
+      "family": "perception-memory-knowledge",
+      "title": "Attention and Salience",
+      "core_question": "Determine who noticed a key cue and who ignored it",
+      "decision_variable": "whether the information entered the character's attentional focus",
+      "use_when": [
+        "Use when you need to determine who noticed a key cue and who ignored it.",
+        "Use when the answer depends on whether the information entered the character's attentional focus."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from sensory access; seeing is not the same as noticing."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-08",
+      "level": "micro",
+      "layer": "L1",
+      "family": "perception-memory-knowledge",
+      "title": "Temporal Order and Event Updating",
+      "core_question": "Determine how event order changes mental states",
+      "decision_variable": "the sequence of events and its updating effect",
+      "use_when": [
+        "Use when you need to determine how event order changes mental states.",
+        "Use when the answer depends on the sequence of events and its updating effect."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not judge memory retention; only event order."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-09",
+      "level": "micro",
+      "layer": "L1",
+      "family": "perception-memory-knowledge",
+      "title": "Memory, Forgetting, and Misremembering",
+      "core_question": "Determine what a character knows, remembers, forgets, or misremembers",
+      "decision_variable": "the character's current memory state",
+      "use_when": [
+        "Use when you need to determine what a character knows, remembers, forgets, or misremembers.",
+        "Use when the answer depends on the character's current memory state."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from knowledge boundary; this skill concerns retention or distortion after prior exposure."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-10",
+      "level": "micro",
+      "layer": "L1",
+      "family": "perception-memory-knowledge",
+      "title": "Knowledge Boundary",
+      "core_question": "Determine whether a character has the background knowledge needed to understand information",
+      "decision_variable": "whether the character has the required professional, cultural, experiential, or conceptual background",
+      "use_when": [
+        "Use when you need to determine whether a character has the background knowledge needed to understand information.",
+        "Use when the answer depends on whether the character has the required professional, cultural, experiential, or conceptual background."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from perception and memory; it concerns background competence."
+      ],
+      "boundary_neighbors": [
+        "micro-05",
+        "micro-09",
+        "micro-11",
+        "micro-12"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-11",
+      "level": "micro",
+      "layer": "L2",
+      "family": "belief-models",
+      "title": "First-Order Belief",
+      "core_question": "Determine what X believes the facts are",
+      "decision_variable": "the character's subjective representation of reality",
+      "use_when": [
+        "Use when you need to determine what X believes the facts are.",
+        "Use when the answer depends on the character's subjective representation of reality."
+      ],
+      "do_not_use_when": [
+        "Do not use when the belief does not have to be false."
+      ],
+      "boundary_neighbors": [
+        "micro-09",
+        "micro-10",
+        "micro-12",
+        "micro-13"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-12",
+      "level": "micro",
+      "layer": "L2",
+      "family": "belief-models",
+      "title": "False Belief",
+      "core_question": "Determine when X's belief conflicts with reality",
+      "decision_variable": "the discrepancy between belief and actual state",
+      "use_when": [
+        "Use when you need to determine when X's belief conflicts with reality.",
+        "Use when the answer depends on the discrepancy between belief and actual state."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit requires a reality-belief conflict."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-13",
+      "level": "micro",
+      "layer": "L2",
+      "family": "belief-models",
+      "title": "Second-Order or Recursive Belief",
+      "core_question": "Determine what X thinks Y believes",
+      "decision_variable": "one mental model embedded inside another",
+      "use_when": [
+        "Use when you need to determine what X thinks Y believes.",
+        "Use when the answer depends on one mental model embedded inside another."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from common knowledge; the focus is recursive attribution."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-14",
+      "level": "micro",
+      "layer": "L2",
+      "family": "belief-models",
+      "title": "Appearance-Reality Distinction",
+      "core_question": "Distinguish what something appears to be from what it actually is",
+      "decision_variable": "the gap between surface appearance and true state",
+      "use_when": [
+        "Use when you need to distinguish what something appears to be from what it actually is.",
+        "Use when the answer depends on the gap between surface appearance and true state."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not require a specific character to hold a false belief."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-15",
+      "level": "micro",
+      "layer": "L2",
+      "family": "belief-models",
+      "title": "Evidence-Availability Updating",
+      "core_question": "Determine how newly available evidence changes belief",
+      "decision_variable": "the direction of belief update caused by new information",
+      "use_when": [
+        "Use when you need to determine how newly available evidence changes belief.",
+        "Use when the answer depends on the direction of belief update caused by new information."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from source credibility; the focus is evidence availability and update effect."
+      ],
+      "boundary_neighbors": [
+        "micro-13",
+        "micro-14",
+        "micro-16",
+        "micro-17",
+        "micro-18"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-16",
+      "level": "micro",
+      "layer": "L2",
+      "family": "belief-models",
+      "title": "Common Knowledge",
+      "core_question": "Determine whether both parties know something and know that the other knows it",
+      "decision_variable": "whether knowledge is openly shared by both sides",
+      "use_when": [
+        "Use when you need to determine whether both parties know something and know that the other knows it.",
+        "Use when the answer depends on whether knowledge is openly shared by both sides."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from second-order belief; the focus is public sharedness."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-17",
+      "level": "micro",
+      "layer": "L2",
+      "family": "belief-models",
+      "title": "Uncertain Belief",
+      "core_question": "Determine whether X is guessing, doubting, or only partially convinced",
+      "decision_variable": "the character's subjective certainty",
+      "use_when": [
+        "Use when you need to determine whether X is guessing, doubting, or only partially convinced.",
+        "Use when the answer depends on the character's subjective certainty."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from source credibility; it concerns confidence level."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-18",
+      "level": "micro",
+      "layer": "L2",
+      "family": "belief-models",
+      "title": "Source Credibility",
+      "core_question": "Determine how rumors, eyewitness reports, authority, or deceptive sources affect belief",
+      "decision_variable": "the reliability of the information source",
+      "use_when": [
+        "Use when you need to determine how rumors, eyewitness reports, authority, or deceptive sources affect belief.",
+        "Use when the answer depends on the reliability of the information source."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from uncertain belief; it concerns why confidence changes."
+      ],
+      "boundary_neighbors": [
+        "micro-16",
+        "micro-17",
+        "micro-19",
+        "micro-20"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-19",
+      "level": "micro",
+      "layer": "L3",
+      "family": "goal-action",
+      "title": "Self Preference",
+      "core_question": "Determine what a character personally likes or wants",
+      "decision_variable": "the character's own preference",
+      "use_when": [
+        "Use when you need to determine what a character personally likes or wants.",
+        "Use when the answer depends on the character's own preference."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not judge whether the character understands another person's preference."
+      ],
+      "boundary_neighbors": [
+        "micro-17",
+        "micro-18",
+        "micro-20",
+        "micro-21",
+        "micro-24",
+        "micro-40",
+        "micro-41"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-20",
+      "level": "micro",
+      "layer": "L3",
+      "family": "goal-action",
+      "title": "Other Preference",
+      "core_question": "Determine whether a character understands what someone else likes or wants",
+      "decision_variable": "the character's representation of another person's preference",
+      "use_when": [
+        "Use when you need to determine whether a character understands what someone else likes or wants.",
+        "Use when the answer depends on the character's representation of another person's preference."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from self preference; it models another person's desire."
+      ],
+      "boundary_neighbors": [
+        "micro-19",
+        "micro-22",
+        "micro-23"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-21",
+      "level": "micro",
+      "layer": "L3",
+      "family": "goal-action",
+      "title": "Goal Hierarchy",
+      "core_question": "Distinguish long-term, short-term, and local goals",
+      "decision_variable": "the hierarchical relation among goals",
+      "use_when": [
+        "Use when you need to distinguish long-term, short-term, and local goals.",
+        "Use when the answer depends on the hierarchical relation among goals."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not decide between conflicting goals."
+      ],
+      "boundary_neighbors": [
+        "micro-19",
+        "micro-20",
+        "micro-22",
+        "micro-23",
+        "micro-24",
+        "micro-25"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-22",
+      "level": "micro",
+      "layer": "L3",
+      "family": "goal-action",
+      "title": "Intention Recognition",
+      "core_question": "Infer the purpose behind an action, gaze, gesture, or other cue",
+      "decision_variable": "the immediate purpose behind the behavior",
+      "use_when": [
+        "Use when you need to infer the purpose behind an action, gaze, gesture, or other cue.",
+        "Use when the answer depends on the immediate purpose behind the behavior."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from action prediction; it explains why the current behavior occurs."
+      ],
+      "boundary_neighbors": [
+        "micro-20",
+        "micro-21",
+        "micro-23",
+        "micro-24"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-23",
+      "level": "micro",
+      "layer": "L3",
+      "family": "goal-action",
+      "title": "Action Prediction",
+      "core_question": "Predict the next likely action from belief and goal",
+      "decision_variable": "what the character is most likely to do next",
+      "use_when": [
+        "Use when you need to predict the next likely action from belief and goal.",
+        "Use when the answer depends on what the character is most likely to do next."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from intention recognition; it concerns future behavior."
+      ],
+      "boundary_neighbors": [
+        "micro-21",
+        "micro-22",
+        "micro-24",
+        "micro-25"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-24",
+      "level": "micro",
+      "layer": "L3",
+      "family": "goal-action",
+      "title": "Commitment Priority",
+      "core_question": "Resolve priority among existing commitments, ongoing tasks, and new invitations",
+      "decision_variable": "the priority order among commitments or plans",
+      "use_when": [
+        "Use when you need to resolve priority among existing commitments, ongoing tasks, and new invitations.",
+        "Use when the answer depends on the priority order among commitments or plans."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from general goal conflict; it requires a commitment or plan constraint."
+      ],
+      "boundary_neighbors": [
+        "micro-21",
+        "micro-22",
+        "micro-23",
+        "micro-25"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-25",
+      "level": "micro",
+      "layer": "L3",
+      "family": "goal-action",
+      "title": "Goal-Conflict Arbitration",
+      "core_question": "Determine how a character chooses among conflicting goals",
+      "decision_variable": "the weighting rule for competing goals",
+      "use_when": [
+        "Use when you need to determine how a character chooses among conflicting goals.",
+        "Use when the answer depends on the weighting rule for competing goals."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not require prior commitments; it applies to general goal competition."
+      ],
+      "boundary_neighbors": [
+        "micro-21",
+        "micro-22",
+        "micro-23",
+        "micro-24",
+        "micro-26",
+        "micro-31"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-26",
+      "level": "micro",
+      "layer": "L4",
+      "family": "emotion-appraisal",
+      "title": "Basic Emotion Appraisal",
+      "core_question": "Infer emotion from success, failure, threat, loss, or gain",
+      "decision_variable": "how an event affects the character's goals or interests",
+      "use_when": [
+        "Use when you need to infer emotion from success, failure, threat, loss, or gain.",
+        "Use when the answer depends on how an event affects the character's goals or interests."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not handle disguise, counterfactual emotion, or moral emotion."
+      ],
+      "boundary_neighbors": [
+        "micro-24",
+        "micro-25",
+        "micro-27",
+        "micro-28"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-27",
+      "level": "micro",
+      "layer": "L4",
+      "family": "emotion-appraisal",
+      "title": "Atypical Emotion",
+      "core_question": "Explain why an unexpected or nonstandard emotion appears",
+      "decision_variable": "why the emotion deviates from ordinary expectation",
+      "use_when": [
+        "Use when you need to explain why an unexpected or nonstandard emotion appears.",
+        "Use when the answer depends on why the emotion deviates from ordinary expectation."
+      ],
+      "do_not_use_when": [
+        "Do not use when not the same as hidden emotion; the true feeling itself is unusual."
+      ],
+      "boundary_neighbors": [
+        "micro-25",
+        "micro-26",
+        "micro-28",
+        "micro-29"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-28",
+      "level": "micro",
+      "layer": "L4",
+      "family": "emotion-appraisal",
+      "title": "Hidden Emotion",
+      "core_question": "Detect a mismatch between true feeling and outward display",
+      "decision_variable": "the difference between internal emotion and external expression",
+      "use_when": [
+        "Use when you need to detect a mismatch between true feeling and outward display.",
+        "Use when the answer depends on the difference between internal emotion and external expression."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not explain the social rule behind hiding; only detects the mismatch."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-29",
+      "level": "micro",
+      "layer": "L4",
+      "family": "emotion-appraisal",
+      "title": "Emotional Disguise and Display Rules",
+      "core_question": "Explain why and how a character manages outward emotion for politeness, role, or situation",
+      "decision_variable": "the social rule governing emotional display",
+      "use_when": [
+        "Use when you need to explain why and how a character manages outward emotion for politeness, role, or situation.",
+        "Use when the answer depends on the social rule governing emotional display."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from hidden emotion; the focus is rule-based expression control."
+      ],
+      "boundary_neighbors": [
+        "micro-27",
+        "micro-28",
+        "micro-30",
+        "micro-31"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-30",
+      "level": "micro",
+      "layer": "L4",
+      "family": "emotion-appraisal",
+      "title": "Moral Emotion",
+      "core_question": "Infer guilt, shame, pride, anger, or gratitude from responsibility, norm, or value appraisal",
+      "decision_variable": "the responsibility or norm evaluation that triggers emotion",
+      "use_when": [
+        "Use when you need to infer guilt, shame, pride, anger, or gratitude from responsibility, norm, or value appraisal.",
+        "Use when the answer depends on the responsibility or norm evaluation that triggers emotion."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from basic emotion; moral or normative appraisal must be present."
+      ],
+      "boundary_neighbors": [
+        "micro-26",
+        "micro-28",
+        "micro-29",
+        "micro-31",
+        "micro-32"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-31",
+      "level": "micro",
+      "layer": "L4",
+      "family": "emotion-appraisal",
+      "title": "Counterfactual Emotion",
+      "core_question": "Infer regret, relief, disappointment, or pleasant surprise from comparison with an alternative outcome",
+      "decision_variable": "the comparison between reality and a possible alternative",
+      "use_when": [
+        "Use when you need to infer regret, relief, disappointment, or pleasant surprise from comparison with an alternative outcome.",
+        "Use when the answer depends on the comparison between reality and a possible alternative."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not handle simple success or failure emotion."
+      ],
+      "boundary_neighbors": [
+        "micro-26",
+        "micro-28",
+        "micro-29",
+        "micro-30",
+        "micro-33"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-32",
+      "level": "micro",
+      "layer": "L4",
+      "family": "emotion-appraisal",
+      "title": "Empathy and Emotional Contagion",
+      "core_question": "Determine how another person's emotion affects the self",
+      "decision_variable": "the transmission of another person's emotion into one's own state",
+      "use_when": [
+        "Use when you need to determine how another person's emotion affects the self.",
+        "Use when the answer depends on the transmission of another person's emotion into one's own state."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from understanding another's emotion; the focus is being affected."
+      ],
+      "boundary_neighbors": [
+        "micro-30",
+        "micro-31",
+        "micro-33",
+        "micro-34"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-33",
+      "level": "micro",
+      "layer": "L4",
+      "family": "emotion-appraisal",
+      "title": "Emotion Regulation",
+      "core_question": "Determine how a character suppresses, redirects, rationalizes, or comforts themselves",
+      "decision_variable": "how the character changes or manages their internal emotion",
+      "use_when": [
+        "Use when you need to determine how a character suppresses, redirects, rationalizes, or comforts themselves.",
+        "Use when the answer depends on how the character changes or manages their internal emotion."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from display rules; it concerns internal regulation rather than external politeness."
+      ],
+      "boundary_neighbors": [
+        "micro-31",
+        "micro-32",
+        "micro-34",
+        "micro-35"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-34",
+      "level": "micro",
+      "layer": "L5",
+      "family": "language-pragmatics",
+      "title": "Literal Meaning",
+      "core_question": "Determine what an utterance explicitly says",
+      "decision_variable": "the sentence's explicit semantic content",
+      "use_when": [
+        "Use when you need to determine what an utterance explicitly says.",
+        "Use when the answer depends on the sentence's explicit semantic content."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not infer hidden intention."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-35",
+      "level": "micro",
+      "layer": "L5",
+      "family": "language-pragmatics",
+      "title": "Indirect Speech Act",
+      "core_question": "Determine the social action performed by an utterance, such as hinting, requesting, refusing, reminding, or warning",
+      "decision_variable": "what the utterance is doing socially",
+      "use_when": [
+        "Use when you need to determine the social action performed by an utterance, such as hinting, requesting, refusing, reminding, or warning.",
+        "Use when the answer depends on what the utterance is doing socially."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from conversational implicature; it asks \"what act is this sentence performing?\"."
+      ],
+      "boundary_neighbors": [
+        "micro-34",
+        "micro-36",
+        "micro-37",
+        "micro-38",
+        "micro-39"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-36",
+      "level": "micro",
+      "layer": "L5",
+      "family": "language-pragmatics",
+      "title": "Conversational Implicature",
+      "core_question": "Infer what is communicated by context but not explicitly said",
+      "decision_variable": "the implicit information derived from context",
+      "use_when": [
+        "Use when you need to infer what is communicated by context but not explicitly said.",
+        "Use when the answer depends on the implicit information derived from context."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from indirect speech act; it asks \"what extra meaning was conveyed?\"."
+      ],
+      "boundary_neighbors": [
+        "micro-34",
+        "micro-35",
+        "micro-37",
+        "micro-38"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-37",
+      "level": "micro",
+      "layer": "L5",
+      "family": "language-pragmatics",
+      "title": "Truth, Lie, and Half-Truth",
+      "core_question": "Evaluate a statement's relation to the facts",
+      "decision_variable": "the truth status of the utterance content",
+      "use_when": [
+        "Use when you need to evaluate a statement's relation to the facts.",
+        "Use when the answer depends on the truth status of the utterance content."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not judge whether the speaker intended to mislead."
+      ],
+      "boundary_neighbors": [
+        "micro-35",
+        "micro-36",
+        "micro-38",
+        "micro-39"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-38",
+      "level": "micro",
+      "layer": "L5",
+      "family": "language-pragmatics",
+      "title": "Misleading and Selective Expression",
+      "core_question": "Determine whether a true statement induces a false understanding",
+      "decision_variable": "whether the expression leads the listener toward an incorrect inference",
+      "use_when": [
+        "Use when you need to determine whether a true statement induces a false understanding.",
+        "Use when the answer depends on whether the expression leads the listener toward an incorrect inference."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from lying; the stated content can be true."
+      ],
+      "boundary_neighbors": [
+        "micro-36",
+        "micro-37",
+        "micro-39",
+        "micro-40"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-39",
+      "level": "micro",
+      "layer": "L5",
+      "family": "language-pragmatics",
+      "title": "Speaker Motivation",
+      "core_question": "Infer why a speaker says something, such as politeness, face-saving, testing, avoidance, or ingratiation",
+      "decision_variable": "the speaker's motive for speaking that way",
+      "use_when": [
+        "Use when you need to infer why a speaker says something, such as politeness, face-saving, testing, avoidance, or ingratiation.",
+        "Use when the answer depends on the speaker's motive for speaking that way."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from persuasion strategy; the goal need not be to change the listener's attitude."
+      ],
+      "boundary_neighbors": [
+        "micro-35",
+        "micro-36",
+        "micro-37",
+        "micro-38",
+        "micro-40",
+        "micro-41"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-40",
+      "level": "micro",
+      "layer": "L5",
+      "family": "language-pragmatics",
+      "title": "Audience Calibration",
+      "core_question": "Adapt expression to experts, novices, children, out-groups, or other listeners",
+      "decision_variable": "how the expression fits the listener's ability, identity, or stance",
+      "use_when": [
+        "Use when you need to adapt expression to experts, novices, children, out-groups, or other listeners.",
+        "Use when the answer depends on how the expression fits the listener's ability, identity, or stance."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from persuasion; the focus is adaptation rather than influence."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-41",
+      "level": "micro",
+      "layer": "L5",
+      "family": "language-pragmatics",
+      "title": "Persuasion Strategy",
+      "core_question": "Determine how to change another person's belief, attitude, or behavior",
+      "decision_variable": "the influence strategy directed at the listener",
+      "use_when": [
+        "Use when you need to determine how to change another person's belief, attitude, or behavior.",
+        "Use when the answer depends on the influence strategy directed at the listener."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from negotiation; it is primarily one-way influence."
+      ],
+      "boundary_neighbors": [
+        "micro-39",
+        "micro-40",
+        "micro-42",
+        "micro-43",
+        "micro-51"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-42",
+      "level": "micro",
+      "layer": "L6",
+      "family": "norms-relationships",
+      "title": "Faux Pas and Offense",
+      "core_question": "Judge whether behavior or speech violates social appropriateness",
+      "decision_variable": "whether the act breaches social tact or creates embarrassment/offense",
+      "use_when": [
+        "Use when you need to judge whether behavior or speech violates social appropriateness.",
+        "Use when the answer depends on whether the act breaches social tact or creates embarrassment/offense."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not assign responsibility or propose repair."
+      ],
+      "boundary_neighbors": [
+        "micro-40",
+        "micro-43",
+        "micro-44",
+        "micro-49",
+        "micro-51"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-43",
+      "level": "micro",
+      "layer": "L6",
+      "family": "norms-relationships",
+      "title": "Harm and Responsibility",
+      "core_question": "Determine who caused harm, whether it was intentional, and whether blame is appropriate",
+      "decision_variable": "responsibility for harm",
+      "use_when": [
+        "Use when you need to determine who caused harm, whether it was intentional, and whether blame is appropriate.",
+        "Use when the answer depends on responsibility for harm."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from faux pas judgment; the focus is responsibility and blameworthiness."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-44",
+      "level": "micro",
+      "layer": "L6",
+      "family": "norms-relationships",
+      "title": "Fairness and Reciprocity",
+      "core_question": "Evaluate distribution, fairness, repayment, and taking advantage",
+      "decision_variable": "whether resources or obligations are fair and reciprocal",
+      "use_when": [
+        "Use when you need to evaluate distribution, fairness, repayment, and taking advantage.",
+        "Use when the answer depends on whether resources or obligations are fair and reciprocal."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from negotiation; it evaluates norms rather than designing a deal."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-45",
+      "level": "micro",
+      "layer": "L6",
+      "family": "norms-relationships",
+      "title": "Trust and Reputation",
+      "core_question": "Evaluate reliability from past behavior and interpersonal history",
+      "decision_variable": "long-term reliability",
+      "use_when": [
+        "Use when you need to evaluate reliability from past behavior and interpersonal history.",
+        "Use when the answer depends on long-term reliability."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from source credibility; it concerns interpersonal history rather than one information source."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-46",
+      "level": "micro",
+      "layer": "L6",
+      "family": "norms-relationships",
+      "title": "Power, Status, and Role",
+      "core_question": "Identify teacher/student, manager/subordinate, expert/novice, and related role structures",
+      "decision_variable": "the role structure between interaction partners",
+      "use_when": [
+        "Use when you need to identify teacher/student, manager/subordinate, expert/novice, and related role structures.",
+        "Use when the answer depends on the role structure between interaction partners."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not choose a communication strategy; it identifies the structure."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-47",
+      "level": "micro",
+      "layer": "L6",
+      "family": "norms-relationships",
+      "title": "Group Identity",
+      "core_question": "Determine how in-group, out-group, stereotypes, or belonging shape interpretation and evaluation",
+      "decision_variable": "the effect of group membership",
+      "use_when": [
+        "Use when you need to determine how in-group, out-group, stereotypes, or belonging shape interpretation and evaluation.",
+        "Use when the answer depends on the effect of group membership."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from power role; it concerns identity boundaries."
+      ],
+      "boundary_neighbors": [
+        "micro-45",
+        "micro-46",
+        "micro-48",
+        "micro-49"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-48",
+      "level": "micro",
+      "layer": "L6",
+      "family": "norms-relationships",
+      "title": "Privacy, Secrets, and Boundaries",
+      "core_question": "Determine what information may be shared and what should remain private",
+      "decision_variable": "the boundary of information disclosure",
+      "use_when": [
+        "Use when you need to determine what information may be shared and what should remain private.",
+        "Use when the answer depends on the boundary of information disclosure."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not handle repair after a boundary has already been crossed."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-49",
+      "level": "micro",
+      "layer": "L6",
+      "family": "norms-relationships",
+      "title": "Relationship Repair and Apology",
+      "core_question": "Identify when apology, explanation, compensation, or relationship easing is needed",
+      "decision_variable": "the repair need after relationship damage",
+      "use_when": [
+        "Use when you need to identify when apology, explanation, compensation, or relationship easing is needed.",
+        "Use when the answer depends on the repair need after relationship damage."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from faux pas judgment; it concerns follow-up repair."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-50",
+      "level": "micro",
+      "layer": "L6",
+      "family": "norms-relationships",
+      "title": "Self-Presentation and Impression Management",
+      "core_question": "Manage self-information, image, disclosure order, and self-description",
+      "decision_variable": "the desired impression others should form",
+      "use_when": [
+        "Use when you need to manage self-information, image, disclosure order, and self-description.",
+        "Use when the answer depends on the desired impression others should form."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from emotional display rules; it concerns overall image management."
+      ],
+      "boundary_neighbors": [
+        "micro-28",
+        "micro-29",
+        "micro-48",
+        "micro-49",
+        "micro-51",
+        "micro-52"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-51",
+      "level": "micro",
+      "layer": "L6",
+      "family": "norms-relationships",
+      "title": "Negotiation, Concession, and Joint Plan",
+      "core_question": "Find compromise, trades, and mutually acceptable plans under disagreement",
+      "decision_variable": "how both sides adjust to form a joint solution",
+      "use_when": [
+        "Use when you need to find compromise, trades, and mutually acceptable plans under disagreement.",
+        "Use when the answer depends on how both sides adjust to form a joint solution."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from persuasion; negotiation requires bilateral adjustment."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-52",
+      "level": "micro",
+      "layer": "L6",
+      "family": "norms-relationships",
+      "title": "Power Navigation and Hierarchical Communication",
+      "core_question": "Choose communication actions across hierarchy, including escalation, authorization, compliance, challenge, and retreat",
+      "decision_variable": "what communication move fits a power gap",
+      "use_when": [
+        "Use when you need to choose communication actions across hierarchy, including escalation, authorization, compliance, challenge, and retreat.",
+        "Use when the answer depends on what communication move fits a power gap."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from role recognition; it concerns strategy under hierarchy."
+      ],
+      "boundary_neighbors": [],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-53",
+      "level": "micro",
+      "layer": "L7",
+      "family": "quantity-probability",
+      "title": "Vague Quantity Prior",
+      "core_question": "Interpret vague quantifiers such as some, most, almost none, or about half",
+      "decision_variable": "the approximate range implied by a vague quantifier",
+      "use_when": [
+        "Use when you need to interpret vague quantifiers such as some, most, almost none, or about half.",
+        "Use when the answer depends on the approximate range implied by a vague quantifier."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit does not update after observation."
+      ],
+      "boundary_neighbors": [
+        "micro-51",
+        "micro-52",
+        "micro-54",
+        "micro-55"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-54",
+      "level": "micro",
+      "layer": "L7",
+      "family": "quantity-probability",
+      "title": "Quantity Update After Partial Observation",
+      "core_question": "Revise an estimate after seeing a sample",
+      "decision_variable": "how sample evidence changes quantity estimates",
+      "use_when": [
+        "Use when you need to revise an estimate after seeing a sample.",
+        "Use when the answer depends on how sample evidence changes quantity estimates."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from base rate; it focuses on sample-based updating."
+      ],
+      "boundary_neighbors": [
+        "micro-52",
+        "micro-53",
+        "micro-55",
+        "micro-56"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-55",
+      "level": "micro",
+      "layer": "L7",
+      "family": "quantity-probability",
+      "title": "Base Rate and Typicality",
+      "core_question": "Judge likelihood from commonness or typicality",
+      "decision_variable": "background probability or category typicality",
+      "use_when": [
+        "Use when you need to judge likelihood from commonness or typicality.",
+        "Use when the answer depends on background probability or category typicality."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from vague quantity; it concerns category likelihood."
+      ],
+      "boundary_neighbors": [
+        "micro-53",
+        "micro-54",
+        "micro-56"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    },
+    {
+      "id": "micro-56",
+      "level": "micro",
+      "layer": "L7",
+      "family": "quantity-probability",
+      "title": "Causal Attribution",
+      "core_question": "Identify which person, event, or condition caused an outcome",
+      "decision_variable": "the cause of the result",
+      "use_when": [
+        "Use when you need to identify which person, event, or condition caused an outcome.",
+        "Use when the answer depends on the cause of the result."
+      ],
+      "do_not_use_when": [
+        "Do not use when this unit differs from responsibility judgment; causation need not include blame."
+      ],
+      "boundary_neighbors": [
+        "micro-15",
+        "micro-22",
+        "micro-30",
+        "micro-43",
+        "micro-54",
+        "micro-55"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ]
+    }
+  ],
+  "macro_units": [
+    {
+      "id": "macro-01",
+      "level": "macro",
+      "layer": "macro",
+      "family": "false-belief",
+      "title": "Classic False-Belief Judgment",
+      "core_question": "where or how a character will act based on a false belief",
+      "decision_variable": "where or how a character will act based on a false belief",
+      "direct_route_rule": "Route immediately when the case is a first-order search-location belief after an unseen move.",
+      "expandable_micro_ids": [
+        "micro-05",
+        "micro-08",
+        "micro-11",
+        "micro-12",
+        "micro-23"
+      ],
+      "boundary_neighbors": [
+        "macro-02",
+        "macro-03"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the classic false-belief judgment prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from second-order mind and appearance-reality cases; the core is action based on false belief."
+      ]
+    },
+    {
+      "id": "macro-02",
+      "level": "macro",
+      "layer": "macro",
+      "family": "nested-mind",
+      "title": "Second-Order Mind and Common Knowledge",
+      "core_question": "how one character understands another character's understanding",
+      "decision_variable": "how one character understands another character's understanding",
+      "direct_route_rule": "Route immediately when one mind models another mind or shared knowledge is central.",
+      "expandable_micro_ids": [
+        "micro-13",
+        "micro-16",
+        "micro-17",
+        "micro-18"
+      ],
+      "boundary_neighbors": [
+        "macro-01",
+        "macro-03",
+        "macro-04",
+        "macro-05"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the second-order mind and common knowledge prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from first-order false belief; the core is nested mindreading or shared knowledge."
+      ]
+    },
+    {
+      "id": "macro-03",
+      "level": "macro",
+      "layer": "macro",
+      "family": "appearance-reality",
+      "title": "Appearance-Reality and Knowledge Boundary",
+      "core_question": "how appearance, reality, and a character's knowledge boundary jointly determine the answer",
+      "decision_variable": "how appearance, reality, and a character's knowledge boundary jointly determine the answer",
+      "direct_route_rule": "Route immediately when appearance conflicts with reality or world knowledge is fenced off.",
+      "expandable_micro_ids": [
+        "micro-10",
+        "micro-14",
+        "micro-15",
+        "micro-18"
+      ],
+      "boundary_neighbors": [
+        "macro-01",
+        "macro-02",
+        "macro-04",
+        "macro-05"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the appearance-reality and knowledge boundary prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from false-belief action prediction; the core is conflict among appearance, truth, and knowledge boundary."
+      ]
+    },
+    {
+      "id": "macro-04",
+      "level": "macro",
+      "layer": "macro",
+      "family": "social-cues",
+      "title": "Social Cues and Nonverbal Intention",
+      "core_question": "what intention or social action a nonverbal cue conveys",
+      "decision_variable": "what intention or social action a nonverbal cue conveys",
+      "direct_route_rule": "Route immediately when the cue is nonverbal and social inference or sender intention is asked.",
+      "expandable_micro_ids": [
+        "micro-07",
+        "micro-22",
+        "micro-23",
+        "micro-26",
+        "micro-35"
+      ],
+      "boundary_neighbors": [
+        "macro-01",
+        "macro-02",
+        "macro-05",
+        "macro-07",
+        "macro-08"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the social cues and nonverbal intention prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from linguistic pragmatics; the core is intention explanation from nonverbal cues."
+      ]
+    },
+    {
+      "id": "macro-05",
+      "level": "macro",
+      "layer": "macro",
+      "family": "emotion",
+      "title": "Hidden Emotion and Atypical Emotion",
+      "core_question": "why a character's true feeling differs from outward display or ordinary expectation",
+      "decision_variable": "why a character's true feeling differs from outward display or ordinary expectation",
+      "direct_route_rule": "Route immediately when emotion must be inferred through suppression, reversal, or unusual appraisal.",
+      "expandable_micro_ids": [
+        "micro-21",
+        "micro-26",
+        "micro-27",
+        "micro-28",
+        "micro-29",
+        "micro-31"
+      ],
+      "boundary_neighbors": [
+        "macro-01",
+        "macro-02",
+        "macro-04",
+        "macro-06"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the hidden emotion and atypical emotion prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from moral emotion; the core is a mismatch between real emotion and display or expectation."
+      ]
+    },
+    {
+      "id": "macro-06",
+      "level": "macro",
+      "layer": "macro",
+      "family": "emotion",
+      "title": "Moral Emotion and Responsibility Judgment",
+      "core_question": "what emotion or judgment follows from responsibility, harm, and norm evaluation",
+      "decision_variable": "what emotion or judgment follows from responsibility, harm, and norm evaluation",
+      "direct_route_rule": "Route immediately when guilt, shame, blame, or responsibility drives the emotion.",
+      "expandable_micro_ids": [
+        "micro-04",
+        "micro-30",
+        "micro-33",
+        "micro-43",
+        "micro-56"
+      ],
+      "boundary_neighbors": [
+        "macro-04",
+        "macro-05",
+        "macro-07",
+        "macro-08"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the moral emotion and responsibility judgment prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from general emotion appraisal; the core is responsibility, harm, and normative evaluation."
+      ]
+    },
+    {
+      "id": "macro-07",
+      "level": "macro",
+      "layer": "macro",
+      "family": "language",
+      "title": "Indirect Language and Conversational Meaning",
+      "core_question": "what the speaker really wants the listener to understand",
+      "decision_variable": "what the speaker really wants the listener to understand",
+      "direct_route_rule": "Route immediately when spoken words mean a request, warning, complaint, refusal, reminder, or invitation beyond literal text.",
+      "expandable_micro_ids": [
+        "micro-34",
+        "micro-35",
+        "micro-36",
+        "micro-39",
+        "micro-48"
+      ],
+      "boundary_neighbors": [
+        "macro-04",
+        "macro-05",
+        "macro-08",
+        "macro-09"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the indirect language and conversational meaning prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from lies and misleading language; the core is indirect expression and implicature."
+      ]
+    },
+    {
+      "id": "macro-08",
+      "level": "macro",
+      "layer": "macro",
+      "family": "lies-half-truths-and-misdirection",
+      "title": "Lies, Half-Truths, and Misdirection",
+      "core_question": "how an utterance operates across truth value, motive, and misleading effect",
+      "decision_variable": "how an utterance operates across truth value, motive, and misleading effect",
+      "direct_route_rule": "Route immediately when truth status or wording motive under partial disclosure is central.",
+      "expandable_micro_ids": [
+        "micro-18",
+        "micro-37",
+        "micro-38",
+        "micro-39",
+        "micro-45"
+      ],
+      "boundary_neighbors": [
+        "macro-01",
+        "macro-02",
+        "macro-07",
+        "macro-09",
+        "macro-17"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the lies, half-truths, and misdirection prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from ordinary indirect expression; the core is truth status, selective wording, and misleading effect."
+      ]
+    },
+    {
+      "id": "macro-09",
+      "level": "macro",
+      "layer": "macro",
+      "family": "persuasion",
+      "title": "Persuasion, Advice, and Audience Calibration",
+      "core_question": "how to adapt expression to a listener and change their belief, attitude, or behavior",
+      "decision_variable": "how to adapt expression to a listener and change their belief, attitude, or behavior",
+      "direct_route_rule": "Route immediately when the message must fit the listener's barrier, expertise, or motive.",
+      "expandable_micro_ids": [
+        "micro-03",
+        "micro-20",
+        "micro-40",
+        "micro-41",
+        "micro-46"
+      ],
+      "boundary_neighbors": [
+        "macro-07",
+        "macro-08",
+        "macro-14",
+        "macro-18"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the persuasion, advice, and audience calibration prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from two-way negotiation; the core is listener-adapted expression and one-way influence."
+      ]
+    },
+    {
+      "id": "macro-10",
+      "level": "macro",
+      "layer": "macro",
+      "family": "decision-conflict",
+      "title": "Preference Conflict and Joint Decision",
+      "core_question": "what action or allocation should be chosen when preferences conflict",
+      "decision_variable": "what action or allocation should be chosen when preferences conflict",
+      "direct_route_rule": "Route immediately when divergent desire, shared desire, or preference-based action prediction is asked.",
+      "expandable_micro_ids": [
+        "micro-19",
+        "micro-20",
+        "micro-21",
+        "micro-23",
+        "micro-25",
+        "micro-44"
+      ],
+      "boundary_neighbors": [
+        "macro-08",
+        "macro-09",
+        "macro-11",
+        "macro-12",
+        "macro-18"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the preference conflict and joint decision prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from negotiation process; the core is choice or allocation under preference conflict."
+      ]
+    },
+    {
+      "id": "macro-11",
+      "level": "macro",
+      "layer": "macro",
+      "family": "commitments-plans-and-next-action",
+      "title": "Commitments, Plans, and Next Action",
+      "core_question": "what a character does next when existing commitments compete with a new opportunity",
+      "decision_variable": "what a character does next when existing commitments compete with a new opportunity",
+      "direct_route_rule": "Route immediately when multiple actions compete and priority must be resolved by commitment, continuation, invitation, or task load.",
+      "expandable_micro_ids": [
+        "micro-08",
+        "micro-21",
+        "micro-23",
+        "micro-24",
+        "micro-25"
+      ],
+      "boundary_neighbors": [
+        "macro-07",
+        "macro-10",
+        "macro-12",
+        "macro-13"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the commitments, plans, and next action prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from general goal conflict; the core is commitment, plan, and next action."
+      ]
+    },
+    {
+      "id": "macro-12",
+      "level": "macro",
+      "layer": "macro",
+      "family": "faux-pas-offense-and-social-embarrassment",
+      "title": "Faux Pas, Offense, and Social Embarrassment",
+      "core_question": "whether behavior creates offense, awkwardness, or face threat",
+      "decision_variable": "whether behavior creates offense, awkwardness, or face threat",
+      "direct_route_rule": "Route immediately when a remark, secret, or disclosure creates social harm or awkwardness.",
+      "expandable_micro_ids": [
+        "micro-30",
+        "micro-39",
+        "micro-42",
+        "micro-46",
+        "micro-48"
+      ],
+      "boundary_neighbors": [
+        "macro-07",
+        "macro-08",
+        "macro-17",
+        "macro-20"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the faux pas, offense, and social embarrassment prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from apology and repair; the core is whether an act caused offense, embarrassment, or face threat."
+      ]
+    },
+    {
+      "id": "macro-13",
+      "level": "macro",
+      "layer": "macro",
+      "family": "spatial-social-perspective-judgment",
+      "title": "Spatial Social Perspective Judgment",
+      "core_question": "what a target character can see or how they understand spatial relations from their viewpoint",
+      "decision_variable": "what a target character can see or how they understand spatial relations from their viewpoint",
+      "direct_route_rule": "Route immediately when left-right, rotation, viewpoint, or cube/dice/picture perspective is central.",
+      "expandable_micro_ids": [
+        "micro-05",
+        "micro-06",
+        "micro-07",
+        "micro-11"
+      ],
+      "boundary_neighbors": [
+        "macro-11",
+        "macro-12",
+        "macro-14",
+        "macro-15"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the spatial social perspective judgment prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from belief inference; the core is spatial perspective and visibility."
+      ]
+    },
+    {
+      "id": "macro-14",
+      "level": "macro",
+      "layer": "macro",
+      "family": "estimation",
+      "title": "Quantity, Probability, and Social Estimation",
+      "core_question": "how to estimate under vague quantities, samples, and base rates",
+      "decision_variable": "how to estimate under vague quantities, samples, and base rates",
+      "direct_route_rule": "Route immediately when vague quantities or partial observation require estimation or update.",
+      "expandable_micro_ids": [
+        "micro-03",
+        "micro-53",
+        "micro-54",
+        "micro-55"
+      ],
+      "boundary_neighbors": [
+        "macro-01",
+        "macro-02",
+        "macro-05",
+        "macro-07",
+        "macro-12",
+        "macro-13",
+        "macro-15",
+        "macro-17"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the quantity, probability, and social estimation prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from causal attribution; the core is quantity, probability, and estimation."
+      ]
+    },
+    {
+      "id": "macro-15",
+      "level": "macro",
+      "layer": "macro",
+      "family": "relationships",
+      "title": "Trust, Relationship, and Long-Term Interaction",
+      "core_question": "how long-term history affects trust, reputation, and relationship judgment",
+      "decision_variable": "how long-term history affects trust, reputation, and relationship judgment",
+      "direct_route_rule": "Route immediately when trust, reputation, identity, role, or long-term relational history matters.",
+      "expandable_micro_ids": [
+        "micro-18",
+        "micro-44",
+        "micro-45",
+        "micro-46",
+        "micro-47",
+        "micro-56"
+      ],
+      "boundary_neighbors": [
+        "macro-01",
+        "macro-07",
+        "macro-08",
+        "macro-16",
+        "macro-17",
+        "macro-19",
+        "macro-20"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the trust, relationship, and long-term interaction prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from single-source credibility; the core is long-term relational history and reputation."
+      ]
+    },
+    {
+      "id": "macro-16",
+      "level": "macro",
+      "layer": "macro",
+      "family": "dialogue-misunderstanding-repair-and-clarification",
+      "title": "Dialogue Misunderstanding Repair and Clarification",
+      "core_question": "how to detect and clarify a live misunderstanding in conversation",
+      "decision_variable": "how to detect and clarify a live misunderstanding in conversation",
+      "direct_route_rule": "Route immediately when the scene is a live conversational misunderstanding that can be clarified on the spot.",
+      "expandable_micro_ids": [
+        "micro-02",
+        "micro-03",
+        "micro-36",
+        "micro-40",
+        "micro-48"
+      ],
+      "boundary_neighbors": [
+        "macro-07",
+        "macro-08",
+        "macro-09",
+        "macro-17",
+        "macro-18"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the dialogue misunderstanding repair and clarification prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from apology after relationship damage; the focus is real-time clarification."
+      ]
+    },
+    {
+      "id": "macro-17",
+      "level": "macro",
+      "layer": "macro",
+      "family": "apology-compensation-and-reconciliation",
+      "title": "Apology, Compensation, and Reconciliation",
+      "core_question": "how to acknowledge, compensate, and restore interaction after relationship damage",
+      "decision_variable": "how to acknowledge, compensate, and restore interaction after relationship damage",
+      "direct_route_rule": "Route immediately when the scene centers on apology, repair, or relationship recovery after harm or offense.",
+      "expandable_micro_ids": [
+        "micro-02",
+        "micro-42",
+        "micro-43",
+        "micro-48",
+        "micro-49"
+      ],
+      "boundary_neighbors": [
+        "macro-15",
+        "macro-16",
+        "macro-18",
+        "macro-19"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the apology, compensation, and reconciliation prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from real-time misunderstanding clarification; the focus is repair after damage."
+      ]
+    },
+    {
+      "id": "macro-18",
+      "level": "macro",
+      "layer": "macro",
+      "family": "decision-conflict",
+      "title": "Negotiation, Compromise, and Joint Plan",
+      "core_question": "how conflicting sides can reach a mutually acceptable plan through concessions",
+      "decision_variable": "how conflicting sides can reach a mutually acceptable plan through concessions",
+      "direct_route_rule": "Route immediately when the case requires offers, concessions, trade-offs, or a shared solution under conflict.",
+      "expandable_micro_ids": [
+        "micro-19",
+        "micro-20",
+        "micro-25",
+        "micro-44",
+        "micro-51"
+      ],
+      "boundary_neighbors": [
+        "macro-16",
+        "macro-17",
+        "macro-19",
+        "macro-20"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the negotiation, compromise, and joint plan prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from one-way persuasion; this scene requires both sides to adjust."
+      ]
+    },
+    {
+      "id": "macro-19",
+      "level": "macro",
+      "layer": "macro",
+      "family": "first-impression-self-presentation-and-formal-interaction",
+      "title": "First Impression, Self-Presentation, and Formal Interaction",
+      "core_question": "how to manage the image one presents to others",
+      "decision_variable": "how to manage the image one presents to others",
+      "direct_route_rule": "Route immediately when first impressions, self-presentation, or formal interaction style are central.",
+      "expandable_micro_ids": [
+        "micro-29",
+        "micro-39",
+        "micro-40",
+        "micro-50"
+      ],
+      "boundary_neighbors": [
+        "macro-01",
+        "macro-05",
+        "macro-17",
+        "macro-18",
+        "macro-20"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the first impression, self-presentation, and formal interaction prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from power communication; the focus is self-image presentation."
+      ]
+    },
+    {
+      "id": "macro-20",
+      "level": "macro",
+      "layer": "macro",
+      "family": "power",
+      "title": "Power Gap, Escalation, and Hierarchical Communication",
+      "core_question": "what communication action is appropriate under a power gap",
+      "decision_variable": "what communication action is appropriate under a power gap",
+      "direct_route_rule": "Route immediately when the scene involves hierarchy, escalation, deference, challenge, or cross-level communication.",
+      "expandable_micro_ids": [
+        "micro-39",
+        "micro-40",
+        "micro-45",
+        "micro-46",
+        "micro-48",
+        "micro-52"
+      ],
+      "boundary_neighbors": [
+        "macro-01",
+        "macro-05",
+        "macro-07",
+        "macro-17",
+        "macro-18",
+        "macro-19"
+      ],
+      "source_mix": [
+        "benchmark",
+        "psychology",
+        "real-world"
+      ],
+      "use_when": [
+        "Use when the scene matches the power gap, escalation, and hierarchical communication prototype."
+      ],
+      "do_not_use_when": [
+        "Do not use when the scene is better explained by a narrower micro capability than differs from role-structure recognition; the focus is communication action under hierarchy."
+      ]
+    }
+  ],
+  "coverage_map": {
+    "benchmark": [
+      "ToMBench",
+      "CogToM",
+      "skills_v1/error_dataset",
+      "skills_v4/data"
+    ],
+    "real_world": [
+      "privacy",
+      "trust",
+      "relationships",
+      "power",
+      "identity",
+      "repair",
+      "audience calibration",
+      "commitment priority"
+    ]
+  },
+  "generation_notes": [
+    "Registry was generated locally from the English framework text.",
+    "Plan stage is deterministic and does not call the LLM."
+  ]
+}

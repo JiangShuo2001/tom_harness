@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-02",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Maya and Leo put a camera in the drawer. Leo leaves. While Leo is gone, Maya moves the camera to the shelf. Maya knows Leo did not see the move.",
+      "question": "Where does Maya think Leo will look for the camera first?",
+      "options": [
+        "In the drawer",
+        "On the shelf",
+        "In both places equally",
+        "Wherever Maya last touched it"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Maya must model Leo's outdated belief, not the real location."
+    },
+    {
+      "id": "case_2",
+      "pattern": "boundary",
+      "scene": "Nora and Sam both watch a ticket being moved from the blue folder to the red folder. They also see each other watching the move. Later, Nora predicts where Sam will search.",
+      "question": "Where does Nora think Sam will look for the ticket first?",
+      "options": [
+        "In the blue folder",
+        "In the red folder",
+        "Under the table",
+        "Nora cannot form any expectation"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "The answer depends on common knowledge: Nora knows Sam saw the move and knows Sam is informed."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Owen puts his snack in the top cabinet. While he is outside, his sister moves it to the bottom cabinet. Owen does not see this happen.",
+      "question": "Where will Owen look for his snack first?",
+      "options": [
+        "In the top cabinet",
+        "In the bottom cabinet",
+        "In both cabinets at once",
+        "Where his sister is standing"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is only first-order false belief; no character is modeling another character's belief."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Iris hides a note in a vase. Jon secretly sees her move it to a book. Iris does not know Jon saw the move. Iris later wonders where Jon will search.",
+      "question": "Where does Iris think Jon will look for the note first?",
+      "options": [
+        "In the vase",
+        "In the book",
+        "In Jon's pocket",
+        "Where the note actually is, because Jon knows"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This case targets the shortcut of answering from Jon's real knowledge instead of Iris's model of Jon's knowledge."
+    }
+  ]
+}

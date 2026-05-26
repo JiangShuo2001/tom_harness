@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-16",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "At the team meeting, the manager announces to Alice and Ben in front of everyone that the deadline is Friday. Alice nods, Ben repeats the date, and both hear the same announcement.",
+      "question": "Is the Friday deadline common knowledge between Alice and Ben?",
+      "options": [
+        "Yes, because the deadline was openly announced and both know the other heard it.",
+        "Yes, but only Alice knows it.",
+        "No, because the announcement was private.",
+        "No, because neither person heard the date."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct match: public disclosure plus explicit mutual awareness."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Mia tells Noah that the store closes at 6. Later, Noah thinks Mia will leave early to shop before closing.",
+      "question": "Does this scene ask whether the store-closing time is common knowledge between them?",
+      "options": [
+        "Yes, because Noah heard the time.",
+        "No, because the question is about Noah's expectation of Mia's action, not mutual knowledge.",
+        "Yes, because Mia said it out loud once.",
+        "No, because the store closing time cannot be known."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Near-miss: it looks related to shared information, but the target is second-order belief/action prediction."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "The teacher announces the test date to the class, but Tara was outside the room and missed the announcement. Leo heard it.",
+      "question": "Is the test date common knowledge between Tara and Leo?",
+      "options": [
+        "Yes, because the announcement was public.",
+        "Yes, because Leo knows the date.",
+        "No, because Tara missed the announcement.",
+        "No, because public announcements never count."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Hard boundary: public disclosure alone is not enough if one party did not receive it."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Two coworkers read an online post from an unknown account saying the office will close next Monday. No one has verified it.",
+      "question": "Is the office closure a case of common knowledge for the coworkers?",
+      "options": [
+        "Yes, because both saw the same post.",
+        "Yes, because anything online is automatically shared knowledge.",
+        "No, because it is only an unverified rumor from an unknown source.",
+        "No, because one coworker forgot it immediately."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Boundary against a source-credibility shortcut: shared exposure is not enough when the status is rumor or unverified."
+    }
+  ]
+}

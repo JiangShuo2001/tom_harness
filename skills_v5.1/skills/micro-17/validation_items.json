@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-17",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Leah says, \"I think the train leaves at 6, but I'm not fully sure.\"",
+      "question": "How certain is Leah?",
+      "options": [
+        "Fully certain",
+        "Somewhat uncertain",
+        "Changed her belief because of new evidence",
+        "Does not know whether the source is reliable"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Direct match: the task is about Leah's subjective certainty, not the truth of the train time."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "After checking the timetable, Leah now believes the train leaves at 6.",
+      "question": "What is the main issue here?",
+      "options": [
+        "How sure Leah feels",
+        "Whether Leah updated her belief from new evidence",
+        "Whether the timetable source is deceptive",
+        "Whether Leah and someone else share knowledge"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Near-miss: the scene is about belief change from evidence, so this exits to evidence updating rather than uncertain belief."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Sam and Dana both saw the same sign, and each knows the other saw it too.",
+      "question": "What is the best skill match?",
+      "options": [
+        "Uncertain belief",
+        "Source credibility",
+        "Common knowledge",
+        "Preference or goal"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Hard boundary: the issue is mutual knowledge, not uncertainty about a belief."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Mina says, \"I'm sure the keys are in the drawer,\" but later the keys are found elsewhere.",
+      "question": "How certain was Mina?",
+      "options": [
+        "Fully certain",
+        "Only partly convinced",
+        "Doubtful about the source",
+        "Unsure because of new evidence"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This catches a common shortcut: a wrong belief can still be held with high certainty."
+    }
+  ]
+}

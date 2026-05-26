@@ -1,0 +1,117 @@
+{
+  "frontmatter_description": "Direct-route macro for estimating quantities, probabilities, or best guesses from partial evidence, vague counts, or base rates.",
+  "title": "Quantity, Probability, and Social Estimation",
+  "use_when": [
+    "Use when the scene asks for a count, amount, proportion, likelihood, or best estimate under incomplete or noisy evidence.",
+    "Use when the main task is to update a guess from a sample, a base rate, or partial observation.",
+    "Use when a social judgment is framed as an estimate rather than a causal, emotional, or relational inference.",
+    "Use when the question is about how many, how much, how likely, or which option is more probable."
+  ],
+  "do_not_use_when": [
+    "Do not use when the real task is causal attribution, such as why an event happened or who caused it.",
+    "Do not use when the scene is mainly about belief, intention, emotion, language meaning, trust, or social repair.",
+    "Do not use when spatial viewpoint, visibility, or perspective taking is the core problem.",
+    "Do not use when the question is primarily about offense, embarrassment, or faux pas rather than estimation."
+  ],
+  "decision_variable": "how to estimate under vague quantities, samples, and base rates",
+  "direct_route_rule": "Route immediately when vague quantities or partial observation require estimation or update.",
+  "expandable_micro_ids": [
+    "micro-53",
+    "micro-54",
+    "micro-55"
+  ],
+  "trigger_checklist": [
+    "The question asks for an approximate number, amount, rate, or probability.",
+    "Only part of the relevant evidence is visible, sampled, or known.",
+    "A base rate, prior frequency, or small sample must be turned into a best estimate.",
+    "The answer should be the most likely estimate, not a narrative explanation.",
+    "The scene does not hinge on who believes what, who saw what, or what someone meant."
+  ],
+  "workflow": [
+    "Identify the target quantity: count, amount, proportion, or probability.",
+    "Separate observed evidence from hidden total population, unseen cases, or prior base rate.",
+    "Check whether the question asks for a point estimate, a comparison, or a likely range.",
+    "Use the strongest available evidence without overfitting a tiny sample.",
+    "If the evidence is partial, return the best estimate that balances sample clues and prior frequency.",
+    "State the answer as the most probable value or the most defensible approximation."
+  ],
+  "special_case": {
+    "title": "Small sample versus base rate",
+    "rule": "When a tiny sample conflicts with a stable base rate, prefer the base rate unless the sample is clearly diagnostic or the prompt explicitly asks for the sample-only estimate.",
+    "worked_example": {
+      "scene": "A manager sees only two customer reviews, both positive, but knows the product category is usually mixed.",
+      "question": "How likely is the product to be broadly well received?",
+      "answer_logic": "Do not treat two positive reviews as decisive. Combine the small sample with the broader category base rate, then give the most likely moderate estimate rather than an extreme conclusion."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to a causal macro / micro-56 if the question is really about why something happened, not how likely or how many.",
+    "Exit to macro-01 / macro-02 / macro-05 / macro-07 if the answer depends on belief, intention, emotion, or communication meaning rather than estimation.",
+    "Exit to macro-13 if the key issue is perspective, visibility, or who noticed what.",
+    "Exit to macro-15 / macro-17 / macro-12 if the scene is better handled by trust history, apology, or embarrassment.",
+    "Add micro-53 when interpreting a vague quantifier (\"a few\", \"most\", \"almost half\").",
+    "Add micro-54 when sample observations must be turned into a population estimate.",
+    "Add micro-55 when a base rate or category typicality drives the answer."
+  ],
+  "references": {
+    "route_signal": "The prompt contains vague quantity language, incomplete evidence, sampled data, or a request for the best estimate, likelihood, or count.",
+    "hard_boundary": [
+      "Not causal attribution",
+      "Not belief tracking",
+      "Not emotion inference",
+      "Not viewpoint or visibility reasoning",
+      "Not pragmatic meaning repair",
+      "Not trust or relationship judgment"
+    ],
+    "shortcut_to_avoid": [
+      "Do not explain the answer as a motive, intention, or hidden belief when the question is numeric or probabilistic.",
+      "Do not jump from one small clue to certainty when the scene only supports a best estimate.",
+      "Do not confuse a social estimate with an emotional or moral judgment."
+    ],
+    "common_failure_modes": [
+      "Overweighting one visible sample and ignoring the base rate.",
+      "Answering with a causal story instead of an estimate.",
+      "Treating uncertainty as ignorance when the task only requires the most likely value.",
+      "Using a relational or emotional macro when the core is numerical approximation.",
+      "Giving an exact count when the scene only supports a rough estimate."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A jar is partly visible and the question asks for the best estimate of how many items are inside.",
+        "why_it_matches": "The core task is quantity estimation from partial observation."
+      },
+      {
+        "case": "A manager sees one employee finish on time and the question asks why that employee succeeded.",
+        "why_it_matches": "This is a near miss: it involves partial observation, but the target is causal attribution rather than a count or probability, so it routes away from estimation."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the scene asks why the person acted that way, it is not this macro.",
+      "If the scene asks what someone believes another person saw or knew, it is not this macro.",
+      "If the scene asks whether a remark was rude or embarrassing, it is not this macro.",
+      "If the scene asks for a numerical guess plus a hidden intention, solve the estimate here only if the estimate is the main question."
+    ],
+    "generalization_note": "This macro covers robust estimation across benchmark-style partial-information items and real-world judgments where people must infer rough quantities, rates, or likelihoods without full data."
+  },
+  "validation_seed": {
+    "positive_pattern": "A scene provides partial evidence or a small sample and asks for the most likely count, amount, or probability.",
+    "near_miss_pattern": "A scene mentions uncertainty but the real question is who believed what, who intended what, or why something happened.",
+    "boundary_pattern": "A scene looks quantitative on the surface, but the decisive issue is social harm, perspective, trust, or conversational meaning."
+  },
+  "notes": [
+    "Keep the answer centered on estimation, not explanation.",
+    "Use the micro ids only for diagnosis, refinement, or boundary repair.",
+    "Prefer a simple best estimate over a memorized benchmark-specific heuristic.",
+    "This macro should route directly for generic vague-quantity and partial-observation cases."
+  ],
+  "id": "macro-14",
+  "level": "macro",
+  "layer": "macro",
+  "family": "estimation",
+  "core_question": "how to estimate under vague quantities, samples, and base rates",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

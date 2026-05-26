@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-35",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "At dinner, A says to B, \"Can you pass the salt?\"",
+      "question": "What social act is A performing?",
+      "options": [
+        "Requesting the salt",
+        "Describing B's ability",
+        "Refusing the meal",
+        "Warning about salt"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "A question form functions as a request, which is the target speech act."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "A says to a roommate, \"It's getting chilly in here,\" while looking toward the window.",
+      "question": "What is A doing socially?",
+      "options": [
+        "Requesting that the window be closed",
+        "Reporting the temperature",
+        "Asking whether it is cold",
+        "Complaining about the weather only"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a classic indirect request that can be mistaken for a plain statement."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "A says to B, \"You left your badge on the desk,\" as B heads toward the exit.",
+      "question": "What extra meaning is being conveyed?",
+      "options": [
+        "B should go back for the badge",
+        "The badge is physically on the desk",
+        "A is refusing entry",
+        "The badge is fake"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This tests a nearby implicature-style question rather than the speech act itself."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "In a staff briefing, someone says, \"The server maintenance begins at 2 a.m.\"",
+      "question": "What does the sentence explicitly say?",
+      "options": [
+        "The maintenance starts at 2 a.m.",
+        "The speaker is warning staff",
+        "The speaker is making a request",
+        "The speaker is inviting people"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a literal-meaning case, so it should not be treated as an indirect speech act question."
+    }
+  ]
+}

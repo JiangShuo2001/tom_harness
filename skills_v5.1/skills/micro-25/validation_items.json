@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-25",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Maya has one free evening. She wants to practice piano because auditions are soon, but she also wants to join her friends at a new cafe. No one is expecting her, and she has made no promise.",
+      "question": "Which goal is Maya weighting more strongly if she chooses based on the audition being soon?",
+      "options": [
+        "Improving her audition readiness",
+        "Keeping a prior promise to friends",
+        "Finding out what her friends intend",
+        "Predicting the exact next action she will take"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Two active desires compete, and no commitment settles the choice. The answer depends on which goal gets more weight."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Leo wants to stay home and rest, but he already promised his sister he would drive her to the airport tonight. He also knows she has no backup ride.",
+      "question": "Which factor should determine the priority in this scene?",
+      "options": [
+        "The stronger immediate comfort goal",
+        "The existing promise to his sister",
+        "The emotion Leo will feel afterward",
+        "The most visible action in the scene"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This looks like a goal conflict, but the prior promise makes it a commitment-priority case, not goal-conflict arbitration."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Nina is hungry and wants lunch, but she also wants to finish reading one more page of her report. She closes the report and picks up her wallet.",
+      "question": "What will Nina do next?",
+      "options": [
+        "Go get lunch",
+        "Rank lunch as morally better than work",
+        "Decide which goal matters more in general",
+        "Infer that someone persuaded her"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The question asks for the next action, so it belongs to action prediction rather than goal-weighting diagnosis."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Omar wants to buy a concert ticket, but he also wants to save money for a replacement laptop. He says the laptop affects his schoolwork, while the concert would just be fun.",
+      "question": "Which goal dominates under Omar's stated weighting rule?",
+      "options": [
+        "Saving for the laptop",
+        "Buying the concert ticket because it is more visible",
+        "Honoring a scheduled appointment",
+        "Feeling proud after succeeding"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct goal tradeoff. It also guards against the shortcut of choosing the more vivid or visible action instead of the stated priority rule."
+    }
+  ]
+}

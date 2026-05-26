@@ -1,0 +1,105 @@
+{
+  "frontmatter_description": "Diagnose when the core issue is shaping the impression other people form through self-description, disclosure order, or image management.",
+  "title": "Self-Presentation and Impression Management",
+  "use_when": [
+    "Use when the question is about what image the person wants others to form.",
+    "Use when the key choice is how to present self-information, order disclosures, or describe oneself.",
+    "Use when the main task is managing how one is seen, not whether the information is private or true.",
+    "Use when the scene asks what to reveal first, what to emphasize, or how to frame identity for an audience."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is whether information should remain private; use privacy and boundaries instead.",
+    "Do not use when the main issue is apology, repair, or easing hurt after harm; use relationship repair instead.",
+    "Do not use when the main issue is negotiation, compromise, or mutual adjustment; use joint plan skills instead.",
+    "Do not use when the main issue is power, hierarchy, escalation, or deference across rank; use power navigation instead.",
+    "Do not use when the question is about true emotion display versus concealment; that is emotional inference or display, not overall image management."
+  ],
+  "decision_variable": "the desired impression others should form",
+  "trigger_checklist": [
+    "Is the answer about how the person wants to be seen?",
+    "Is the key lever what to say first, omit, emphasize, or frame?",
+    "Is the content about identity presentation rather than fact detection?",
+    "Would changing the order or tone of self-disclosure change the social image?",
+    "Is the issue broad self-image, not one protected secret or one apology?"
+  ],
+  "workflow": [
+    "Identify the audience and the social goal of the presentation.",
+    "Ask what impression the speaker wants to create or protect.",
+    "Check whether the choice is about disclosure order, framing, or self-description.",
+    "Ignore the factual truth question unless deception is the main issue.",
+    "Choose the option that best fits the intended image."
+  ],
+  "special_case": {
+    "title": "Image management with truthful disclosure",
+    "rule": "Truthful statements can still be impression management if the question is about which facts to lead with, how to frame them, or which identity to signal.",
+    "worked_example": {
+      "scene": "A job candidate lists volunteer work before test scores in a self-introduction.",
+      "question": "Why did they choose that order?",
+      "answer_logic": "The decision is driven by the image they want to project first, so this is self-presentation rather than privacy, repair, or lying."
+    }
+  },
+  "boundary_exit_rule": [
+    "If the core question becomes whether information should be shared at all, exit to privacy and boundaries (micro-48).",
+    "If the core question becomes how to respond after offense or damage, exit to repair and apology (micro-49).",
+    "If the core question becomes what action best satisfies both sides, exit to negotiation or joint planning (micro-51).",
+    "If the core question becomes what a superior or subordinate should say, exit to power navigation (micro-52).",
+    "If the core question becomes what emotion is actually being felt or shown, exit to emotion inference (micro-28 / micro-29).",
+    "If the scene is a full first-impression or formal-interaction prototype rather than a single self-presentation diagnostic, route up to macro-19 and use this micro only as expansion."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the scene asks how a person manages self-image, disclosure order, or self-description to shape others' impressions.",
+    "hard_boundary": [
+      "Privacy is about whether information may be shared; this unit is about how to present self-information once presentation is in view.",
+      "Repair is about fixing harm after a social break; this unit is about image before or apart from repair.",
+      "Power navigation is about strategy under hierarchy; this unit is about the image being projected, not rank-based tactics.",
+      "Emotional display concerns visible feeling; this unit concerns the broader social picture of the self."
+    ],
+    "shortcut_to_avoid": [
+      "Do not equate impression management with lying; truthful framing can still be self-presentation.",
+      "Do not use secrecy as the default answer; secrecy may serve image, but the variable is the intended impression.",
+      "Do not overfocus on single emotion cues; the unit is about overall self-image, not expression decoding."
+    ],
+    "common_failure_modes": [
+      "Confusing image management with privacy control.",
+      "Treating apology or repair as if it were self-presentation.",
+      "Assuming any selective disclosure is deception.",
+      "Missing that disclosure order alone can be the diagnostic clue."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A person introduces themselves by leading with leadership experience instead of a recent job gap.",
+        "why_it_matches": "The choice is driven by the impression they want others to form from the self-description."
+      },
+      {
+        "case": "A person refuses to tell friends a confidential medical detail.",
+        "why_it_matches": "This is primarily about whether the information should be shared, so it belongs to privacy and boundaries."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the person could say the same facts in a different order and change the impression, this unit may apply.",
+      "If the main goal is to protect a secret rather than shape a public image, this unit should not be used.",
+      "If the scene adds apology, blame, or reconciliation, the center of gravity has moved out of this unit."
+    ],
+    "generalization_note": "This unit covers bios, introductions, first impressions, selective disclosure, and framing choices whenever the primary variable is the impression others should form."
+  },
+  "validation_seed": {
+    "positive_pattern": "The speaker chooses what to reveal first in order to look competent, trustworthy, or likable.",
+    "near_miss_pattern": "The speaker hides a fact because it is private, but the question is really about disclosure permission.",
+    "boundary_pattern": "The speaker apologizes after upsetting someone, and the task is to repair the relationship."
+  },
+  "notes": [
+    "Keep the unit narrow: image management only, not all communication strategy.",
+    "Do not absorb privacy, repair, persuasion, or hierarchy into this skill.",
+    "A good diagnostic cue is the question 'What impression should others get?'"
+  ],
+  "id": "micro-50",
+  "level": "micro",
+  "layer": "L6",
+  "family": "norms-relationships",
+  "core_question": "Manage self-information, image, disclosure order, and self-description",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-08",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Ava is told the parcel is in the mailroom. Before she goes to get it, she receives a text correcting it to the loading dock, and she reads the text.",
+      "question": "Where will Ava go?",
+      "options": [
+        "To the loading dock",
+        "To the mailroom",
+        "To the front desk",
+        "She will not go anywhere"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "A later accessible correction updates the earlier belief before action."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Yesterday Ben was told the keys were in the blue drawer. This morning he cannot remember that instruction and, relying on habit, checks the red drawer first.",
+      "question": "Where will Ben look first?",
+      "options": [
+        "The blue drawer",
+        "The red drawer",
+        "The mailbox",
+        "His pocket"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "The key issue is forgetting, not event order."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Clara is told the meeting is at 2. Later a text changes it to 3, but her phone stays in her bag and she never reads it before leaving.",
+      "question": "What time does Clara think the meeting is?",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "She has no idea"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "A later update exists, but it was not accessible to her."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "The story first says Max searched the closet. Later, in a flashback, it reveals that before he searched, he had already been told the coat was moved to the hallway.",
+      "question": "Where should Max look if the timeline is followed?",
+      "options": [
+        "The closet",
+        "The hallway",
+        "The kitchen",
+        "The garage"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This catches the shortcut of using sentence order instead of actual event order."
+    }
+  ]
+}

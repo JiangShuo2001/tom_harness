@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-05",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Maya is reading at a desk. A bright red mug sits in clear view on the table next to her notebook.",
+      "question": "Can Maya directly perceive the red mug through vision?",
+      "options": [
+        "Yes, the mug is visually available to her",
+        "No, because she is not looking at it",
+        "No, because she only hears it described",
+        "Yes, but only through touch"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Tests direct sensory access even when attention is elsewhere."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Jon hears a crash from the kitchen and sees broken glass on the floor after he walks in.",
+      "question": "Did Jon directly perceive that the vase hit the floor?",
+      "options": [
+        "Yes, he directly saw the vase hit the floor",
+        "No, he only inferred it from the broken glass and crash",
+        "Yes, because he heard a crash",
+        "No, because broken glass cannot be seen"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Separates direct perception from inference from clues."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Nina is in another room when her brother says, 'The cookie jar is empty.' She never goes to the kitchen.",
+      "question": "Did Nina directly perceive the jar's contents?",
+      "options": [
+        "Yes, because she heard the statement",
+        "Yes, because she can imagine the jar",
+        "No, she only received a report about it",
+        "No, because hearing is never a sensory channel"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Checks the report-versus-direct-access boundary."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "While standing outside a closed apartment door, Priya smells smoke coming from inside and assumes the stove is on fire.",
+      "question": "Did Priya directly perceive that there was a fire on the stove?",
+      "options": [
+        "Yes, the smoke smell gives direct access to the fire itself",
+        "No, she only perceived smoke and inferred the fire",
+        "Yes, because she can smell anything inside the apartment",
+        "No, because smell is not a valid sensory channel"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Targets the shortcut of treating a sensory cue as access to the hidden fact."
+    }
+  ]
+}

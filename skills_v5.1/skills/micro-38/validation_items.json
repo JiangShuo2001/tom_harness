@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-38",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A used car seller says, 'This car passed inspection last month.' The seller does not mention that the transmission started failing yesterday. The buyer assumes the car is currently in good working condition.",
+      "question": "Which classification best fits the seller's statement?",
+      "options": [
+        "It is misleading because a true statement leads the buyer to a false belief.",
+        "It is only a simple false statement because the inspection claim is untrue.",
+        "It is only an implicature question because the buyer inferred something extra.",
+        "It is not misleading because the statement about inspection is literally true."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The sentence may be true, but the omitted recent problem steers the listener toward a false current-condition belief."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A applicant says, 'I graduated from Eastview University.' In fact, the applicant never attended Eastview University. The employer believes the applicant has that degree.",
+      "question": "Why is this not the best case for misleading selective expression?",
+      "options": [
+        "Because the statement is plainly false, so the main issue is truth or lying.",
+        "Because the employer correctly understood the applicant's intended meaning.",
+        "Because the applicant used language that was too technical for the audience.",
+        "Because the statement is true but incomplete."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a hard near-miss: the problem is factual falsity, not a true statement producing a false inference."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "A says, 'The meeting starts at 3 p.m.' The calendar also says 3 p.m., and the listener correctly believes the meeting starts then. No important timing detail is omitted.",
+      "question": "Does this belong in the misleading and selective expression unit?",
+      "options": [
+        "Yes, because any statement can carry unstated implications.",
+        "Yes, because the listener inferred the meeting time from the sentence.",
+        "No, because the listener is not led to any false belief.",
+        "No, because the speaker's motive is unknown."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "The statement is true and the listener's inference is accurate, so the unit should not be used."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "A tenant asks whether the apartment is quiet. The landlord says, 'The building has thick walls.' That is true, but the landlord leaves out that loud trains pass directly outside every ten minutes. The tenant assumes noise will not be a problem.",
+      "question": "What is the best analysis?",
+      "options": [
+        "The statement is not misleading because thick walls are real.",
+        "The statement is misleading because the true detail frames the apartment as quiet while omitting the main noise source.",
+        "The statement is a lie because the building does not have thick walls.",
+        "The issue is only why the landlord chose that wording."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This targets the shortcut that a true sentence cannot mislead; the communicative effect creates a false impression."
+    }
+  ]
+}

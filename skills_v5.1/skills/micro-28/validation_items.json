@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-28",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Nina wanted the lead in the school play, but her friend got it instead. At the announcement, Nina smiled and said, \"That's great, congratulations.\" Later she looked upset alone.",
+      "question": "How does Nina really feel when she congratulates her friend?",
+      "options": [
+        "Disappointed",
+        "Proud",
+        "Relieved",
+        "Amused"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct hidden-emotion match: her smile conflicts with the private disappointment, so the visible expression is not the true feeling."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "After losing the final race, Omar frowned, sighed, and said, \"I'm angry about that finish.\"",
+      "question": "What is Omar feeling?",
+      "options": [
+        "Angry",
+        "Excited",
+        "Grateful",
+        "Calm"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Near-miss: the emotion is openly shown, so there is no mismatch to detect."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "During a tense emergency at the clinic, Dr. Rao kept a steady voice and controlled his face while giving instructions.",
+      "question": "Why does Dr. Rao keep his expression so controlled?",
+      "options": [
+        "He is following professional rules",
+        "He is secretly thrilled",
+        "He feels no stress at all",
+        "He is mocking the situation"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Boundary case for display rules: the question asks why he stays calm, not what he privately feels."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Maya forgot her friend's birthday and later went quiet and avoided eye contact when the friend mentioned it.",
+      "question": "What is the main feeling behind Maya's silence?",
+      "options": [
+        "Guilt",
+        "Joy",
+        "Relief",
+        "Pride"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Boundary case for moral emotion: responsibility is the core inference, so this is not just hidden emotion."
+    }
+  ]
+}

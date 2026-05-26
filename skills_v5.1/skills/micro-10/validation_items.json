@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-10",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A doctor tells a patient, 'The biopsy looks benign.' The patient hears the word clearly but does not know its medical meaning.",
+      "question": "Does the patient understand what the doctor means?",
+      "options": [
+        "Yes, the patient understands the meaning.",
+        "No, the patient lacks the background knowledge to decode the term.",
+        "No, the patient did not hear the doctor speak.",
+        "Yes, because the patient has no reason to doubt the doctor."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Direct match: perception is intact, but medical background is missing."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A former lab technician once knew what 'PCR' meant, but after years away from the field she cannot remember the definition during a conversation.",
+      "question": "Does she understand the term in this moment?",
+      "options": [
+        "Yes, she still understands it.",
+        "No, because this is a memory problem, not a background-knowledge gap.",
+        "No, because she never heard the term before.",
+        "Yes, because she believes the term is important."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Near-miss: the issue is forgetting, so it should exit to memory."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "In a noisy workshop, a supervisor says, 'Check the torque spec on the chart.' The apprentice only hears the word 'chart' and misses the rest.",
+      "question": "Can the apprentice interpret the instruction?",
+      "options": [
+        "Yes, because hearing one word is enough.",
+        "No, because the key information was not perceived.",
+        "No, because the apprentice lacks engineering training.",
+        "Yes, because the supervisor sounds confident."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Hard boundary: the barrier is perception, not background knowledge."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "At an office, a manager says, 'Let's circle back after EOD.' A new intern hears it clearly but has never learned the workplace phrase.",
+      "question": "Does the intern understand the intended meaning?",
+      "options": [
+        "Yes, the intern understands the jargon.",
+        "No, the intern lacks the workplace background to interpret it.",
+        "No, the intern must dislike the manager.",
+        "Yes, because the manager is probably joking."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Tests the shortcut trap: this is about jargon comprehension, not emotion or intention."
+    }
+  ]
+}

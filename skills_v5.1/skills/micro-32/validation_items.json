@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-32",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Nina sits beside her brother while he waits for medical test results. He keeps wringing his hands and whispering that he is scared. Nina was calm before, but after watching him she feels tight in her chest and worried too.",
+      "question": "Why does Nina start to feel worried?",
+      "options": [
+        "Her brother's visible fear spreads to her, making her feel anxious for him.",
+        "She compares the result with a better possible outcome and feels regret.",
+        "She feels guilty because she caused her brother's medical problem.",
+        "She only understands that her brother is scared but remains emotionally unchanged."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct match: the target's emotion changes because she perceives another person's fear."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Omar sees a coworker crying after a difficult phone call. Omar thinks, 'She is upset and needs space,' then returns to his task feeling steady and neutral.",
+      "question": "What is the best classification of Omar's response?",
+      "options": [
+        "Emotional contagion, because he catches her sadness.",
+        "Emotion recognition without emotional transmission into Omar.",
+        "Guilt, because he believes he caused the coworker's pain.",
+        "Relief, because the call could have gone worse."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This tests the hard boundary: identifying another person's emotion is not enough unless the observer is emotionally affected."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Leah snaps at her friend, and the friend looks hurt. Leah feels bad mainly because she realizes she was unfair and caused the hurt.",
+      "question": "Which explanation best fits Leah's feeling?",
+      "options": [
+        "She is catching her friend's hurt through emotional contagion.",
+        "She feels guilt because she judges herself responsible for harming her friend.",
+        "She feels surprise because the outcome was unexpected.",
+        "She is regulating her sadness by distracting herself."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a boundary case: the deciding variable is moral responsibility, not transmission of the friend's emotion into Leah."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "During a quiet meeting, one person begins laughing with obvious delight at a harmless mistake. Soon several teammates start smiling and laughing, even those who did not see the mistake clearly.",
+      "question": "Why do the teammates become more cheerful?",
+      "options": [
+        "The first person's amusement spreads through the group and shifts their mood.",
+        "They all independently appraise the mistake as important to their goals.",
+        "They feel shame because they violated a workplace norm.",
+        "They are merely defining what the laughter means."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This case is inspired by a common shortcut: the original event is less important than the visible emotion spreading through the group."
+    }
+  ]
+}

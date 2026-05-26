@@ -36,8 +36,7 @@ logs/
 *.jsonl.tmp
 docs/
 model/
-skills/
-skill_v2/
+cli/
 tom_harness/tools/tomrag/index
 *.faiss
 *.pkl
@@ -50,5 +49,10 @@ secrets.yaml
 # Benchmark / experiment artifacts (regenerable; not source)
 results/
 results_*/
-!results/frozen_v04_selective/
-!results/frozen_v04_selective/**
+examples/
+
+# Benchmark data directories (large, not source)
+benchmark/ICTBench/
+benchmark/tactful-tom/
+benchmark/ToMBench/
+benchmark/CogToM/

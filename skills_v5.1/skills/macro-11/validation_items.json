@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-11",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Nina promised to cover the front desk until 3:00. At 2:30, a coworker invites her to join a quick walk outside.",
+      "question": "What does Nina most likely do next?",
+      "options": [
+        "She stays at the desk until her coverage is finished or arranges proper relief first.",
+        "She leaves immediately because the walk sounds more pleasant.",
+        "She asks the coworker whether walks are usually fun.",
+        "She decides which coworker she likes more."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "A clear standing obligation competes with a new opportunity, so the next action follows the commitment rather than the tempting option."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "Omar is halfway through loading equipment for a school event he agreed to help set up. His friend texts that extra tickets just opened for a movie starting soon.",
+      "question": "What should Omar do next?",
+      "options": [
+        "Finish or coordinate the setup work before considering the movie.",
+        "Drop the equipment and go to the movie because tickets are rare.",
+        "Assume the friend is ordering him to leave the event.",
+        "Think about whether he generally prefers movies to school events."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This targets the shortcut of choosing the most appealing new opportunity while ignoring an already-started commitment."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Leah and Sam are both free Saturday afternoon. Leah wants to go hiking, while Sam wants to watch a film. They have not made any prior plan.",
+      "question": "Which action should be analyzed first?",
+      "options": [
+        "Resolve whose preference should guide the shared choice.",
+        "Assume Leah must continue an existing commitment.",
+        "Treat Sam's film idea as an interruption of a duty.",
+        "Decide that the first suggestion automatically wins."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "There is a preference conflict but no standing commitment, so this is a near-miss for the commitments-and-next-action unit."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Priya is busy preparing a report due today. A teammate asks if she can review a draft. The question is how Priya can politely say she cannot do it right now.",
+      "question": "What is the main reasoning task?",
+      "options": [
+        "Choose the most polite wording for a refusal or delay.",
+        "Decide whether Priya should abandon the report immediately.",
+        "Infer which task Priya secretly enjoys more.",
+        "Judge whether the teammate intended to embarrass Priya."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Although there is an active task and a request, the question asks about phrasing a response, so it falls on a communication boundary rather than next-action priority."
+    }
+  ]
+}

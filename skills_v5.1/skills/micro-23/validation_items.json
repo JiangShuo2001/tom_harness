@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-23",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Lena puts her train ticket in the red purse and leaves the room. While she is gone, Sam moves the ticket to the drawer. Lena returns because she wants to catch the train.",
+      "question": "Where will Lena look first?",
+      "options": [
+        "The red purse",
+        "The drawer",
+        "The couch",
+        "Her pocket"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Classic false-belief action prediction: she should search where she thinks the ticket is."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Ben points at a broken lamp across the room and stays silent.",
+      "question": "Why is Ben pointing there?",
+      "options": [
+        "To show the broken lamp",
+        "To leave the room",
+        "To pick up the lamp",
+        "To ask for food"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This asks for the purpose behind a current gesture, which is intention recognition rather than next-action prediction."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Nina promised to help at the school booth at 3 PM. At 2:50 PM, a friend invites her to a concert that starts at 3 PM.",
+      "question": "What will Nina most likely do next?",
+      "options": [
+        "Tell her friend she cannot go and head to the booth",
+        "Accept the concert invite and skip the booth",
+        "Forget both plans and go home",
+        "Call the police"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The key issue is whether the prior commitment overrides the new option, which is a boundary with commitment priority."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Omar left his watch on the windowsill. Later, his brother moves it to a coat pocket without Omar seeing it. Omar comes back because he wants his watch.",
+      "question": "What will Omar most likely do next?",
+      "options": [
+        "Check the windowsill",
+        "Check the coat pocket",
+        "Check the kitchen sink",
+        "Check the car"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Tests the common wrong shortcut of using reality instead of the character's belief."
+    }
+  ]
+}

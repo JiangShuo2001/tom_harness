@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-09",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A doctor explains a new asthma inhaler to a teenager who feels embarrassed and says they will not remember all the steps.",
+      "question": "Which wording is most likely to get the teen to use it correctly?",
+      "options": [
+        "The full pharmacology matters, so let me explain the receptor pathway.",
+        "You should just do it because I said so.",
+        "Let's keep it to three easy steps, and I can show you once so it feels manageable.",
+        "If you forget, the treatment is probably pointless."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Clear audience calibration: the listener is anxious and overwhelmed, so simple, supportive framing should win over dense detail."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "At a meeting, a team lead says to a lagging colleague, \"Great, another surprise deadline.\"",
+      "question": "What is the line most likely doing?",
+      "options": [
+        "Setting a new official deadline",
+        "Expressing frustration sarcastically",
+        "Offering a compromise on workload",
+        "Asking for a status update politely"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a literal-versus-implied meaning case, not primarily about adapting a message to change the listener."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Two founders discuss how to split equity for a startup, and each is ready to trade terms.",
+      "question": "Which kind of problem is this?",
+      "options": [
+        "One-way persuasion",
+        "Mutual bargaining",
+        "Simple audience calibration",
+        "Literal interpretation"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a back-and-forth settlement with concessions, so it should route away from persuasion."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A student asks whether a sentence in a novel means \"cold\" literally or figuratively.",
+      "question": "What is the main task?",
+      "options": [
+        "Persuade the reader to believe the narrator",
+        "Determine the literal meaning of the phrase",
+        "Adapt the message to a resistant listener",
+        "Negotiate a shared decision"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "The question is pure interpretation, not listener-calibrated influence."
+    }
+  ]
+}

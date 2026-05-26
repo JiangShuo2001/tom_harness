@@ -1,7 +1,7 @@
 # tom_harness
 
 > A lightweight, skill-based agent harness for Theory-of-Mind (ToM) benchmarks.
-> Single-shot runtime (v2) as default; Plan-then-Execute architecture available for multi-step research.
+> Single-shot runtime with 76 hierarchical skills (v5.1) as default; legacy Plan-then-Execute architecture available for multi-step research.
 
 中文版: [README_zh.md](README_zh.md)
 
@@ -15,57 +15,73 @@ reasoner on a specific task family. Here the task family is **social
 cognition / Theory of Mind**: multiple-choice questions about characters'
 mental states, false beliefs, hidden emotions, pragmatic inference, etc.
 
-The system supports three execution modes:
+The system supports two execution modes:
 
-1. **Single-shot runtime (v2, default)**: Route → Build prompt (skill + RAG + playbook) → Single LLM call → Validator check → Return answer. This is the canonical path for benchmark evaluation.
-2. **Full harness** (Plan → Execute → Finalize): Planner generates a multi-phase plan, Executor runs each step via a ReAct loop, Finalizer synthesizes the answer.
-3. **Thin harness** (Skill-prepended single LLM call): A selective router picks the best skill prompt, prepends it to the question, and calls the LLM once.
+1. **Single-shot runtime (default)**: Route → Build prompt (skill + RAG + playbook) → Single LLM call → Optional L0 review → Validator check → Return answer. This is the canonical path for benchmark evaluation.
+2. **Legacy harness** (Plan → Execute → Finalize): Planner generates a multi-phase plan, Executor runs each step via a ReAct loop, Finalizer synthesizes the answer. Preserved under `tom_harness/legacy/` for multi-step research.
 
-### Tool Layer (v2)
+### Tool Layer
 
 The single-shot runtime provides three pluggable modules:
 
-- **Skills v4** — 22 curated SKILL.md reasoning prompts + LLM-based router (SkillV4Router)
-- **RAG v2** — category-aware FAISS retrieval over rewritten clusters (1500 condensed documents from ATOMIC, Social Chemistry, NormBank)
-- **Memory Playbook** — static strategy injection (ACE-refined playbook)
+- **Skills v5.1 (default)** — 76 curated SKILL.md reasoning prompts (20 macro + 56 micro) + 4-stage LLM-based router (`SkillV5Router`)
+- **Skills v4 (legacy)** — 22 curated SKILL.md reasoning prompts + LLM-based router (`SkillV4Router`), selectable via `--skill-version v4`
+- **RAG v2** — category-aware FAISS retrieval with optional `CategoryClassifier` (1500 condensed documents from ATOMIC, Social Chemistry, NormBank)
+- **Memory Playbook** — selector-based strategy injection (ACE-refined playbook via `memory_playbook` package)
 
-The architecture follows the spec handed down by the project lead. The
-**core is domain-agnostic** (the same skeleton could run legal or math
+The **core is domain-agnostic** (the same skeleton could run legal or math
 reasoning); all **ToM-specific knowledge is external** — loaded as
 pluggable skills, validators, and failure handlers.
 
 ---
 
-## Architecture (v2 Single-Shot Runtime)
+## Architecture (Single-Shot Runtime)
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    HarnessRuntime (single-shot)                  │
-│                                                                 │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐      │
-│  │ SkillV4Router│    │  RAGv2Engine │    │   Playbook   │      │
-│  │ (22 skills,  │    │ (FAISS+bge,  │    │  (static txt │      │
-│  │  LLM-routed) │    │  1500 docs)  │    │   injection) │      │
-│  └──────┬───────┘    └──────┬───────┘    └──────┬───────┘      │
-│         │                   │                   │               │
-│  ┌──────▼───────────────────▼───────────────────▼────────────┐  │
-│  │              Prompt Assembly                               │  │
-│  │  [Skill body] + [RAG context] + [Playbook] +              │  │
-│  │  [Story] + [Question] + [Options] + [Format instruction]  │  │
-│  └──────────────────────────┬────────────────────────────────┘  │
-│                             │                                   │
-│  ┌──────────────────────────▼────────────────────────────────┐  │
-│  │                    LLM Call (single-shot)                  │  │
-│  │  System: "Read story, give reason, then JSON answer"      │  │
-│  │  → Returns: reasoning + {"answer": "A"|"B"|"C"|"D"}      │  │
-│  └──────────────────────────┬────────────────────────────────┘  │
-│                             │                                   │
-│  ┌──────────────────────────▼────────────────────────────────┐  │
-│  │              Validators (optional retry)                   │  │
-│  │  ScalarProceduralValidator: arithmetic check for           │  │
-│  │  Scalar Implicature tasks → suggest/retry if invalid      │  │
-│  └───────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│                     HarnessRuntime (single-shot)                     │
+│                                                                      │
+│  Stage 1-2: ROUTE                                                    │
+│  ┌────────────────────────────────────────────────────────────────┐  │
+│  │ SkillV5Router (default) / SkillV4Router / NoOpRouter           │  │
+│  │                                                                │  │
+│  │ v5.1: micro-01 (route prep) → pick macros → expand micros     │  │
+│  │       route_modes: baseline | macro_only | micro_only          │  │
+│  │                    | hierarchical (default) | flat_all          │  │
+│  │       inject_modes: full | light (default)                     │  │
+│  └────────────────────────────┬───────────────────────────────────┘  │
+│                               │                                      │
+│  ┌──────────────┐  ┌──────────┴───┐  ┌──────────────┐               │
+│  │  RAGv2Engine │  │ Skill bodies │  │   Playbook   │               │
+│  │ (FAISS+bge,  │  │ (0-N skills  │  │  (selector-  │               │
+│  │  1500 docs)  │  │  injected)   │  │   based)     │               │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘               │
+│         │                 │                  │                        │
+│  Stage 3: SOLVE                                                      │
+│  ┌──────▼─────────────────▼──────────────────▼───────────────────┐   │
+│  │              Prompt Assembly                                   │   │
+│  │  [Skill body] + [RAG context] + [Playbook] +                 │   │
+│  │  [Story] + [Question] + [Options] + [Format instruction]     │   │
+│  └──────────────────────────┬────────────────────────────────────┘   │
+│                              │                                       │
+│  ┌───────────────────────────▼───────────────────────────────────┐   │
+│  │                    LLM Call (single-shot)                      │   │
+│  │  → Returns: reasoning + {"answer": "A"|"B"|"C"|"D"}          │   │
+│  └───────────────────────────┬───────────────────────────────────┘   │
+│                              │                                       │
+│  Stage 4: L0 REVIEW (optional, --review-mode on)                     │
+│  ┌───────────────────────────▼───────────────────────────────────┐   │
+│  │  micro-02 (evidence chain) + micro-03 (explanation            │   │
+│  │  competition) + micro-04 (anti-bias check)                    │   │
+│  │  → chain-of-thought audit → may override draft answer         │   │
+│  └───────────────────────────┬───────────────────────────────────┘   │
+│                              │                                       │
+│  ┌───────────────────────────▼───────────────────────────────────┐   │
+│  │              Validators (optional retry)                       │   │
+│  │  ScalarProceduralValidator: arithmetic check for               │   │
+│  │  Scalar Implicature tasks → suggest/retry if invalid          │   │
+│  └───────────────────────────────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -93,41 +109,51 @@ Dependencies are intentionally minimal: core only needs **`pydantic>=2` and `req
 ## Configuration
 
 The harness talks to an OpenAI-compatible Chat Completions endpoint. Set
-three environment variables (or create a `.env` from `.env.example`):
+environment variables (or create a `.env` from `.env.example`):
 
 ```bash
+# Test model (the model being evaluated)
 export TOM_API_BASE="https://dashscope.aliyuncs.com/compatible-mode/v1"
 export TOM_API_KEY="<your key>"
 export TOM_MODEL="qwen3.5-27b"
+export TOM_TEMPERATURE="0.0"       # optional, default 0.0
+
+# Helper model (for selector/classifier, independent of test model)
+export HELPER_API_BASE="..."       # optional, falls back to TOM_API_BASE
+export HELPER_API_KEY="..."        # optional, falls back to TOM_API_KEY
+export HELPER_MODEL="..."          # optional, falls back to TOM_MODEL
 ```
 
 ---
 
 ## Quickstart
 
-### Single-question demo (Sally-Anne)
-
-```bash
-python examples/run_demo.py
-```
-
-### Run ToMBench benchmark (single-shot v2 runtime — default)
+### Run ToMBench benchmark (default: v5.1 hierarchical skill routing)
 
 ```bash
 # All tasks, 20 samples per task (baseline, no modules)
 python examples/run_tombench_harness.py --limit 20
 
-# With skill routing (22 LLM-routed skills)
+# With skill routing (v5.1, 76 skills, hierarchical mode)
 python examples/run_tombench_harness.py --skill --limit 20
 
 # With RAG v2 retrieval
 python examples/run_tombench_harness.py --rag --limit 20
 
-# With memory playbook
+# With memory playbook (selector-based)
 python examples/run_tombench_harness.py --memory --limit 20
 
 # All modules combined
 python examples/run_tombench_harness.py --skill --rag --memory --limit 20
+
+# Skill + L0 review (chain-of-thought audit)
+python examples/run_tombench_harness.py --skill --review-mode on --limit 20
+
+# Specific route mode (flat_all picks from all 72 candidates)
+python examples/run_tombench_harness.py --skill --route-mode flat_all --limit 20
+
+# Use legacy v4 skill routing (22 skills)
+python examples/run_tombench_harness.py --skill --skill-version v4 --limit 20
 
 # Specific tasks only
 python examples/run_tombench_harness.py --tasks "False Belief Task,Hinting Task Test" --limit 10
@@ -139,7 +165,7 @@ python examples/run_tombench_harness.py --limit 0
 python examples/run_tombench_harness.py --tasks "False Belief Task" --limit 5 -v
 ```
 
-### Run ablation experiments (all 7 module combinations)
+### Run ablation experiments
 
 ```bash
 # Full data (all tasks, all samples)
@@ -152,36 +178,33 @@ bash examples/run_ablation.sh --limit 2
 bash examples/run_ablation.sh --tasks "False Belief Task,Persuasion Story Task"
 ```
 
-The ablation script runs 7 combinations: baseline, skill, rag, memory, skill+rag, skill+memory, skill+rag+memory. Completed runs are auto-skipped.
+### Run CogToM benchmark
+
+```bash
+python examples/run_cogtom_v2_harness.py --limit 20
+python examples/run_cogtom_v2_harness.py --category "Belief" --limit 10
+python examples/run_cogtom_v2_harness.py --category "Belief,Emotion,Desire" --limit 5
+```
+
+### Run Tactful-ToM benchmark
+
+```bash
+python examples/run_tactful_tom_harness.py --limit 20
+bash examples/run_tactful_tom_ablation.sh --limit 5
+```
 
 ### Rerun failed samples / resume interrupted runs
 
 ```bash
-# Rerun only empty-prediction samples
-python examples/rerun_failed.py results/ablation_0507/2_skill --skill
-
-# Resume an interrupted run (fills in missing samples)
-python examples/rerun_failed.py results/ablation_0507/7_rag_memory --rag --memory --resume
+python examples/rerun_failed.py results/some_run/ --skill
+python examples/rerun_failed.py results/some_run/ --skill --rag --resume
 ```
 
-### Compute detailed statistics (8 tasks + 6 ability dimensions)
+### Compute detailed statistics
 
 ```bash
-# All configs under a parent directory
 python examples/compute_detailed_stats.py results/ablation_0507
-
-# Single config
 python examples/compute_detailed_stats.py results/ablation_0507/2_skill
-```
-
-### Run ToMBench benchmark (thin harness — selective skill routing)
-
-```bash
-# Uses regex-based selective router + single LLM call per question
-python examples/run_selective_harness.py --limit 20
-
-# Specific tasks
-python examples/run_selective_harness.py --tasks "Scalar Implicature Test" --limit 0
 ```
 
 Available ToMBench tasks (use exact names with `--tasks`):
@@ -199,130 +222,89 @@ Prediction of Actions         Scalar Implicature Test
 Strange Story Task            Unexpected Outcome Test
 ```
 
-### Run CogToM benchmark
-
-```bash
-# All categories, 20 samples per category
-python examples/run_cogtom_harness.py --limit 20
-
-# Specific category
-python examples/run_cogtom_harness.py --category "Belief" --limit 10
-
-# Multiple categories
-python examples/run_cogtom_harness.py --category "Belief,Emotion,Desire" --limit 5
-```
-
-Available CogToM categories (use exact names with `--category`):
-
-```
-Belief    Comprehensive    Desire    Emotion
-Intention Knowledge        Non-literal Percept
-```
-
 ---
 
-## Memory Playbook (`--memory`)
+## Skill Routing (v5.1)
 
-The Memory Playbook injects pre-built ACE-framework strategies into the Planner prompt. These are curated through multi-round iterative refinement and contain:
+The default skill system uses **SkillV5Router**: a 4-stage LLM-based router over 76 skills organized into 20 macros and 56 micros under `skills_v5.1/skills/`.
 
-- **Strategies & Insights** — proven reasoning patterns for ToM tasks
-- **Common Mistakes to Avoid** — error patterns to guard against
-- **Problem-Solving Heuristics** — general decision rules
+### Route Modes
 
-### Setup
+| Mode | Candidates | Description |
+|:-----|:-----------|:------------|
+| `baseline` | 0 | No routing, no skill injection |
+| `macro_only` | 20 macros | Pick from macro skills only |
+| `micro_only` | 52 non-L0 micros | Pick from micro skills only |
+| `hierarchical` (default) | 20 → expanded | Step 1: pick macros; Step 2: pick micros from their expandable set |
+| `flat_all` | 72 | Pick from all candidates (20 macros + 52 non-L0 micros) |
 
-Place playbook files (`.txt` or `.md`) in the `memory_playbook/` directory:
+### Inject Modes
 
-```
-memory_playbook/
-└── epoch_1_step_600_playbook.txt    ← ACE-refined strategies
-```
+| Mode | Description |
+|:-----|:------------|
+| `full` | Inject complete SKILL.md content (frontmatter stripped) |
+| `light` (default) | Inject structured summary (title, decision variable, workflow, special case) |
 
-### Usage
+### L0 Skills (infrastructure layer)
 
-```bash
-# ToMBench with memory playbook
-python examples/run_tombench_harness.py --memory --limit 20
+| Skill | Role |
+|:------|:-----|
+| `micro-01` | Route prep — always injected as router system prompt |
+| `micro-02` | Evidence chain — used in L0 review |
+| `micro-03` | Explanation competition — used in L0 review |
+| `micro-04` | Anti-bias check — used in L0 review |
 
-# CogToM with memory playbook
-python examples/run_cogtom_harness.py --memory --category "Belief" --limit 10
+### Legacy v4 Routing
 
-# Custom playbook directory
-python examples/run_tombench_harness.py --memory --memory_dir /path/to/my_playbook/
-```
-
-The playbook content is injected **only into the Planner** prompt (not the Executor's ReAct loop). The Planner system prompt instructs the LLM to actively reference playbook strategies and avoid documented common mistakes.
-
-| Flag | Default | Description |
-|:---|:---|:---|
-| `--memory` | off | Enable memory playbook injection into planner |
-| `--memory_dir` | `memory_playbook/` | Path to playbook directory |
+22 curated skills under `tom_harness/tools/skills_v4/`, selectable via `--skill-version v4`. Uses `SkillV4Router` with a single LLM call to pick one skill.
 
 ---
 
 ## RAG Retrieval (`--rag`)
 
-RAG provides dynamic retrieval of social-norm / commonsense knowledge passages during execution.
+RAG v2 provides category-aware retrieval of social-norm / commonsense knowledge passages.
 
-### Build the FAISS index (one-time setup)
+### Data
 
-The RAG engine uses bge-m3 embeddings over three knowledge sources (577k total entries):
-- **ATOMIC** — commonsense causal knowledge (81k)
-- **Social Chemistry** — social norms (340k)
-- **NormBank** — behavioral norms (155k)
+1500 condensed documents (clustered & rewritten) from three knowledge sources:
+- **ATOMIC** — commonsense causal knowledge
+- **Social Chemistry** — social norms
+- **NormBank** — behavioral norms
 
-```bash
-# Full index build (~30-60 min on CPU)
-python -c "from tom_harness.tools import RAGEngine; r = RAGEngine(); r.build_index()"
-
-# Quick test with small sample (100 per source, ~few minutes)
-python -c "from tom_harness.tools import RAGEngine; r = RAGEngine(); r.build_index(num_samples=100); print(f'Done: {r.size()} docs')"
-```
-
-The index is cached to `tom_harness/tools/tomrag/index/` — subsequent runs load from disk in seconds.
+Data: `tom_harness/tools/rag_v2_data/` | Index cache: `tom_harness/tools/rag_v2_index/`
 
 ### Usage
 
 ```bash
 python examples/run_tombench_harness.py --rag --limit 20
-python examples/run_cogtom_harness.py --rag --category "Belief" --limit 10
+
+# Disable category filter (enabled by default)
+python examples/run_tombench_harness.py --rag --no_rag_category_filter --limit 20
 ```
 
 | Flag | Default | Description |
 |:---|:---|:---|
-| `--rag` | off | Enable RAG retrieval |
-| `--rag_data_dir` | `tom_harness/tools/tomrag/data` | JSONL knowledge corpus directory |
-| `--rag_index_dir` | `tom_harness/tools/tomrag/index` | FAISS index cache directory |
+| `--rag` | off | Enable RAG v2 retrieval |
+| `--rag_data_dir` | `tom_harness/tools/rag_v2_data` | RAG data directory |
+| `--rag_index_dir` | `tom_harness/tools/rag_v2_index` | RAG index directory |
 | `--rag_model` | `model/bge-m3` | Embedding model path or HuggingFace name |
-
-### Combining Memory Playbook + RAG
-
-Both can be enabled simultaneously:
-
-```bash
-python examples/run_tombench_harness.py --memory --rag --limit 20 --tag memory_rag
-```
+| `--rag_category_filter` | on | Enable category-aware filtering |
 
 ---
 
-## LLM Interaction Cache
+## Memory Playbook (`--memory`)
 
-Every LLM call (system prompt, user prompt, response, timing) is logged to a JSONL file for debugging and analysis. The cache is **reset at the start of each task**.
+Selector-based strategy injection using the `memory_playbook` package. A helper LLM classifies the question's subtask and selects relevant strategy bullets from the playbook.
 
-Cache location: `results/<tag>/llm_cache/llm_interactions.jsonl`
-
-Each line contains:
-```json
-{
-  "seq": 1,
-  "timestamp": "2026-04-24T09:35:28+0800",
-  "model": "qwen3-32b",
-  "duration_ms": 9867,
-  "system": "You are the Planner...",
-  "user": "## Context\n...",
-  "response": "{\"task_type\": \"false_belief\", ...}"
-}
+```bash
+python examples/run_tombench_harness.py --memory --limit 20
+python examples/run_tombench_harness.py --memory --memory_playbook memory_playbook/playbook/final_playbook_pruned.txt
 ```
+
+| Flag | Default | Description |
+|:---|:---|:---|
+| `--memory` | off | Enable memory playbook injection |
+| `--memory_playbook` | `memory_playbook/playbook/final_playbook_pruned.txt` | Playbook file path |
 
 ---
 
@@ -349,11 +331,13 @@ results/<out_dir>/
   "answer": "B",
   "predicted": "B",
   "correct": true,
-  "skill_id": "skill3",
-  "n_llm_calls": 1,
+  "skill_id": "macro-05",
+  "skill_ids": ["macro-05", "micro-12"],
+  "draft_predicted": "B",
+  "review_changed": false,
+  "n_llm_calls": 2,
   "elapsed_sec": 5.12,
-  "error": null,
-  "thinking": "The story shows Sally placed the ball in the basket, then left. Anne moved it. Sally still believes it's in the basket."
+  "error": null
 }
 ```
 
@@ -361,7 +345,6 @@ results/<out_dir>/
 
 - Records with `predicted=""` (parse failure) or `error != null` are counted as **errors**
 - Accuracy = `correct / (total - errors)` — errors are excluded from the denominator
-- This prevents parse failures from artificially deflating accuracy
 
 ---
 
@@ -378,26 +361,19 @@ results/<out_dir>/
 | `--workers` | 8 | Number of parallel workers |
 | `--verbose` / `-v` | off | Show detailed framework logs on console |
 | `--out_dir` | `results` | Output directory |
-| `--skill` | off | Enable LLM-routed skill injection (22 skills v4) |
+| `--skill` | off | Enable skill injection |
+| `--skill-version` | `v5` | Skill version: `v4` (22 skills) or `v5` (76 skills, default) |
+| `--route-mode` | `hierarchical` | Route mode: baseline / macro_only / micro_only / hierarchical / flat_all |
+| `--inject-mode` | `light` | Inject mode: full / light |
+| `--review-mode` | `off` | L0 review: on / off |
+| `--lang` | `en` | Language for router prompts: en / zh |
 | `--rag` | off | Enable RAG v2 retrieval |
 | `--rag_data_dir` | `tom_harness/tools/rag_v2_data` | RAG data directory |
 | `--rag_index_dir` | `tom_harness/tools/rag_v2_index` | RAG index directory |
 | `--rag_model` | `model/bge-m3` | Embedding model |
-| `--rag_rewritten` | on | Use rewritten cluster data (1500 docs) |
-| `--memory` | off | Enable memory playbook |
-| `--memory_dir` | `memory_playbook/` | Playbook directory path |
-
-### `run_cogtom_harness.py`
-
-Same flags as above, with these differences:
-
-| Flag | Default | Description |
-|:---|:---|:---|
-| `--data_dir` | `benchmark/cogtom/` | CogToM data directory |
-| `--category` | all categories | Comma-separated category names (replaces `--tasks`) |
-| `--limit` | 20 | Max samples per category |
-| `--offset` | 0 | Skip first N samples per category |
-| `--tag` | `cogtom` | Default run tag |
+| `--rag_category_filter` | on | Category-aware RAG filtering |
+| `--memory` | off | Enable memory playbook (selector-based) |
+| `--memory_playbook` | `memory_playbook/playbook/...` | Playbook file path |
 
 ---
 
@@ -413,393 +389,159 @@ tom_harness/
 ├── benchmark/                           ← data loaders & datasets
 │   ├── load_tombench.py                 ← ToMBench JSONL loader
 │   ├── load_cogtom.py                   ← CogToM JSONL loader
+│   ├── load_tactful_tom.py              ← Tactful-ToM loader
 │   ├── ToMBench/                        ← ToMBench data (20 task .jsonl files)
-│   └── cogtom/                          ← CogToM data
-│       ├── CogToM-en.jsonl              ← English (8513 samples)
-│       └── CogToM-zh.jsonl              ← Chinese
+│   ├── CogToM/                          ← CogToM data
+│   ├── tactful-tom/                     ← Tactful-ToM data
+│   └── ICTBench/                        ← ICTBench data
+│
+├── skills_v5.1/                         ← v5.1 skill pack (default)
+│   └── skills/
+│       ├── macro-01..20/                ← 20 macro skills (each with SKILL.md + unit_pack.json)
+│       └── micro-01..56/               ← 56 micro skills (4 L0 + 52 domain)
 │
 ├── memory_playbook/                     ← static playbook files
-│   └── epoch_1_step_600_playbook.txt    ← ACE-refined strategies
+│   └── playbook/
+│       └── final_playbook_pruned.txt    ← ACE-refined strategies
 │
 ├── tom_harness/                         ← core package
-│   ├── schemas.py                       ← Pydantic data models (Plan, Step, Phase, ExecutionTrace, etc.)
+│   ├── __init__.py                      ← public API: LLMClient, build_default_runtime
 │   ├── llm.py                           ← LLM client + interaction cache + JSON parsing
-│   ├── context.py                       ← ContextManager (3-tier context + playbook injection)
-│   ├── registry.py                      ← ToolRegistry (2D dispatch by tool_type + tool_name)
-│   ├── hooks.py                         ← plugin hook system (7 extension points)
-│   ├── planner.py                       ← Planner Agent (question → structured Plan)
-│   ├── executor.py                      ← Executor Agent (ReAct loop + finalization)
-│   ├── scheduler.py                     ← Scheduler (orchestrator + replan + memory persistence)
-│   ├── skill_router.py                  ← LLM-based skill router (12 hardcoded skills)
+│   ├── runtime.py                       ← HarnessRuntime (single-shot pipeline)
+│   │
+│   ├── routing/                         ← skill routers
+│   │   ├── __init__.py                  ← re-exports: SkillV5Router, SkillV4Router, NoOpRouter
+│   │   ├── base.py                      ← Router ABC + RouteDecision
+│   │   ├── skill_v5_router.py           ← 4-stage LLM router (76 skills, v5.1)
+│   │   ├── skill_v4_router.py           ← LLM router (22 skills, v4)
+│   │   ├── l0_review.py                 ← L0 Review (micro-02/03/04 chain-of-thought audit)
+│   │   └── oracle_picks.py              ← static lookup router (for ablation controls)
+│   │
+│   ├── validators/                      ← procedural validators
+│   │   ├── base.py                      ← Validator ABC + ValidationResult
+│   │   └── scalar_procedural.py         ← Scalar Implicature arithmetic check
 │   │
 │   ├── tools/
 │   │   ├── base.py                      ← Tool ABC + ToolResult envelope
-│   │   ├── memory.py                    ← MemoryStore (vector-indexed task-plan pairs)
+│   │   ├── memory.py                    ← MemoryStore (vector-indexed task-plan pairs, v1)
 │   │   ├── playbook.py                  ← MemoryPlaybook (static strategy loader)
-│   │   ├── skills.py                    ← SkillLib (declarative + procedural skills)
-│   │   ├── rag.py                       ← RAGEngine (FAISS adapter)
-│   │   └── tomrag/                      ← ToMRAG sub-package
-│   │       ├── rag.py                   ← LangChain + FAISS + bge-m3 embeddings
-│   │       ├── data/                    ← knowledge corpus (577k entries)
-│   │       └── index/                   ← FAISS vector index (built at runtime)
+│   │   ├── rag_v2.py                    ← RAGv2Engine (category-aware FAISS retrieval)
+│   │   ├── rag_v2_data/                 ← 1500 condensed knowledge documents
+│   │   ├── rag_v2_index/                ← FAISS index cache
+│   │   └── skills_v4/                   ← 22 v4 SKILL.md skills (legacy)
 │   │
-│   ├── plugins/
-│   │   ├── tom/                         ← ToM-specific plugins
-│   │   │   ├── install.py               ← one-call installer for ToM hooks + skills
-│   │   │   ├── router.py                ← signature-based skill gating
-│   │   │   ├── validators.py            ← after_step validators (belief-order, knowledge-gate)
-│   │   │   ├── failure_handlers.py      ← classify failures → inject recovery skills
-│   │   │   ├── memory_index.py          ← TaskSignature extraction + memory enrichment
-│   │   │   ├── story_model.py           ← externalized ToM state (Event, Declaration, queries)
-│   │   │   ├── plan_templates/          ← 3 plan-template skills
-│   │   │   └── skills/                  ← 13 reasoning skills + procedural handlers
-│   │   │       ├── handlers.py          ← Python implementations (quantifier, story_model, etc.)
-│   │   │       └── *.md                 ← SKILL.md files
-│   │   │
-│   │   └── external_skill_pack/         ← contributed skill packs
-│   │       ├── adapter.py               ← SkillPackAdapter ABC
-│   │       ├── set1_adapter.py          ← Set1 adapter (15 SKILL.md skills)
-│   │       ├── set2_adapter.py          ← Set2 adapter (12 prompt-string skills)
-│   │       ├── selective_router.py      ← meta-router (regex-based, no LLM call)
-│   │       └── data/
-│   │           ├── skill_set1/          ← 15 skills (faux-pas, belief, emotion, etc.)
-│   │           │   ├── ROUTING.md       ← routing rules documentation
-│   │           │   └── skill1..15/      ← each with SKILL.md
-│   │           └── skill_set2/          ← 12 skills
-│   │               ├── skills.py        ← SKILL_S1..S12 prompt strings
-│   │               └── llm_router.py    ← LLM-based router for Set2
+│   ├── plugins/                         ← plugin system (legacy hooks)
+│   │   └── tom/                         ← ToM-specific plugins
+│   │       ├── install.py               ← one-call installer for ToM hooks
+│   │       ├── validators.py            ← after_step validators (belief-order, knowledge-gate)
+│   │       ├── failure_handlers.py      ← classify failures → inject recovery skills
+│   │       └── memory_index.py          ← TaskSignature extraction + memory enrichment
+│   │
+│   └── legacy/                          ← Plan-then-Execute architecture (preserved)
+│       ├── __init__.py
+│       ├── schemas.py                   ← Pydantic data models (Plan, Step, Phase, etc.)
+│       ├── context.py                   ← ContextManager (3-tier context)
+│       ├── registry.py                  ← ToolRegistry (2D dispatch)
+│       ├── hooks.py                     ← plugin hook system (7 extension points)
+│       ├── planner.py                   ← Planner Agent (question → structured Plan)
+│       ├── executor.py                  ← Executor Agent (ReAct loop)
+│       └── scheduler.py                ← Scheduler (orchestrator + replan + memory)
 │
 ├── examples/
-│   ├── run_demo.py                      ← single-question demo (Sally-Anne)
-│   ├── run_tombench_harness.py          ← ToMBench full harness runner
-│   ├── run_selective_harness.py         ← thin harness (selective routing)
-│   ├── run_cogtom_harness.py            ← CogToM benchmark runner
-│   ├── run_tombench_with_skills.py      ← ToMBench with LLM skill router
-│   ├── run_skills_direct.py             ← direct skill invocation (no harness)
-│   ├── run_compare_skill_packs.py       ← skill pack comparison runner
-│   ├── run_self_consistency.py          ← self-consistency voting runner
-│   ├── run_skill_matrix.py              ← skill × task matrix evaluation
-│   ├── run_task_classifier_inferred.py  ← task-type classifier evaluation
-│   ├── run_tombench_v03.py              ← v0.3 baseline runner
-│   └── run_ablation.sh                  ← ablation experiment script
+│   ├── run_tombench_harness.py          ← ToMBench runner (v5.1 default, --skill-version v4 for legacy)
+│   ├── run_cogtom_v2_harness.py         ← CogToM benchmark runner
+│   ├── run_tactful_tom_harness.py       ← Tactful-ToM benchmark runner
+│   ├── run_oracle_skill_experiment.py   ← oracle skill experiment (ablation control)
+│   ├── run_ablation.sh                  ← ablation experiment script
+│   ├── run_cogtom_ablation.sh           ← CogToM ablation script
+│   ├── run_tactful_tom_ablation.sh      ← Tactful-ToM ablation script
+│   ├── rerun_failed.py                  ← rerun failed/empty samples (v5.1-compatible)
+│   ├── compute_detailed_stats.py        ← stats by 8 task types + 6 ability dimensions
+│   └── error_analysis_0507.py           ← error pattern analysis
 │
-├── docs/                                ← analysis documents
-│   ├── 0428效果分析.md                  ← ablation findings (CN)
-│   └── ...
-│
+├── docs/                                ← analysis & design documents
 └── results/                             ← output (gitignored)
 ```
 
 ---
 
-## Core Components In Depth
+## Core Components
 
-### Data Schemas (`schemas.py`)
+### HarnessRuntime (`runtime.py`)
 
-All core data structures are Pydantic v2 models. Domain-specific fields live in `metadata: dict` — the core never reads metadata; only plugins do.
+The single-shot pipeline: `route → build_prompt → LLM call → L0 review → validators → answer`.
 
-| Class | Purpose |
-|:------|:--------|
-| `ToolType` | Enum: MEMORY, SKILL, RAG, NONE |
-| `ToolCall` | Standardized tool invocation: `tool_type`, `tool_name`, `tool_params`, `output_mapping` |
-| `Step` | Single execution step: `step_id`, `step_order`, `description`, `depends_on`, `tool`, `sub_steps` |
-| `Phase` | Macro stage: `phase_id`, `phase_name`, `steps[]` |
-| `Plan` | Planner output: `task_id`, `task_type`, `phases[]`, `memory_references[]`, `expected_final_output` |
-| `ExecutionTrace` | Audit record: `reasoning`, `tool_call`, `observation`, `step_result` |
-| `Memory` | Stored (task, plan) pair: `task`, `plan`, `execution_summary`, `success`, `score` |
-| `ExecutionContext` | Per-step context: `plan`, `current_phase_id`, `current_step`, `global_context` |
-| `FinalResult` | Harness output: `task_id`, `answer`, `success`, `plan`, `traces[]`, `elapsed_sec` |
+- `answer_one(question, story, options, task_type)` → `RuntimeResult`
+- `build_default_runtime(llm, router, ...)` — convenience factory that wires the default validator stack
 
 ### LLM Client (`llm.py`)
 
 Thin adapter over any OpenAI-compatible Chat Completions API.
 
-- **`chat(system, user, temperature, max_tokens, enable_thinking)`** → raw string
-- **`chat_json(system, user, **kwargs)`** → parsed dict
-- JSON parsing with robust fallback: direct parse → fenced code block → first balanced `{...}` object
+- JSON parsing with robust fallback: direct parse → fenced code block → first balanced `{...}`
 - Exponential backoff retry (default 3 attempts)
 - Strips `<think>...</think>` inline tags
 - Optional JSONL interaction caching for debug/analysis
-- Supports vLLM-style and DashScope-style thinking mode
+- Configurable temperature via `TOM_TEMPERATURE` env var
 
-### Context Manager (`context.py`)
+### SkillV5Router (`routing/skill_v5_router.py`)
 
-Three-tier context governance for LLM prompts:
+4-stage LLM-based router. The routing pipeline:
 
-| Tier | Content | Lifecycle |
-|:-----|:--------|:----------|
-| **Tier 1 (fixed)** | Agent identity, tool schemas, safety policy | Set once at startup |
-| **Tier 1.5 (semi-static)** | Memory Playbook, Skill instructions, RAG passages | Per-task |
-| **Tier 2 (dynamic)** | Task state, retrieved memories, accumulated results | Per-task, updated per step |
-| **Tier 3 (transient)** | Single-step reasoning scratchpad | Cleared after each step |
+1. **Stage 1 (route prep)**: micro-01 always injected as router system prompt
+2. **Stage 2 (route)**: Pick 0+ skills based on `route_mode`
+   - `hierarchical`: pick macros → expand to micros → pick micros
+   - Falls back to `micro_only` if no macros selected
+3. **Skill rendering**: Render picked skills for prompt injection (`inject_mode`: full or light)
+4. **Stage 4 (L0 review)**: Optional chain-of-thought audit via micro-02/03/04
 
-Key methods:
-- `install_fixed(system_identity, tool_schema_summary, safety_policy)` — once at setup
-- `install_playbook(content)` / `install_skill(content)` / `install_rag_context(content)` — per task
-- `begin_task(question, options)` → `GlobalContext`
-- `record_step_result(phase_name, variable_name, value)` — accumulate step outputs
-- `render_fixed_preamble()` → Tier 1 string
-- `render_dynamic_state(include_accumulated)` → Tiers 1.5 + 2 + 3 string
+### Validators (`validators/`)
 
-### Tool Registry (`registry.py`)
-
-Two-dimensional registry keyed by `(tool_type, tool_name)`:
-
-- `register(tool, permissions)` — add a tool with optional permission requirements
-- `dispatch(ToolCall, caller_scope)` → `ToolResult` — resolve, validate params, invoke, wrap result
-- Permission check: `required ⊆ caller_scope`
-- `schema_summary()` → compact schema string for Planner context
-
-### Hook System (`hooks.py`)
-
-Plugin hook registry with 7 extension points:
-
-| Hook | Signature | Returns |
-|:-----|:----------|:--------|
-| `before_plan` | `(question, task_type)` | Optional preamble text |
-| `after_plan` | `(plan)` | Optional amended plan |
-| `before_step` | `(step, context)` | Side effects only |
-| `after_step` | `(step, trace, context)` | Side effects only |
-| `on_step_failure` | `(step, trace, context)` | `RecoveryDirective` or None |
-| `before_finalize` | `(accumulated_results)` | Side effects only |
-| `enrich_memory` | `(memory)` | Annotated `Memory` |
-
-`RecoveryDirective` actions: `retry`, `replan`, `skip`, `abort`. Can inject skills on replan.
-
-### Planner Agent (`planner.py`)
-
-Transforms question → structured multi-phase `Plan` in one LLM call:
-
-1. Fire `before_plan` hooks (plugins inject preamble)
-2. Query Memory Store (top_k=3, mandatory warm-start even if empty)
-3. Format memory block, playbook block, skill block, RAG block
-4. Single LLM call: `llm.chat_json(PLANNER_SYSTEM, user_template)`
-5. Parse JSON → validate tool names against registry (unknown tools → None)
-6. Fire `after_plan` hooks (plugins may amend)
-7. Return typed `Plan`
-
-On JSON parse failure, allows one repair pass before raising.
-
-### Executor Agent (`executor.py`)
-
-ReAct loop for each step: **Reason → Act → Observe → Record**.
-
-- **Reason**: LLM call with full plan overview + dynamic state + current step description
-- **Act**: If step has a tool, dispatch via registry; otherwise reasoning becomes output
-- **Observe**: Store tool result in accumulated_results under `output_mapping.store_to`
-- **Sub-steps**: Recursive execution up to `max_substep_depth`
-
-**Finalization** (`finalize_answer`):
-1. Scan accumulated results for skill-emitted "recommendation" or "answer_letter" votes
-2. If unanimous or strict-majority → short-circuit return (skip LLM call)
-3. Otherwise → LLM finalize call with truncated accumulated results → answer letter
-
-### Scheduler / Orchestrator (`scheduler.py`)
-
-Top-level lifecycle manager. Domain-agnostic — all ToM logic lives in plugins.
-
-**`run(task_id, question, options, dataset)`** → `FinalResult`:
-
-1. `context.begin_task(question, options)`
-2. (Optional) Skill router → inject skill context
-3. (Optional) RAG retrieval → inject passages
-4. **Plan**: `planner.plan(...)` with exception guard
-5. **Execute**: Phase-by-phase, step-by-step
-   - Enforce `depends_on` (warn if unsatisfied)
-   - On step failure: fire `on_step_failure` hook → `RecoveryDirective`
-     - `replan` (max 2 replans): inject failure info, re-plan, restart
-     - `skip`: continue to next step
-     - `abort`: return failure immediately
-6. **Finalize**: `executor.finalize_answer(...)` → answer letter
-7. **Persist memory**: If success → create Memory → fire `enrich_memory` hook → `memory.insert()`
-8. Return `FinalResult`
+- `Validator` ABC with `applies(task_type)` and `validate(...)` → `ValidationResult`
+- `ScalarProceduralValidator`: arithmetic check for Scalar Implicature tasks; can suggest an answer or trigger LLM retry with feedback
 
 ---
 
-## Execution Flow
+## Legacy Architecture (`legacy/`)
 
-```
-Scheduler.run(task_id, question, options)
-│
-├─ context.begin_task(question, options)
-├─ [Optional] skill_router.route() → inject skill context
-├─ [Optional] rag_engine.run() → inject RAG passages
-│
-├─ PLANNING ─────────────────────────────────────────────
-│  planner.plan(task_id, question, options)
-│  ├─ fire("before_plan")              ← plugin hooks
-│  ├─ memory.run(query, top_k=3)      ← mandatory warm-start
-│  ├─ llm.chat_json(PLANNER_SYSTEM, user_template)
-│  ├─ _assemble_plan() → validate tool names → Plan
-│  └─ fire("after_plan", plan)         ← plugin hooks
-│
-├─ EXECUTION ────────────────────────────────────────────
-│  for phase in plan.phases:
-│    for step in phase.steps:
-│      executor.execute_step(ctx, execution_order)
-│      ├─ fire("before_step")
-│      ├─ _reason_about(ctx)           ← LLM: thought + state_analysis
-│      ├─ if step.tool:
-│      │    registry.dispatch(tool_call) → ToolResult
-│      │    context.record_step_result(phase, key, value)
-│      ├─ recurse into sub_steps (if any)
-│      ├─ fire("after_step")
-│      └─ context.clear_transient()
-│
-│      if step failed:
-│        fire("on_step_failure") → RecoveryDirective
-│        ├─ "replan" → re-plan with failure context (max 2×)
-│        ├─ "skip"   → continue
-│        └─ "abort"  → return failure
-│
-├─ FINALIZE ─────────────────────────────────────────────
-│  executor.finalize_answer(question, options, accumulated)
-│  ├─ scan for skill votes (unanimous/majority → short-circuit)
-│  └─ else: LLM call → answer letter
-│
-├─ PERSIST MEMORY ───────────────────────────────────────
-│  if success:
-│    Memory(task, plan, summary) → fire("enrich_memory") → memory.insert()
-│
-└─ return FinalResult(task_id, answer, success, plan, traces, elapsed_sec)
-```
-
----
-
-## Tool Layer
-
-### Memory Store (`tools/memory.py`)
-
-Vector-indexed store of `(task, plan)` pairs for warm-start retrieval.
-
-- Default embedder: character-trigram hashing (256-dim, zero-dependency)
-- Cosine similarity retrieval with `top_k` and `similarity_threshold`
-- Metadata filtering (plugins post-filter by any metadata key)
-- Optional JSONL persistence (crash-resumable)
-- Thread-safe (RLock)
-
-### Skill Library (`tools/skills.py`)
-
-Directory-based skill index supporting two modes:
-
-| Mode | Definition | Execution |
-|:-----|:-----------|:----------|
-| **Declarative** | SKILL.md with frontmatter + workflow | LLM call against skill text |
-| **Procedural** | SKILL.md + Python handler | Direct Python function call |
-
-SKILL.md frontmatter: `skill_id`, `name`, `description`, `triggers[]`; rest → `metadata`.
-
-### RAG Engine (`tools/rag.py` + `tools/tomrag/rag.py`)
-
-FAISS-backed retrieval over social-norm knowledge bases:
-
-| Source | Entries | Content |
-|:-------|:--------|:--------|
-| `atomic.jsonl` | 81k | Commonsense causal knowledge |
-| `social_chem.jsonl` | 340k | Social norms |
-| `normbank.jsonl` | 155k | Behavioral norms |
-
-Backend: LangChain + FAISS + HuggingFace bge-m3 embeddings (normalize=True, batch_size=32).
-
----
-
-## Plugin System
-
-### ToM Plugin (`plugins/tom/`)
-
-One-call installer (`install()`) that registers:
+The Plan-then-Execute architecture is preserved under `tom_harness/legacy/` for multi-step research scenarios. It includes:
 
 | Component | File | Purpose |
 |:----------|:-----|:--------|
-| **Validators** | `validators.py` | after_step checks: belief-order, knowledge-gate (warn, not fail) |
-| **Failure Handlers** | `failure_handlers.py` | Classify failures → inject recovery skills on replan |
-| **Memory Index** | `memory_index.py` | Extract `TaskSignature` → enrich memory metadata |
-| **Story Model** | `story_model.py` | Externalized ToM state: parse story ONCE → deterministic queries |
-| **Router** | `router.py` | Signature-based skill gating (avoid over-invoking) |
-| **Procedural Handlers** | `skills/handlers.py` | Python implementations for 8+ skills |
+| Schemas | `schemas.py` | Pydantic models: Plan, Step, Phase, ExecutionTrace, Memory, etc. |
+| Context Manager | `context.py` | 3-tier context governance for LLM prompts |
+| Tool Registry | `registry.py` | 2D dispatch by (tool_type, tool_name) |
+| Hook System | `hooks.py` | 7 extension points for plugins |
+| Planner | `planner.py` | Question → structured multi-phase Plan |
+| Executor | `executor.py` | ReAct loop per step |
+| Scheduler | `scheduler.py` | Orchestrator with replan + memory persistence |
+
+---
+
+## Plugin System (`plugins/tom/`)
+
+ToM-specific hooks registered via `install.py`:
+
+| Hook | File | Purpose |
+|:-----|:-----|:--------|
+| `on_step_failure` | `failure_handlers.py` | Classify failures (10+ types) → inject recovery skills on replan |
+| `enrich_memory` | `memory_index.py` | Extract TaskSignature → enrich memory metadata |
+| `after_step` | `validators.py` | Belief-order and knowledge-gate consistency checks (warn, not fail) |
 
 **TaskSignature** (from `memory_index.py`): Pure-function, <1ms, no LLM — extracts `task_type`, `question_kind`, `character_count`, `belief_order`, bilingual feature flags via regex.
 
-**StoryModel** (from `story_model.py`): LLM parses story → Pydantic-validated `Events[]` + `Declarations[]` → deterministic Python queries (`latest_known_location`, `character_knows`, etc.) — zero hallucination after parse.
-
-**Procedural Handlers** (from `skills/handlers.py`):
-
-| Handler | Strategy |
-|:--------|:---------|
-| `S02_quantifier_solve` | Map quantifiers to fraction ranges → solve linear constraints |
-| `S_build_story_model` | LLM parse → StoryModel Pydantic validation |
-| `S_belief_query` | Pure Python over StoryModel (zero LLM) |
-| `S_knowledge_query` | Pure Python over StoryModel (zero LLM) |
-| `S_evidence_scorer` | LLM scores each option per sentence (-1 to +2) |
-| `S_minimal_intervention` | Two-phase: extract objections → 4-dimension scoring |
-| `S05_emotion_moderation` | Bilingual emotion lexicon scan → fallthrough to evidence_scorer |
-| `S07_causal_chain` | Extract tail clauses + contrasts → mechanism overlap scoring |
-
-### External Skill Packs (`plugins/external_skill_pack/`)
-
-Pluggable adapters consuming external skill sets via `SkillPackAdapter` ABC:
-
-| Pack | Skills | Format | Routing |
-|:-----|:-------|:-------|:--------|
-| **Set1** | 15 skills (cs1_skill1..15) | SKILL.md files | Static regex rules from ROUTING.md |
-| **Set2** | 12 skills (cs2_S1..S12) | Python string constants | LLM-based or signature-based |
-
-**SelectiveRouter** (`selective_router.py`): Meta-adapter with frozen v0.4 rules:
-1. `has_quantifier + "how many"` → cs1_skill10/11 (scalar)
-2. `has_belief_switch + belief query` → cs1_skill3 (false belief)
-3. `"should X but / surprising"` → cs2_S5 (unexpected outcome)
-4. Fallthrough → no skill (raw)
-
 ---
 
-## Skill Routing: Three Modes
+## Design Principles
 
-| Router | Skills | Mechanism | LLM Calls | Used By |
-|:-------|:-------|:----------|:----------|:--------|
-| **LLM Router** (`skill_router.py`) | 12 hardcoded (S1–S12) | LLM picks best skill per question | 1 extra per question | `run_tombench_with_skills.py` |
-| **Selective Router** (`selective_router.py`) | 27 external (Set1+Set2) | Regex pattern matching | 0 | `run_selective_harness.py` |
-| **ToM Router** (`plugins/tom/router.py`) | 16 built-in | TaskSignature → skill gating | 0 | Full harness (internal) |
-
----
-
-## How the Framework Works: Loading Mechanisms
-
-### Skill System
-
-**LLM-based Router** (12 skills):
-1. `SkillRouter(llm)` initialized at startup
-2. Per question: `router.route(question, options)` → LLM call → skill_id or `"NONE"`
-3. `router.get_skill_prompt(skill_id)` → full prompt text
-4. Injected into Planner context as "Strategy Guide"
-
-**Selective Router** (27 external skills):
-1. `SelectiveRouter()` initialized → loads Set1 + Set2 adapters
-2. `router.load_into(skill_lib)` loads all 27 skills
-3. Per question: `router.route(question, story, options, task_type)` → regex rules
-4. Returns `RoutingResult(skill_id, confidence, rationale)` or `skill_id=None`
-5. Skill body prepended to prompt in thin harness mode
-
-### Memory Playbook: Static Strategy Injection
-
-1. `MemoryPlaybook(playbook_dir="memory_playbook/")` loads all `.txt`/`.md` files
-2. Concatenated into single string
-3. `ctx.install_playbook(content)` stores in ContextManager
-4. Injected **only into Planner** system prompt as "Memory Playbook" section
-
-### RAG: Dynamic Knowledge Retrieval
-
-1. `RAGEngine(data_dir, index_dir, model_name)` wraps `ToMRAG` backend
-2. `build_index()`: if cached → load from disk (seconds); if not → embed all docs, build FAISS, save (~30-60 min CPU)
-3. `registry.register(rag)` makes RAG available as tool
-4. Per question: `rag.run(query, top_k=5)` → retrieved passages
-5. Formatted and injected into context as "Retrieved Knowledge"
-
-### Execution Modes: Full vs Thin Harness
-
-| Mode | Planner | Executor | Skill Routing | Use Case |
-|:-----|:--------|:---------|:--------------|:---------|
-| **Full harness** | Multi-phase plan | ReAct loop per step | LLM-based / ToM Router | Complex reasoning requiring decomposition |
-| **Thin harness** | None | None | Selective (regex) | Simple prompt prepending, minimal overhead |
+1. **Core is domain-agnostic.** Nothing in `tom_harness/` (outside `plugins/tom/`) mentions belief, emotion, faux-pas, etc.
+2. **External knowledge drives reasoning.** All ToM logic lives in skill files, not code.
+3. **Single-shot by default.** Plan-then-Execute is preserved but no longer the default path.
+4. **Skill version switchable.** `--skill-version {v4,v5}` allows explicit version selection.
+5. **No heavy frameworks in core.** No LangChain/AutoGen dependency (only in RAG backend).
+6. **Bilingual.** Feature extractors, skill content, and router prompts support English + Chinese.
+7. **Thread-safe.** Runners support parallel execution via ThreadPoolExecutor.
+8. **Crash-resumable.** `rerun_failed.py` can resume interrupted runs and fill in missing samples.
 
 ---
 
@@ -807,93 +549,16 @@ Pluggable adapters consuming external skill sets via `SkillPackAdapter` ABC:
 
 | Script | Description |
 |:-------|:------------|
-| `run_demo.py` | Single Sally-Anne question through full harness |
-| `run_tombench_harness.py` | ToMBench single-shot v2 runner (parallel, configurable modules) |
-| `run_cogtom_harness.py` | CogToM benchmark runner (8 categories) |
-| `run_selective_harness.py` | Thin harness with selective routing (regex-based) |
-| `run_tombench_with_skills.py` | ToMBench with LLM skill router enabled |
-| `run_skills_direct.py` | Direct skill invocation without harness (testing) |
-| `run_compare_skill_packs.py` | Compare Set1 vs Set2 skill packs |
-| `run_self_consistency.py` | Self-consistency voting (multiple runs → majority) |
-| `run_skill_matrix.py` | Skill × task matrix evaluation |
-| `run_task_classifier_inferred.py` | Task-type classifier accuracy evaluation |
-| `run_tombench_v03.py` | v0.3 baseline runner |
-| `run_ablation.sh` | 7-combination ablation experiment (all module combos) |
-| `rerun_failed.py` | Rerun failed/empty samples, resume interrupted runs |
+| `run_tombench_harness.py` | ToMBench single-shot runner (v5.1 default, v4 via `--skill-version`) |
+| `run_cogtom_v2_harness.py` | CogToM benchmark runner |
+| `run_tactful_tom_harness.py` | Tactful-ToM benchmark runner |
+| `run_oracle_skill_experiment.py` | Oracle skill experiment (ablation control) |
+| `run_ablation.sh` | ToMBench ablation experiment (module combinations) |
+| `run_cogtom_ablation.sh` | CogToM ablation experiment |
+| `run_tactful_tom_ablation.sh` | Tactful-ToM ablation experiment |
+| `rerun_failed.py` | Rerun failed/empty samples, resume interrupted runs (v5.1) |
 | `compute_detailed_stats.py` | Compute stats by 8 task types + 6 ability dimensions |
-
----
-
-## Ablation Findings (ToMBench full dataset, n=2860, qwen3.5-27b)
-
-| Variant | Accuracy | Errors |
-|:--------|:---------|:-------|
-| Baseline (no modules) | 79.78% | 6 |
-| + Skill (v4, 22 skills) | **83.07%** | 2 |
-| + RAG (v2) | 77.73% | 4 |
-| + Memory (playbook) | 84.55% | 401 |
-| + Skill + RAG | 83.03% | 14 |
-| + Skill + Memory | 84.51% | 607 |
-| + RAG + Memory | 90.87%* | 56 |
-
-*RAG+Memory result based on partial run (1074/2860 samples).
-
-**Key insights**:
-- **Skill v4** brings consistent +3.3pp gain with near-zero errors
-- **RAG v2** alone slightly hurts (−2pp) — retrieved passages can add noise
-- **Memory** achieves high accuracy on valid samples but causes high error rate (14%) due to long playbook (186KB) causing output truncation
-- **Skill + RAG** performs similarly to Skill alone — RAG doesn't add value on top of skill routing
-- Error rates for memory-containing configs are high due to prompt length; accuracy numbers should be interpreted with caution (survivorship bias)
-
-Statistics are computed excluding errors from the denominator (errors = parse failures + API errors).
-
----
-
-## Design Principles
-
-1. **Core is domain-agnostic.** Nothing in `tom_harness/` (outside `plugins/tom/`) mentions belief, emotion, faux-pas, etc.
-2. **Schemas are stable.** Fields in `schemas.py` follow the original project spec. Use `metadata: dict` for extensions.
-3. **Memory Store is queried in every planning pass** (mandatory warm-start, even if empty).
-4. **Plugins register through hooks, never by editing core.** Seven well-defined extension points.
-5. **No heavy frameworks in core.** No LangChain/AutoGen/LangGraph dependency (only in RAG backend).
-6. **Deterministic where possible.** State-tracking skills use Python; LLM only for structured parsing.
-7. **Bilingual.** Feature extractors, skill content, and failure taxonomy support English + Chinese.
-8. **Thread-safe.** MemoryStore uses RLock; runners support parallel execution via ThreadPoolExecutor.
-9. **Crash-resumable.** Memory persistence via JSONL; LLM interaction caching for replay.
-
----
-
-## Extending the Framework
-
-### Adding a New Skill
-
-1. Create `SKILL.md` in a skill directory with frontmatter:
-   ```yaml
-   ---
-   skill_id: my_skill
-   name: My Custom Skill
-   description: What this skill does
-   triggers:
-     - pattern1
-     - pattern2
-   ---
-   ```
-2. Write the skill workflow in the body (Markdown)
-3. (Optional) Add a procedural handler in Python for deterministic execution
-4. Load via `skill_lib.load_dir(path)` or register handler via `skill_lib.register_handler()`
-
-### Adding a New Plugin
-
-1. Create a new module under `plugins/`
-2. Register hooks via `hook_registry.register(event_name, callback_fn)`
-3. Available hooks: `before_plan`, `after_plan`, `before_step`, `after_step`, `on_step_failure`, `before_finalize`, `enrich_memory`
-
-### Adding Custom Knowledge to RAG
-
-1. Create a JSONL file in `tom_harness/tools/tomrag/data/`
-2. Format: `{"id": "...", "text": "...", "source": "my_source", "category": "...", "title": "...", "metadata": {}}`
-3. Add your source to the `sources` list in `ToMRAG.build_index()`
-4. Run `build_index(force_rebuild=True)` to rebuild
+| `error_analysis_0507.py` | Error pattern analysis |
 
 ---
 

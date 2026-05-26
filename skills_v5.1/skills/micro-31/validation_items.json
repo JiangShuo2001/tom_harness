@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-31",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Maya missed her train by ten seconds and watched it pull away. She kept thinking that if she had left home one minute earlier, she would have made her interview on time.",
+      "question": "What emotion is Maya most likely feeling because of the comparison she is making?",
+      "options": [
+        "Regret",
+        "Gratitude",
+        "Pride",
+        "Calm"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The actual outcome is worse than a clear better alternative, so the emotion depends on counterfactual comparison."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "After hearing a loud crash, Jordan found that the falling branch had missed his parked car by a few inches. He imagined how expensive the damage could have been.",
+      "question": "What does Jordan most likely feel?",
+      "options": [
+        "Relief",
+        "Shame",
+        "Anger",
+        "Envy"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The actual outcome is better than the salient worse alternative, supporting relief."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Leah opened the email and learned that her application was rejected. She felt low because she had wanted the position badly, but she did not think about any near miss or different possible result.",
+      "question": "Which emotion best fits the scene as written?",
+      "options": [
+        "Regret",
+        "Relief",
+        "Simple sadness",
+        "Pleasant surprise"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This tests the shortcut of calling any bad outcome regret; no alternative outcome is doing the emotional work."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Owen lied to his teammate about finishing the report. When the teammate had to stay late to fix the problem, Owen felt bad because he knew he had acted dishonestly.",
+      "question": "What is the main basis of Owen's emotion?",
+      "options": [
+        "A worse alternative outcome",
+        "A better-than-expected outcome",
+        "Fault and wrongdoing",
+        "A surprising success"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "The emotion is driven by responsibility and moral appraisal, so it falls outside counterfactual emotion."
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "frontmatter_description": "Evaluate whether an utterance's explicit content is true, false, or only partly supported by the known facts.",
+  "title": "Truth, Lie, and Half-Truth",
+  "use_when": [
+    "Use when the question asks whether a stated claim matches the facts available in the scene.",
+    "Use when the answer depends on classifying explicit utterance content as true, false, partly true, or unsupported.",
+    "Use when a character says something and the task is to compare the wording against what actually happened or what is actually the case.",
+    "Use when a half-truth must be identified because the utterance contains both accurate and inaccurate explicit content."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is whether the speaker intended to mislead; route to speaker motivation or misleading expression instead.",
+    "Do not use when the statement is literally true but creates a false impression through omission or framing; route to Misleading and Selective Expression.",
+    "Do not use when the question asks what the speaker implied beyond the literal words; route to Conversational Implicature.",
+    "Do not use when the question asks what social act the utterance performs, such as requesting, warning, refusing, or hinting; route to Indirect Speech Act.",
+    "Do not use when the truth depends on what a character believes rather than what is factually true; first route to the relevant belief or knowledge unit."
+  ],
+  "decision_variable": "truth status of explicit content",
+  "trigger_checklist": [
+    "There is a specific utterance, claim, answer, promise, report, or description to evaluate.",
+    "The scene provides facts that can be compared against the utterance.",
+    "The question asks whether the utterance is true, false, accurate, inaccurate, a lie, or a half-truth.",
+    "The needed judgment concerns the words stated, not the hidden motive or listener interpretation.",
+    "The utterance can be decomposed into one or more explicit propositions."
+  ],
+  "workflow": [
+    "Quote or paraphrase only the explicit content that was asserted.",
+    "Separate the utterance into atomic factual propositions if it contains multiple claims.",
+    "List the relevant scene facts that bear directly on each proposition.",
+    "Compare each proposition with the facts: mark it true, false, unsupported, or partly true.",
+    "Classify the whole utterance: true if all central explicit claims match the facts, false if a central claim conflicts with facts, half-truth if explicit content mixes true and false or materially incomplete asserted claims.",
+    "Do not infer deception, politeness, or strategic motive unless the question separately asks for it."
+  ],
+  "special_case": {
+    "title": "Literally true but misleading",
+    "rule": "If every explicit claim is true but the wording predictably leads the listener to a false conclusion, this unit may say the literal content is true, then exit to micro-38 for the misleading effect.",
+    "worked_example": {
+      "scene": "Maya ate the last cookie after Ben left. When Ben asks, 'Did you eat the cookies this morning?', Maya says, 'I ate one cookie before lunch.' She did eat one cookie before lunch, but it was also the last cookie.",
+      "question": "Was Maya's statement true?",
+      "answer_logic": "The explicit content 'I ate one cookie before lunch' matches the facts, so its truth status is true. Whether it misleads Ben about the last cookie is a separate micro-38 question."
+    }
+  },
+  "boundary_exit_rule": [
+    "If the explicit words are already classified and the remaining question is why the speaker chose them, exit to micro-39.",
+    "If the explicit words are true but the listener is guided toward a wrong inference, exit to micro-38.",
+    "If the answer requires adding unstated contextual meaning, exit to micro-36.",
+    "If the utterance functions mainly as a request, warning, refusal, reminder, or invitation, exit to micro-35.",
+    "If the relevant comparison is between a character's belief and reality rather than a statement and reality, exit to the appropriate belief or knowledge unit before using this one."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the diagnostic target is the factual accuracy of what was explicitly said.",
+    "hard_boundary": [
+      "This unit judges content-fact fit, not moral blame for lying.",
+      "This unit does not decide whether the speaker knew the statement was false.",
+      "This unit does not decide whether the listener was deceived.",
+      "This unit does not analyze implied meaning unless it affects the explicit proposition being evaluated."
+    ],
+    "shortcut_to_avoid": [
+      "Do not label a statement false merely because it is unhelpful, evasive, or suspicious.",
+      "Do not label a literally true statement a lie just because it omits an important fact.",
+      "Do not use the speaker's facial expression, motive, or relationship history to change the truth value of the explicit words."
+    ],
+    "common_failure_modes": [
+      "Conflating factual falsity with intent to deceive.",
+      "Treating implication as if it were explicitly stated.",
+      "Ignoring qualifiers such as 'some,' 'all,' 'before,' 'after,' 'maybe,' or 'I think.'",
+      "Collapsing mixed claims into a single true-or-false label without checking each component.",
+      "Using the listener's mistaken conclusion as proof that the utterance itself was false."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Alex says, 'I put the keys on the table,' but the keys are in his backpack.",
+        "why_it_matches": "The explicit claim conflicts with the facts, so the target variable is the truth status of the utterance content."
+      },
+      {
+        "case": "Alex says, 'I saw the keys earlier,' which is true, while avoiding saying that he later moved them.",
+        "why_it_matches": "The literal truth can be evaluated here, but the main misleading effect belongs to micro-38 if the question asks about deception by omission."
+      }
+    ],
+    "boundary_stress_test": [
+      "A speaker says something false but sincerely believes it; classify the content as false, but do not infer intentional lying.",
+      "A speaker says something true in a way that causes a false belief; classify the content as true, then route the misleading inference elsewhere.",
+      "A sentence contains one true clause and one false clause; mark it as a half-truth or mixed-content statement rather than forcing a simple true label.",
+      "A vague statement such as 'I finished most of it' requires checking whether the scene supports the vague quantity before judging truth status."
+    ],
+    "generalization_note": "The unit generalizes to reports, excuses, answers, descriptions, and denials whenever the key operation is comparing explicit asserted content with known facts."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character makes a factual claim, and the scene gives enough information to determine whether the claim is true, false, or partly true.",
+    "near_miss_pattern": "A character makes a literally true claim that omits a crucial fact and causes the listener to misunderstand.",
+    "boundary_pattern": "A character says a false statement because they are mistaken, and the question asks whether they were trying to deceive."
+  },
+  "notes": [
+    "Preserve a narrow content-level judgment before moving to motive, implication, or social effect.",
+    "Use 'lie' cautiously: in this unit it means factual conflict in the utterance content unless the question explicitly requires intent.",
+    "Half-truth here requires mixed or materially partial explicit content; pure omission with true wording belongs to misleading selective expression."
+  ],
+  "id": "micro-37",
+  "level": "micro",
+  "layer": "L5",
+  "family": "language-pragmatics",
+  "core_question": "Evaluate a statement's relation to the facts",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

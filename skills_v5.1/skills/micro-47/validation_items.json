@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-47",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A student from a rival school answers a question in class. Before hearing the full answer, several classmates assume it is probably disrespectful.",
+      "question": "What best explains the classmates' reaction?",
+      "options": [
+        "They are judging the student through out-group bias and a group label.",
+        "They think the student has formal authority in the class.",
+        "They are reacting to a broken promise from that student.",
+        "They want to keep private information from the student."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct identity-based interpretation: the same behavior is read negatively because of out-group membership."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A manager gives the same blunt feedback to two workers. One worker says the comment sounds harsh but fair because the manager is their boss.",
+      "question": "What is the main driver of the worker's interpretation?",
+      "options": [
+        "Group identity and in-group favoritism",
+        "Role-based authority and hierarchy",
+        "A stereotype about a rival club",
+        "A need to protect a secret"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a close near-miss: the cue is power and role, not group identity."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "A neighbor says a man is unreliable because he missed two earlier meetings after promising to come.",
+      "question": "Why is he being judged as unreliable?",
+      "options": [
+        "Because he belongs to an out-group",
+        "Because of a stereotype about his neighborhood club",
+        "Because of his past behavior and broken promise",
+        "Because he has a lower-status job"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This is a boundary case: the judgment is based on history, not identity-bound inference."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A teacher does not share a student's personal note with the class, even though the student is from the rival debate team.",
+      "question": "What is the main issue here?",
+      "options": [
+        "Privacy and boundaries",
+        "In-group favoritism",
+        "Stereotype-based judgment",
+        "Formal authority"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This includes a group label, but the real issue is whether information may be disclosed, not identity-based interpretation."
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "frontmatter_description": "Directly route scenes where a remark, secret, or disclosure creates offense, awkwardness, embarrassment, or face threat.",
+  "title": "Faux Pas, Offense, and Social Embarrassment",
+  "use_when": [
+    "Use when the main question is whether a behavior caused offense, embarrassment, awkwardness, or face threat.",
+    "Use when a remark, disclosure, or action may violate privacy, tact, status, or social comfort.",
+    "Use when the scene asks whether something was socially inappropriate, embarrassing, or insulting, even if no repair is requested.",
+    "Use when the core inference is the social harm created by what was said or done, not the later apology or reconciliation."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main task is to repair the relationship after harm; route to apology and repair instead.",
+    "Do not use when the main task is to judge truth, deception, or half-truth rather than embarrassment or offense; route to lies and misdirection instead.",
+    "Do not use when the main task is indirect meaning, request, warning, or implication; route to indirect language instead.",
+    "Do not use when the main task is power, hierarchy, or deference across rank; route to power-distance communication instead.",
+    "Do not use when the main task is preference conflict, next action, or spatial perspective rather than social harm."
+  ],
+  "decision_variable": "whether behavior creates offense, awkwardness, or face threat",
+  "direct_route_rule": "Route immediately when a remark, secret, or disclosure creates social harm or awkwardness.",
+  "expandable_micro_ids": [
+    "micro-30",
+    "micro-39",
+    "micro-42",
+    "micro-46",
+    "micro-48"
+  ],
+  "trigger_checklist": [
+    "A private fact, secret, or sensitive detail is revealed in the wrong setting.",
+    "Someone may feel embarrassed, exposed, insulted, or socially cornered.",
+    "The key issue is whether the act violated tact, privacy, or face.",
+    "The question is about whether the scene is awkward or inappropriate, not how to fix it.",
+    "The harmful effect depends on audience awareness, social context, or status sensitivity."
+  ],
+  "workflow": [
+    "Identify who is exposed, embarrassed, insulted, or put on the spot.",
+    "Check whether the behavior revealed private, sensitive, or socially risky information.",
+    "Ask whether the main outcome is offense, awkwardness, or face threat.",
+    "Ignore repair steps unless the question explicitly asks for them.",
+    "Answer with the social consequence of the act, not with truth status or apology strategy."
+  ],
+  "special_case": {
+    "title": "Accidental disclosure in a social setting",
+    "rule": "If the act is unintentional but reveals sensitive information in front of the wrong audience, the scene still routes here because the decisive variable is social harm, not intent.",
+    "worked_example": {
+      "scene": "At a dinner table, one person casually mentions another person's private medical issue in front of coworkers.",
+      "question": "Was this socially inappropriate?",
+      "answer_logic": "Yes. The key issue is that the disclosure created embarrassment and privacy violation in front of an audience that should not have heard it."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to macro-17 if the main question becomes how to apologize, repair trust, or reconcile after the offense.",
+    "Exit to macro-08 if the main question is whether a statement was true, false, or deceptive rather than embarrassing.",
+    "Exit to macro-07 if the main question is what the speaker indirectly meant rather than whether the remark caused face threat.",
+    "Exit to macro-20 if status, hierarchy, or deference is the dominant issue and embarrassment is secondary.",
+    "Add micro-30 when the moral-emotion appraisal (shame, guilt, embarrassment) must be distinguished.",
+    "Add micro-39 when the speaker's motive (tease, slip, malice) determines the social interpretation.",
+    "Add micro-42 to diagnose whether the act crosses the faux-pas threshold.",
+    "Add micro-46 when role or status amplifies or excuses the breach.",
+    "Add micro-48 when the breach is specifically a privacy violation."
+  ],
+  "references": {
+    "route_signal": "The scene centers on embarrassment, offense, awkwardness, exposure, or loss of face caused by a remark, secret, or disclosure.",
+    "hard_boundary": [
+      "Primary task is repair or apology after harm.",
+      "Primary task is truth evaluation, lying detection, or half-truth detection.",
+      "Primary task is indirect speech interpretation.",
+      "Primary task is power or hierarchy communication.",
+      "Primary task is action selection, preference conflict, or perspective taking."
+    ],
+    "shortcut_to_avoid": [
+      "Do not reduce the case to 'what was meant' when the question is really 'was this embarrassing or offensive?'",
+      "Do not jump to apology logic when the prompt only asks whether the act was a faux pas.",
+      "Do not treat every private disclosure as a lie or deception question.",
+      "Do not overfit to one benchmark-style embarrassment item; use the reusable face-threat prototype."
+    ],
+    "common_failure_modes": [
+      "Confusing offense with later repair and answering with an apology strategy.",
+      "Confusing embarrassment with literal falsehood and routing to deception.",
+      "Missing that the offense comes from audience context, not from the content alone.",
+      "Ignoring the target's face loss and focusing only on speaker intent.",
+      "Overweighting politeness words while missing the social harm of disclosure."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Someone blurts out a friend's secret in front of a group.",
+        "why_it_matches": "The decisive issue is embarrassment, privacy violation, and face threat caused by the disclosure."
+      },
+      {
+        "case": "After making a rude comment, the speaker later apologizes and asks how to make it right.",
+        "why_it_matches": "This is here only if the question is whether the original comment was offensive; if the question is about repair, it belongs elsewhere."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the same words were said privately, would the social harm disappear?",
+      "If no one else heard the remark, is the embarrassment still the core issue?",
+      "If the prompt asks how to fix the situation, does the task shift out of this macro?",
+      "If the statement is true but hurtful, does the harm come from offense rather than deception?"
+    ],
+    "generalization_note": "This macro generalizes to any scene where social harm is created by exposure, tact failure, or face threat, even when the exact surface form changes across secrets, jokes, remarks, or disclosures."
+  },
+  "validation_seed": {
+    "positive_pattern": "A sensitive remark, secret, or disclosure causes the target to feel exposed, embarrassed, or offended in front of others.",
+    "near_miss_pattern": "A rude act is followed by an apology, and the question is about relationship repair rather than whether offense occurred.",
+    "boundary_pattern": "A speaker says something untrue or misleading, but the prompt asks whether it is a lie or half-truth instead of whether it is embarrassing."
+  },
+  "notes": [
+    "This macro is about the social impact of a behavior, not about repair mechanics.",
+    "The canonical answer logic is: identify the face threat, then judge whether the act caused embarrassment or offense.",
+    "Optional micro expansion ids are for diagnosis and boundary repair, not for replacing the macro prototype.",
+    "Keep the routing simple: if the scene is about awkwardness, insult, or exposed privacy, solve here first."
+  ],
+  "id": "macro-12",
+  "level": "macro",
+  "layer": "macro",
+  "family": "faux-pas-offense-and-social-embarrassment",
+  "core_question": "whether behavior creates offense, awkwardness, or face threat",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

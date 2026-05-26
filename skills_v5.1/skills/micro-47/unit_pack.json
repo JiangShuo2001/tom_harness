@@ -1,0 +1,99 @@
+{
+  "frontmatter_description": "Diagnose whether in-group, out-group, stereotype, or belonging cues change how a person is interpreted or judged.",
+  "title": "Group Identity",
+  "use_when": [
+    "Use when the question asks how belonging to an in-group or out-group changes interpretation, judgment, or expectations.",
+    "Use when stereotypes, group labels, affiliation, or social identity shift how an act, remark, or person is evaluated.",
+    "Use when the key issue is whether group membership itself explains the observer's inference.",
+    "Use when the task is to identify identity-bound interpretation rather than role-based authority or interpersonal trust."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is power, status, authority, or role structure; use Power, Status, and Role instead.",
+    "Do not use when the main issue is trustworthiness based on past behavior; use Trust and Reputation instead.",
+    "Do not use when the issue is whether information may be shared or kept private; use Privacy, Secrets, and Boundaries instead.",
+    "Do not use when the issue is repair after offense, apology, or reconciliation; use Relationship Repair and Apology instead.",
+    "Do not use when the question is about literal belief, emotion, intention, or language meaning without any identity-bound inference."
+  ],
+  "decision_variable": "whether group membership changes interpretation or evaluation",
+  "trigger_checklist": [
+    "Is the answer driven by in-group versus out-group membership?",
+    "Are stereotypes, belonging, or identity labels affecting judgment?",
+    "Does the scene ask how the same behavior is read differently because of group identity?",
+    "Can the core explanation be stated as an identity-bound bias, expectation, or affiliation effect?"
+  ],
+  "workflow": [
+    "Identify the relevant group label or membership cue.",
+    "Ask whether the cue changes interpretation, expectation, or evaluation.",
+    "If yes, state the effect of belonging or stereotype on the judgment.",
+    "If the cue instead changes authority, trust, privacy, or repair, exit to the neighboring micro skill."
+  ],
+  "special_case": {
+    "title": "Identity cue without explicit stereotype",
+    "rule": "If the scene never names a stereotype but still changes judgment because the person is treated as part of a group, this still belongs here.",
+    "worked_example": {
+      "scene": "A student from the debate team gives a short answer in class, and the teacher assumes the student is being strategic rather than unsure.",
+      "question": "Why is the answer interpreted that way?",
+      "answer_logic": "The teacher's interpretation is shaped by group identity and the stereotype attached to that group, so the effect of membership determines the judgment."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-46 if the main question is about hierarchy, authority, or formal role rather than group identity.",
+    "Exit to micro-45 if the main question is about whether someone is reliable based on history rather than belonging.",
+    "Exit to micro-48 if the question is about what information may be disclosed or concealed.",
+    "Exit to micro-49 if the question is about apology, harm repair, or restoring the relationship after offense."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when group membership, in-group/out-group status, stereotypes, or belonging changes how a person, act, or message is interpreted.",
+    "hard_boundary": [
+      "Identity boundary, not power structure.",
+      "Group-based evaluation, not trust from past conduct.",
+      "Belonging effect, not privacy or repair."
+    ],
+    "shortcut_to_avoid": [
+      "Do not confuse 'they are the boss' with 'they are one of us.'",
+      "Do not infer trust or fault just because a group label is present.",
+      "Do not route scenes about hidden information or apology here unless identity-based judgment is central."
+    ],
+    "common_failure_modes": [
+      "Treating role hierarchy as group identity.",
+      "Treating stereotype-based inference as simple attitude or emotion reading.",
+      "Overrouting any social scene with a group label, even when the real variable is trust, privacy, or repair."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A manager gives the same criticism to two employees, and one is treated as being 'just strict' because of their role.",
+        "why_it_matches": "This is about role and authority, not in-group or out-group identity."
+      },
+      {
+        "case": "A new neighbor is judged as unfriendly because they belong to the rival local club.",
+        "why_it_matches": "The judgment is shaped by group membership and out-group bias."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the same behavior would be judged differently solely because of group membership, this matches.",
+      "If removing the group label removes the explanation, this matches.",
+      "If the scene still works the same after removing identity cues, do not use this unit."
+    ],
+    "generalization_note": "This unit covers any identity-bound shift in interpretation or evaluation, including stereotypes, belonging, affiliation, and in-group/out-group bias, as long as the decisive variable is group membership rather than role, trust, privacy, or repair."
+  },
+  "validation_seed": {
+    "positive_pattern": "A person is evaluated differently because they are seen as part of an in-group or out-group.",
+    "near_miss_pattern": "A person is evaluated differently because they are the boss, expert, or subordinate.",
+    "boundary_pattern": "A person is judged for being unreliable, but the reason is their past broken promise rather than their group identity."
+  },
+  "notes": [
+    "Keep the unit narrow: it diagnoses identity-based interpretation, not general social judgment.",
+    "A stereotype can be explicit or implicit; the key is that group membership changes the inference.",
+    "If the question asks what someone feels about a group, do not use this unless the feeling itself is being shaped by belonging or stereotype."
+  ],
+  "id": "micro-47",
+  "level": "micro",
+  "layer": "L6",
+  "family": "norms-relationships",
+  "core_question": "Determine how in-group, out-group, stereotypes, or belonging shape interpretation and evaluation",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

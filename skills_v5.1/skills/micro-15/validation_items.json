@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-15",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Nina thinks her keys are probably in the car. Then she sees the keys hanging on the hook by the front door.",
+      "question": "How should Nina's belief change after this new evidence?",
+      "options": [
+        "She should believe the keys are more likely on the hook.",
+        "She should believe the keys are less likely on the hook.",
+        "Her belief should not change.",
+        "She should become certain the keys were never in the car."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The new observation directly supports a prior belief, so this is a clean evidence-update case."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Tom hears a coworker say the report is finished, but the coworker often makes up stories.",
+      "question": "What is the main issue here?",
+      "options": [
+        "Whether the report is actually finished.",
+        "Whether the coworker is trustworthy.",
+        "Whether Tom's belief should become stronger.",
+        "Whether the report is common knowledge."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a source-credibility problem, not a pure update-direction problem."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "After reading a message, Mia learns the meeting moved to 4 p.m. The question asks what Mia thinks Dan now believes about the meeting time.",
+      "question": "Which issue is being asked?",
+      "options": [
+        "How Mia's own belief changes from the new message.",
+        "What Dan believes about Mia's belief.",
+        "Whether the message sender is lying.",
+        "Whether the meeting time is certainly 4 p.m."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is recursive belief, which is outside the target unit."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Owen thinks it may rain today. He sees dark clouds gathering, but it has not started raining yet.",
+      "question": "How should Owen's belief change?",
+      "options": [
+        "Rain is now certain.",
+        "His belief in rain should increase.",
+        "His belief in rain should decrease.",
+        "His belief should not change because there is no rain yet."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This tests partial evidence updating and avoids the common mistake of treating weak evidence as certainty."
+    }
+  ]
+}

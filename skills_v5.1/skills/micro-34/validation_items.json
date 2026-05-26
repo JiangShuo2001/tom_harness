@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-34",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A classroom notice says, 'The quiz begins at 9:00 a.m. and lasts 20 minutes.'",
+      "question": "What does the notice explicitly say?",
+      "options": [
+        "The quiz starts at 9:00 a.m. and has a duration of 20 minutes.",
+        "Students should arrive early because the teacher is strict.",
+        "The quiz will be difficult and time pressure is expected.",
+        "The teacher is reminding students not to be late."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The answer is obtained directly from the posted words without adding motive, warning, or emotional implication."
+    },
+    {
+      "id": "case_2",
+      "pattern": "boundary",
+      "scene": "At dinner, Maya looks at the pepper shaker near Jordan and says, 'Can you pass the pepper?'",
+      "question": "What does Maya's sentence literally ask?",
+      "options": [
+        "Whether Jordan is able to pass the pepper.",
+        "Jordan should pass the pepper to Maya.",
+        "Maya is annoyed that Jordan has not offered the pepper.",
+        "Maya wants Jordan to pay more attention."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This tests the common shortcut of replacing a polite question with the likely request; the literal content is about ability."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "A store clerk sees a customer browsing after closing time and says, 'We close at 8:00 p.m.' It is now 8:05 p.m.",
+      "question": "What is the clerk likely trying to get the customer to do?",
+      "options": [
+        "State that the store closes at 8:00 p.m.",
+        "Leave the store soon.",
+        "Ask what time it is.",
+        "Explain the store's full weekly schedule."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Although the quoted words have clear literal content, the question asks for the social action or implied request, so it falls outside Literal Meaning."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "After tasting a very salty soup, Leo says, 'This soup has a little salt in it.'",
+      "question": "Which option best states only the explicit semantic content of Leo's sentence?",
+      "options": [
+        "The soup contains a small amount of salt.",
+        "The soup is much too salty.",
+        "Leo is criticizing the cook politely.",
+        "Leo wants the cook to stop adding salt."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The context may suggest understatement or criticism, but the literal sentence only says the soup contains a little salt."
+    }
+  ]
+}

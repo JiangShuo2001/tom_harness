@@ -69,6 +69,18 @@ SYSTEM_TAIL = (
     '{"answer": "A" | "B" | "C" | "D"}'
 )
 
+SYSTEM_FREE_FORM = (
+    "You are a reading comprehension assistant. Read the story/conversation "
+    "carefully and answer the question as instructed.\n"
+)
+
+SYSTEM_FREE_FORM_TAIL = (
+    "First give a brief reason (2-3 sentences), then output a JSON object on "
+    'its own line: {"answer": ["Name1", "Name2"]}  — the list should contain '
+    "only the character names that answer the question. If no characters match, "
+    'output {"answer": []}.'
+)
+
 # Keep backward-compat alias for any external code referencing SYSTEM_RAW
 SYSTEM_RAW = SYSTEM_BASE + SYSTEM_TAIL
 
@@ -78,7 +90,18 @@ def _build_system_prompt(
     has_skill: bool = False,
     has_rag: bool = False,
     has_playbook: bool = False,
+    free_form: bool = False,
 ) -> str:
+    if free_form:
+        parts = [SYSTEM_FREE_FORM]
+        if has_skill:
+            parts.append(SYSTEM_SKILL_HINT)
+        if has_rag:
+            parts.append(SYSTEM_RAG_HINT)
+        if has_playbook:
+            parts.append(SYSTEM_PLAYBOOK_HINT)
+        parts.append(SYSTEM_FREE_FORM_TAIL)
+        return "".join(parts)
     parts = [SYSTEM_BASE]
     if has_skill:
         parts.append(SYSTEM_SKILL_HINT)
@@ -177,15 +200,19 @@ class RuntimeResult:
     skill_id: str | None
     n_llm_calls: int
     thinking: str = ""
+    draft_reasoning: str = ""
     rag_context: str = ""
     memory_bullets: list[str] = field(default_factory=list)
     memory_subtask: str = ""
     validator_events: list[dict] = field(default_factory=list)
+    draft_answer: str = ""
+    skill_ids: list[str] = field(default_factory=list)
+    review_changed: bool = False
 
 
 @dataclass
 class HarnessRuntime:
-    """Single-shot harness with optional validator-retry."""
+    """Single-shot harness with optional validator-retry and L0 review."""
     llm: LLMClient
     router: "Router"
     validators: list["Validator"] = field(default_factory=list)
@@ -193,6 +220,7 @@ class HarnessRuntime:
     playbook: str | None = None
     memory: Any = None
     max_retries: int = 1
+    review_mode: str = "off"
 
     def answer_one(
         self,
@@ -201,16 +229,22 @@ class HarnessRuntime:
         story: str,
         options: dict[str, str],
         task_type: str | None = None,
+        free_form: bool = False,
     ) -> RuntimeResult:
         decision: RouteDecision = self.router.route(
             question=question, story=story, options=options, task_type=task_type
         )
         skill_id = decision.skill_id
+        skill_ids = decision.skill_ids
+
+        # ── resolve skill body (multi-skill aware) ────────────────────────
         skill_body = None
-        if skill_id and hasattr(self.router, 'get_skill_body'):
+        if skill_ids and hasattr(self.router, 'get_skill_bodies'):
+            skill_body = self.router.get_skill_bodies(skill_ids)
+        elif skill_id and hasattr(self.router, 'get_skill_body'):
             skill_body = self.router.get_skill_body(skill_id)
-            if skill_body is None:
-                logger.warning("router picked skill_id=%s but get_skill_body returned None", skill_id)
+        if skill_id and skill_body is None:
+            logger.warning("router picked skill_id=%s but skill body is None", skill_id)
 
         rag_context = None
         if self.rag_engine is not None:
@@ -251,20 +285,81 @@ class HarnessRuntime:
             has_skill=bool(skill_body),
             has_rag=bool(rag_context),
             has_playbook=bool(playbook_text),
+            free_form=free_form,
         )
 
-        # ── 1. initial LLM call ───────────────────────────────────────────
-        n_calls = 1
+        # ── free_form path: open generation, no MCQ parsing/validator ────
+        if free_form:
+            # For free_form, the question already contains the full prompt
+            user_msg = question
+            if skill_body:
+                user_msg = f"## Reasoning Skill (apply before answering)\n{skill_body}\n\n{user_msg}"
+            if rag_context:
+                user_msg = f"## Background Knowledge\n{rag_context}\n\n{user_msg}"
+            if playbook_text:
+                user_msg = f"## Playbook\n{playbook_text}\n\n{user_msg}"
+            n_calls = 1 + decision.n_llm_calls
+            try:
+                text = self.llm.chat(system_prompt, user_msg, max_tokens=1024)
+            except Exception as e:
+                logger.warning("free_form LLM call failed: %s", e)
+                text = ""
+            # Strip think tags if present
+            raw = text or ""
+            stripped = re.sub(r"<think>[\s\S]*?</think>", "", raw).strip()
+            if not stripped:
+                m_think = re.search(r"<think>([\s\S]*?)</think>", raw)
+                stripped = m_think.group(1).strip() if m_think else ""
+            return RuntimeResult(
+                answer=stripped,
+                skill_id=skill_id,
+                n_llm_calls=n_calls,
+                thinking="",
+                draft_reasoning="",
+                rag_context=rag_context or "",
+                memory_bullets=memory_bullet_ids,
+                memory_subtask=memory_subtask,
+                validator_events=[],
+                draft_answer=stripped,
+                skill_ids=skill_ids,
+                review_changed=False,
+            )
+
+        # ── 1. initial LLM call (Stage 3: solve) ─────────────────────────
+        n_calls = 1 + decision.n_llm_calls
         reasoning = ""
         try:
             text = self.llm.chat(system_prompt, base_user, max_tokens=4096)
         except Exception as e:
             logger.warning("initial LLM call failed: %s", e)
             text = ""
-        answer, reasoning = _parse_response(text)
-        events: list[dict] = []
+        draft_answer, reasoning = _parse_response(text)
 
-        # ── 2. validators ─────────────────────────────────────────────────
+        # ── 2. L0 review (Stage 4, optional) ─────────────────────────────
+        answer = draft_answer
+        review_changed = False
+        if self.review_mode == "on" and hasattr(self.router, 'skills_dir'):
+            from .routing.l0_review import run_review
+            n_calls += 1
+            reviewed = run_review(
+                llm=self.llm,
+                skills_dir=self.router.skills_dir,
+                inject_mode=getattr(self.router, 'inject_mode', 'light'),
+                story=story,
+                question=question,
+                options=options,
+                draft_answer=draft_answer,
+                draft_reasoning=reasoning,
+                picked_skills=skill_ids or None,
+                lang=getattr(self.router, 'lang', 'en'),
+            )
+            if reviewed and reviewed != draft_answer:
+                review_changed = True
+                answer = reviewed
+                logger.info("[L0Review] changed %s -> %s", draft_answer, answer)
+
+        # ── 3. validators ─────────────────────────────────────────────────
+        events: list[dict] = []
         for v in self.validators:
             if not v.applies(task_type):
                 continue
@@ -320,10 +415,14 @@ class HarnessRuntime:
         return RuntimeResult(
             answer=answer, skill_id=skill_id, n_llm_calls=n_calls,
             thinking=reasoning,
+            draft_reasoning=reasoning,
             rag_context=rag_context or "",
             memory_bullets=memory_bullet_ids,
             memory_subtask=memory_subtask,
             validator_events=events,
+            draft_answer=draft_answer,
+            skill_ids=skill_ids,
+            review_changed=review_changed,
         )
 
 
@@ -335,6 +434,7 @@ def build_default_runtime(
     playbook: str | None = None,
     memory: Any = None,
     enable_scalar_validator: bool = True,
+    review_mode: str = "off",
 ) -> HarnessRuntime:
     """Convenience factory: wires the default validator stack."""
     validators: list["Validator"] = []
@@ -344,5 +444,5 @@ def build_default_runtime(
     return HarnessRuntime(
         llm=llm, router=router, validators=validators,
         rag_engine=rag_engine, playbook=playbook,
-        memory=memory,
+        memory=memory, review_mode=review_mode,
     )

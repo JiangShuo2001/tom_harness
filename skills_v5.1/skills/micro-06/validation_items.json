@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-06",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A box sits in front of a cup. From Maya's side of the table, the box blocks the cup.",
+      "question": "Which unit best fits the case: 'What can Maya see from her position?'",
+      "options": [
+        "Spatial Perspective Transformation",
+        "Sensory Access",
+        "Attention/Memory",
+        "Belief/Inference"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct occlusion from a specific viewpoint is the core match."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "A floor plan has a star on the map's right side. Leo stands facing the map from the opposite side.",
+      "question": "Which unit best fits the case: 'Which side is on Leo's left after the view is transformed?'",
+      "options": [
+        "Spatial Perspective Transformation",
+        "Sensory Access",
+        "Attention/Memory",
+        "Belief/Inference"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Tests the common shortcut of answering from the solver's own viewpoint instead of Leo's rotated viewpoint."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Rina walked past a poster with a tiny date in the corner, but the prompt asks whether she noticed the date.",
+      "question": "Which unit best fits the case?",
+      "options": [
+        "Spatial Perspective Transformation",
+        "Sensory Access",
+        "Attention/Memory",
+        "Belief/Inference"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Near miss: it mentions a visible detail, but the real issue is noticing, not viewpoint."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A microphone is turned off in a room. The prompt asks whether Omar had sensory access to the discussion.",
+      "question": "Which unit best fits the case?",
+      "options": [
+        "Spatial Perspective Transformation",
+        "Sensory Access",
+        "Attention/Memory",
+        "Belief/Inference"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Boundary case: this is about general sensory access, not viewpoint-specific visibility."
+    }
+  ]
+}

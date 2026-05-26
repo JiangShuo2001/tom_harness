@@ -1,0 +1,106 @@
+{
+  "frontmatter_description": "Estimate how observed sample evidence should revise a quantity judgment while keeping base rates, vague language, and causal explanations separate.",
+  "title": "Quantity Update After Partial Observation",
+  "use_when": [
+    "Use when a character or reasoner sees only part of a set, group, container, sequence, or population and must revise an estimate about the whole.",
+    "Use when the answer depends on how many, how much, or what proportion is suggested by sampled observations.",
+    "Use when a prior quantity estimate is changed by concrete sampled evidence, such as several checked items, a few observed people, or a partial count.",
+    "Use when the question asks what someone should now expect after looking at some cases but not all cases."
+  ],
+  "do_not_use_when": [
+    "Do not use when the only issue is interpreting a vague quantifier such as 'some,' 'most,' or 'almost none' without new observation; use micro-53.",
+    "Do not use when the answer mainly depends on background commonness, typical category frequency, or a known base rate rather than a sample just observed; use micro-55.",
+    "Do not use when the task is to identify what caused an outcome, even if quantities are mentioned; use micro-56.",
+    "Do not use when the main problem is hierarchy, role permission, escalation, or power-sensitive communication; use micro-52.",
+    "Do not use when the question asks for exact arithmetic from complete information rather than estimate revision from partial observation."
+  ],
+  "decision_variable": "sample-driven quantity revision",
+  "trigger_checklist": [
+    "A quantity, proportion, frequency, or amount is unknown or initially uncertain.",
+    "Only part of the relevant set has been observed, checked, counted, or sampled.",
+    "The observed subset provides evidence about the unobserved remainder.",
+    "The question asks for an updated estimate, expectation, likelihood, or judgment about the whole.",
+    "The sample's representativeness, size, and direction are more important than social status, blame, or language politeness."
+  ],
+  "workflow": [
+    "Identify the target quantity: what amount, count, proportion, or frequency is being estimated.",
+    "Separate the prior expectation from the new sample evidence, if a prior is given.",
+    "Describe the sample: how many cases were observed, what was found, and whether the sample was selected randomly, conveniently, or in a biased way.",
+    "Update cautiously: stronger samples shift the estimate more; tiny or biased samples shift it less.",
+    "Preserve uncertainty about the unobserved cases instead of treating the sample as a complete count.",
+    "Answer in the form requested: revised estimate, likely range, comparison, or qualitative expectation."
+  ],
+  "special_case": {
+    "title": "Biased or non-representative sample",
+    "rule": "If the observed sample was selected in a way that overrepresents one kind of case, use it as weak evidence and avoid projecting it directly to the whole group.",
+    "worked_example": {
+      "scene": "A teacher wants to know whether most students finished the homework. She asks the three students sitting in the front row, and all three say yes.",
+      "question": "Should she now think almost everyone finished?",
+      "answer_logic": "The sample points toward some completion, but it is small and may be biased because front-row students may be more prepared. Her estimate should rise only modestly, not jump to 'almost everyone.'"
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-53 if the problem is only about what a phrase like 'most,' 'a few,' or 'about half' means, with no sampled observation changing the estimate.",
+    "Exit to micro-55 if the evidence is mainly a stable base rate, stereotype of category frequency, or typicality judgment rather than observed partial cases.",
+    "Exit to micro-56 if the central question is why an outcome happened or which factor produced it.",
+    "Exit to a macro quantity route when the scene requires multiple quantity operations, such as interpreting a vague prior, updating from evidence, and comparing final estimates.",
+    "Do not force this unit when the observed information is complete; complete counts require direct calculation, not partial-observation updating."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when partial sampled evidence should change an estimate about a larger unobserved quantity.",
+    "hard_boundary": [
+      "This unit is about updating from observed samples, not merely knowing that a category is common or rare.",
+      "This unit is about quantity estimation, not causal responsibility, blame, or motive.",
+      "This unit does not decide whether a sample was morally fair or socially appropriate; it only assesses evidential force for a quantity estimate."
+    ],
+    "shortcut_to_avoid": [
+      "Do not assume the observed sample exactly equals the whole population.",
+      "Do not ignore sample size: two observed cases should not outweigh a large known pattern unless the context makes them highly diagnostic.",
+      "Do not treat a vivid or recent observation as representative without checking how it was selected."
+    ],
+    "common_failure_modes": [
+      "Overgeneralizing from a tiny sample.",
+      "Failing to update at all when a meaningful sample contradicts the prior expectation.",
+      "Confusing base-rate reasoning with sample-based revision.",
+      "Treating biased samples as random samples.",
+      "Answering with an exact count when the unobserved remainder is still unknown."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A person checks 10 boxes from a shipment of 100 and finds 8 damaged, then estimates how many boxes may be damaged overall.",
+        "why_it_matches": "The estimate about the whole shipment is revised using a partial observed sample."
+      },
+      {
+        "case": "A person says 'most boxes are usually fine' because shipments from this company are usually reliable.",
+        "why_it_matches": "This is a near miss for micro-54 but actually belongs to base rate and typicality reasoning because no new sample was observed."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the sample is large and randomly chosen, the estimate should move strongly toward the sample proportion.",
+      "If the sample is small, selected from an unusual subgroup, or chosen after noticing a problem, the estimate should move only weakly.",
+      "If a vague phrase and an observed sample both appear, first interpret the phrase only as a prior, then let the sample evidence revise it.",
+      "If the question asks 'who caused the increase' rather than 'how many are likely,' leave this unit."
+    ],
+    "generalization_note": "The same reasoning applies to social and non-social estimates: attendance, agreement, defect rates, likely votes, remembered events, or how many people in a group know something, as long as the key operation is updating a quantity from partial observation."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character observes a subset of cases and must revise an estimate about the larger set, while acknowledging uncertainty about unobserved cases.",
+    "near_miss_pattern": "A character interprets 'many,' 'few,' or 'most' without seeing any new sample evidence.",
+    "boundary_pattern": "A character relies on a known background rate or typical category frequency rather than a newly observed sample."
+  },
+  "notes": [
+    "Keep the answer proportional to the strength and representativeness of the sample.",
+    "This unit can support macro-14 when a broader scene combines vague quantities, evidence updates, and social estimation.",
+    "The central contrast is sample evidence versus prior or base-rate evidence."
+  ],
+  "id": "micro-54",
+  "level": "micro",
+  "layer": "L7",
+  "family": "quantity-probability",
+  "core_question": "Revise an estimate after seeing a sample",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

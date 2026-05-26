@@ -1,0 +1,395 @@
+{
+    "library_name":  "skills_v5",
+    "target_counts":  {
+                          "micro":  56,
+                          "macro":  20
+                      },
+    "id_scheme":  {
+                      "micro":  "micro-01 .. micro-56",
+                      "macro":  "macro-01 .. macro-20"
+                  },
+    "design_principles":  [
+                              "Micro skills target one primary capability, with low overlap and explicit boundaries.",
+                              "Macro skills are directly routable scene prototypes, not just bundles.",
+                              "A scene that resembles a macro prototype may route directly to that macro skill.",
+                              "Micro skills are used for diagnosis, refinement, and explanation.",
+                              "Benchmark coverage and real-world social coverage are fused in one library.",
+                              "Psychological and theory-of-mind structure comes before benchmark naming."
+                          ],
+    "source_logic":  {
+                         "skills_v1":  [
+                                           "error-cluster driven refinement",
+                                           "validation packs",
+                                           "boundary stress tests"
+                                       ],
+                         "skills_v4":  [
+                                           "one folder per routable unit",
+                                           "SKILL.md as the compact contract",
+                                           "references/examples.md for boundaries and minimal pairs",
+                                           "compact unit markdown and boundary descriptions"
+                                       ]
+                     },
+    "benchmark_sources":  [
+                              "ToMBench",
+                              "CogToM",
+                              "skills_v1/error_dataset",
+                              "skills_v4/data"
+                          ],
+    "real_world_extensions":  [
+                                  "privacy",
+                                  "trust",
+                                  "relationships",
+                                  "power",
+                                  "identity",
+                                  "repair",
+                                  "audience calibration",
+                                  "commitment priority"
+                              ],
+    "layers":  [
+                   {
+                       "id":  "L0",
+                       "name":  "Meta-control",
+                       "target_count":  4,
+                       "theme":  "routing, evidence, uncertainty, anti-bias"
+                   },
+                   {
+                       "id":  "L1",
+                       "name":  "Perception, attention, memory, knowledge",
+                       "target_count":  6,
+                       "theme":  "who saw what, who noticed what, what was remembered, knowledge boundaries"
+                   },
+                   {
+                       "id":  "L2",
+                       "name":  "Belief and mental model",
+                       "target_count":  8,
+                       "theme":  "first-order belief, nested belief, appearance-reality, evidence update"
+                   },
+                   {
+                       "id":  "L3",
+                       "name":  "Desire, intention, goal, action",
+                       "target_count":  7,
+                       "theme":  "preferences, intention reading, action prediction, commitment priority"
+                   },
+                   {
+                       "id":  "L4",
+                       "name":  "Emotion and appraisal",
+                       "target_count":  8,
+                       "theme":  "basic emotion, hidden emotion, atypical emotion, moral emotion, counterfactual emotion"
+                   },
+                   {
+                       "id":  "L5",
+                       "name":  "Language, pragmatics, and communication",
+                       "target_count":  8,
+                       "theme":  "literal meaning, indirect speech, implicature, lying, persuasion, audience calibration"
+                   },
+                   {
+                       "id":  "L6",
+                       "name":  "Social norm, relation, and morality",
+                       "target_count":  11,
+                       "theme":  "faux pas, harm, fairness, trust, role, identity, privacy"
+                   },
+                   {
+                       "id":  "L7",
+                       "name":  "Quantity, probability, and social inference",
+                       "target_count":  4,
+                       "theme":  "vague quantity, posterior update, typicality, causal attribution"
+                   }
+               ],
+    "macro_archetypes":  [
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-05",
+                                                               "micro-08",
+                                                               "micro-11",
+                                                               "micro-12",
+                                                               "micro-23"
+                                                           ],
+                                 "core_question":  "Where will X look?",
+                                 "direct_route_rule":  "Route immediately when the case is a first-order search-location belief after an unseen move.",
+                                 "name":  "Classic false belief",
+                                 "id":  "macro-01"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-13",
+                                                               "micro-16",
+                                                               "micro-17",
+                                                               "micro-18"
+                                                           ],
+                                 "core_question":  "Where does A think B will look?",
+                                 "direct_route_rule":  "Route immediately when one mind models another mind or shared knowledge is central.",
+                                 "name":  "Second-order belief and common knowledge",
+                                 "id":  "macro-02"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-10",
+                                                               "micro-14",
+                                                               "micro-15",
+                                                               "micro-18"
+                                                           ],
+                                 "core_question":  "What is really inside / what does this mean in the character\u0027s world?",
+                                 "direct_route_rule":  "Route immediately when appearance conflicts with reality or world knowledge is fenced off.",
+                                 "name":  "Appearance-reality and knowledge boundary",
+                                 "id":  "macro-03"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-07",
+                                                               "micro-22",
+                                                               "micro-23",
+                                                               "micro-26",
+                                                               "micro-35"
+                                                           ],
+                                 "core_question":  "What does the observer infer, or why did the sender wink / smile / glance / nudge?",
+                                 "direct_route_rule":  "Route immediately when the cue is nonverbal and social inference or sender intention is asked.",
+                                 "name":  "Social cue and nonverbal intention",
+                                 "id":  "macro-04"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-21",
+                                                               "micro-26",
+                                                               "micro-27",
+                                                               "micro-28",
+                                                               "micro-29",
+                                                               "micro-31"
+                                                           ],
+                                 "core_question":  "What does the character really feel?",
+                                 "direct_route_rule":  "Route immediately when emotion must be inferred through suppression, reversal, or unusual appraisal.",
+                                 "name":  "Hidden emotion and atypical emotion",
+                                 "id":  "macro-05"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-04",
+                                                               "micro-30",
+                                                               "micro-33",
+                                                               "micro-43",
+                                                               "micro-56"
+                                                           ],
+                                 "core_question":  "What does X feel after possible harm, fault, or blame?",
+                                 "direct_route_rule":  "Route immediately when guilt, shame, blame, or responsibility drives the emotion.",
+                                 "name":  "Moral emotion and responsibility",
+                                 "id":  "macro-06"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-34",
+                                                               "micro-35",
+                                                               "micro-36",
+                                                               "micro-39",
+                                                               "micro-48"
+                                                           ],
+                                 "core_question":  "What does the speaker really mean?",
+                                 "direct_route_rule":  "Route immediately when spoken words mean a request, warning, complaint, refusal, reminder, or invitation beyond literal text.",
+                                 "name":  "Indirect language and conversational meaning",
+                                 "id":  "macro-07"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-18",
+                                                               "micro-37",
+                                                               "micro-38",
+                                                               "micro-39",
+                                                               "micro-45"
+                                                           ],
+                                 "core_question":  "Is the statement true, and why was it said that way?",
+                                 "direct_route_rule":  "Route immediately when truth status or wording motive under partial disclosure is central.",
+                                 "name":  "Lies, half-truths, and misdirection",
+                                 "id":  "macro-08"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-03",
+                                                               "micro-20",
+                                                               "micro-40",
+                                                               "micro-41",
+                                                               "micro-46"
+                                                           ],
+                                 "core_question":  "How should one speak or persuade this listener?",
+                                 "direct_route_rule":  "Route immediately when the message must fit the listener\u0027s barrier, expertise, or motive.",
+                                 "name":  "Persuasion, advice, and audience calibration",
+                                 "id":  "macro-09"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-19",
+                                                               "micro-20",
+                                                               "micro-21",
+                                                               "micro-23",
+                                                               "micro-25",
+                                                               "micro-44"
+                                                           ],
+                                 "core_question":  "Which person\u0027s preference wins, or what action should be chosen under conflicting wants?",
+                                 "direct_route_rule":  "Route immediately when divergent desire, shared desire, or preference-based action prediction is asked.",
+                                 "name":  "Preference conflict and joint decision",
+                                 "id":  "macro-10"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-08",
+                                                               "micro-21",
+                                                               "micro-23",
+                                                               "micro-24",
+                                                               "micro-25"
+                                                           ],
+                                 "core_question":  "What does X do next?",
+                                 "direct_route_rule":  "Route immediately when multiple actions compete and priority must be resolved by commitment, continuation, invitation, or task load.",
+                                 "name":  "Commitment priority and next action",
+                                 "id":  "macro-11"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-30",
+                                                               "micro-39",
+                                                               "micro-42",
+                                                               "micro-46",
+                                                               "micro-48"
+                                                           ],
+                                 "core_question":  "Was this inappropriate or embarrassing?",
+                                 "direct_route_rule":  "Route immediately when a remark, secret, or disclosure creates social harm or awkwardness.",
+                                 "name":  "Faux pas, offense, and social embarrassment",
+                                 "id":  "macro-12"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-05",
+                                                               "micro-06",
+                                                               "micro-07",
+                                                               "micro-11"
+                                                           ],
+                                 "core_question":  "What does the target viewer see from their point of view?",
+                                 "direct_route_rule":  "Route immediately when left-right, rotation, viewpoint, or cube/dice/picture perspective is central.",
+                                 "name":  "Spatial perspective taking",
+                                 "id":  "macro-13"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-03",
+                                                               "micro-53",
+                                                               "micro-54",
+                                                               "micro-55"
+                                                           ],
+                                 "core_question":  "How many, how much, or what is the best estimate?",
+                                 "direct_route_rule":  "Route immediately when vague quantities or partial observation require estimation or update.",
+                                 "name":  "Quantity, probability, and social estimation",
+                                 "id":  "macro-14"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-18",
+                                                               "micro-44",
+                                                               "micro-45",
+                                                               "micro-46",
+                                                               "micro-47",
+                                                               "micro-56"
+                                                           ],
+                                 "core_question":  "How should we interpret this person\u0027s reliability, loyalty, or group position?",
+                                 "direct_route_rule":  "Route immediately when trust, reputation, identity, role, or long-term relational history matters.",
+                                 "name":  "Trust, relationship, and long-term interaction",
+                                 "id":  "macro-15"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-02",
+                                                               "micro-03",
+                                                               "micro-36",
+                                                               "micro-40",
+                                                               "micro-48"
+                                                           ],
+                                 "core_question":  "How should one repair a live misunderstanding?",
+                                 "direct_route_rule":  "Route immediately when the scene is a live conversational misunderstanding that can be clarified on the spot.",
+                                 "name":  "Real-time misunderstanding clarification",
+                                 "id":  "macro-16"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-02",
+                                                               "micro-42",
+                                                               "micro-43",
+                                                               "micro-48",
+                                                               "micro-49"
+                                                           ],
+                                 "core_question":  "How should one repair a damaged relationship?",
+                                 "direct_route_rule":  "Route immediately when the scene centers on apology, repair, or relationship recovery after harm or offense.",
+                                 "name":  "Apology, repair, and reconciliation",
+                                 "id":  "macro-17"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-19",
+                                                               "micro-20",
+                                                               "micro-25",
+                                                               "micro-44",
+                                                               "micro-51"
+                                                           ],
+                                 "core_question":  "How should two sides reach a mutually acceptable plan?",
+                                 "direct_route_rule":  "Route immediately when the case requires offers, concessions, trade-offs, or a shared solution under conflict.",
+                                 "name":  "Negotiation, compromise, and joint solution",
+                                 "id":  "macro-18"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-29",
+                                                               "micro-39",
+                                                               "micro-40",
+                                                               "micro-50"
+                                                           ],
+                                 "core_question":  "How should one manage the self-image shown to others?",
+                                 "direct_route_rule":  "Route immediately when first impressions, self-presentation, or formal interaction style are central.",
+                                 "name":  "First impression, self-presentation, and formal interaction",
+                                 "id":  "macro-19"
+                             },
+                             {
+                                 "expandable_micro_ids":  [
+                                                               "micro-39",
+                                                               "micro-40",
+                                                               "micro-45",
+                                                               "micro-46",
+                                                               "micro-48",
+                                                               "micro-52"
+                                                           ],
+                                 "core_question":  "How should one speak or act across a power gap?",
+                                 "direct_route_rule":  "Route immediately when the scene involves hierarchy, escalation, deference, challenge, or cross-level communication.",
+                                 "name":  "Power distance and upward/downward communication",
+                                 "id":  "macro-20"
+                             }
+                         ],
+    "skill_doc_schema":  {
+                             "frontmatter_required":  [
+                                                          "name",
+                                                          "level",
+                                                          "layer",
+                                                          "family",
+                                                          "description"
+                                                      ],
+                             "skill_md_sections":  [
+                                                       "Use When",
+                                                       "Do Not Use When",
+                                                       "Decision Variable",
+                                                       "Trigger Checklist",
+                                                       "Workflow",
+                                                       "Special Case",
+                                                       "Boundary Exit Rule",
+                                                       "References"
+                                                   ],
+                             "reference_md_sections":  [
+                                                           "Decision Variable",
+                                                           "Route Signal",
+                                                           "Hard Boundary",
+                                                           "Shortcut To Avoid",
+                                                           "Common Failure Modes",
+                                                           "Minimal Pair",
+                                                           "Boundary Stress Test",
+                                                           "Generalization Note"
+                                                       ]
+                         },
+    "generation_stages":  [
+                              "plan_registry",
+                              "expand_skill_packs",
+                              "render_markdown",
+                              "optional_validation",
+                              "audit_and_report"
+                          ]
+}

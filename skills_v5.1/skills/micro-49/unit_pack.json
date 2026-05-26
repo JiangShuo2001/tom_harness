@@ -1,0 +1,96 @@
+{
+  "frontmatter_description": "Diagnose whether a relationship needs apology, explanation, compensation, or other repair after damage has already occurred.",
+  "title": "Relationship Repair and Apology",
+  "use_when": [
+    "Use when the task is to judge whether an apology, explanation, compensation, reassurance, or other easing action is needed after a relationship has been strained.",
+    "Use when the key question is the repair need after relationship damage, not whether the original act was rude, harmful, or embarrassing.",
+    "Use when the scene already contains a hurt, offense, misunderstanding, betrayal, or awkward interaction and asks for the follow-up response."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main question is whether the original act was a faux pas, offense, or embarrassment in the first place.",
+    "Do not use when the main issue is privacy, secret-keeping, self-presentation, or disclosure timing rather than repair after harm.",
+    "Do not use when the main issue is negotiation, compromise, or choosing a joint plan without relational damage.",
+    "Do not use when no relationship has been damaged and the scene is only about general politeness or emotion display."
+  ],
+  "decision_variable": "the amount of repair needed after relationship damage",
+  "trigger_checklist": [
+    "Was someone hurt, offended, excluded, embarrassed, disappointed, or misled?",
+    "Is the question asking what should happen next to mend the relationship?",
+    "Does the scene involve apology, explanation, restitution, reassurance, or easing tension?",
+    "Is the answer about repair level rather than blame detection or norm judgment?"
+  ],
+  "workflow": [
+    "Confirm that some relational damage has already occurred.",
+    "Identify the damage type: hurt feelings, offense, misunderstanding, betrayal, or awkwardness.",
+    "Judge whether repair is needed and how strong it should be: apology only, explanation, compensation, reassurance, or continued follow-up.",
+    "Prefer the least repair that would credibly restore trust or ease strain."
+  ],
+  "special_case": {
+    "title": "Silent repair after minor harm",
+    "rule": "A repair can be needed even when no explicit apology is requested; a softening move, acknowledgment, or small compensation may still be the correct answer.",
+    "worked_example": {
+      "scene": "A person forgets a friend's birthday and later realizes the friend is distant and upset.",
+      "question": "What should they do to repair things?",
+      "answer_logic": "The damage already happened, so the task is not to judge the mistake itself but to identify the needed repair: acknowledge the oversight, apologize, and possibly make amends."
+    }
+  },
+  "boundary_exit_rule": [
+    "If the question is whether the act itself was rude, inappropriate, or embarrassing, exit to faux pas or offense judgment.",
+    "If the question is about what information should have been shared or hidden, exit to privacy or disclosure.",
+    "If the question is about how to persuade, negotiate, or choose a joint plan, exit to those action-structure units.",
+    "If no relationship damage is present, do not force repair reasoning."
+  ],
+  "references": {
+    "route_signal": "Route here when the prompt centers on mending strain after a social injury.",
+    "hard_boundary": [
+      "Not for deciding whether a remark was inappropriate; that is faux pas judgment.",
+      "Not for deciding whether a secret should have been disclosed; that is privacy or boundary management.",
+      "Not for bargaining over outcomes; that is negotiation."
+    ],
+    "shortcut_to_avoid": [
+      "Do not answer from general niceness alone; ask whether repair is actually required.",
+      "Do not confuse apology with admission of fault only; the core issue is relationship easing after damage."
+    ],
+    "common_failure_modes": [
+      "Treating the unit like offense detection instead of repair need detection.",
+      "Confusing compensation or explanation with unrelated persuasion.",
+      "Missing that a small repair can be appropriate even for indirect harm."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Someone says a private detail in front of others, and the friend later feels exposed and hurt.",
+        "why_it_matches": "The issue is what repair is needed after the relationship was damaged."
+      },
+      {
+        "case": "A speaker wonders whether a joke was socially inappropriate before anyone reacts.",
+        "why_it_matches": "This is not repair after damage; it is judgment of the original act."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the scene asks, 'Was this rude?' do not use this unit.",
+      "If the scene asks, 'What should they do now to make it better?' use this unit.",
+      "If the scene includes both offense and a proposed fix, score the repair need, not the original wrong."
+    ],
+    "generalization_note": "This unit covers post-harm relationship maintenance across apologies, explanations, restitution, and reassurance; it does not decide whether the first act was wrong."
+  },
+  "validation_seed": {
+    "positive_pattern": "A person hurts a friend, notices the strain, and must decide whether to apologize, explain, or make amends.",
+    "near_miss_pattern": "A person worries that a comment sounded rude before anyone reacted.",
+    "boundary_pattern": "A person decides whether to keep a secret private rather than tell someone who might be upset."
+  },
+  "notes": [
+    "Keep the unit focused on follow-up repair, not norm violation detection.",
+    "Apology may be verbal, behavioral, or compensatory.",
+    "Use this when the relationship state is the diagnostic target."
+  ],
+  "id": "micro-49",
+  "level": "micro",
+  "layer": "L6",
+  "family": "norms-relationships",
+  "core_question": "Identify when apology, explanation, compensation, or relationship easing is needed",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-37",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Mina says, \"I left the office at 6 p.m.\" The log shows she left at 6 p.m.",
+      "question": "What is the truth status of Mina's statement?",
+      "options": [
+        "True",
+        "False",
+        "Half-true",
+        "Unsupported"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct match between explicit content and scene facts."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "Jules says, \"I returned one book and borrowed no new books.\" The scene shows he returned one book, but he also borrowed a new book.",
+      "question": "What is the truth status of Jules's statement?",
+      "options": [
+        "True",
+        "False",
+        "Half-true",
+        "Unsupported"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Mixed explicit content: one clause is true, one clause is false."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Rina says, \"I ate one cookie before lunch.\" She did eat one cookie before lunch, but it was also the last cookie in the jar.",
+      "question": "What is the truth status of Rina's statement?",
+      "options": [
+        "True",
+        "False",
+        "Half-true",
+        "Unsupported"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The literal claim is true, even though it may create a misleading impression by omission."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Tom says, \"The gate was locked.\" In fact, it was open, but Tom had not checked and honestly believed it was locked.",
+      "question": "Did Tom lie?",
+      "options": [
+        "Yes, because the statement was false",
+        "Need intent evidence beyond truth status",
+        "No, because he believed it",
+        "Cannot compare to the facts"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "The content is false, but the question asks about lying intent, which is outside this unit."
+    }
+  ]
+}

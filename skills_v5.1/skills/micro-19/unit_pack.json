@@ -1,0 +1,95 @@
+{
+  "frontmatter_description": "Use this unit to identify a character's own likes, wants, or preferences, without inferring another person's preference or higher-level goals.",
+  "title": "Self Preference",
+  "use_when": [
+    "Use when the question asks what this character personally likes, wants, prefers, or would choose.",
+    "Use when the answer depends on the character's own preference rather than on belief, knowledge, emotion, or social strategy.",
+    "Use when the scene gives direct statements, repeated choices, or stable tastes that reveal the character's preference."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is another person's preference, even if the character is trying to guess it.",
+    "Do not use when the main issue is how sure the character is, how credible a source is, or what the character knows.",
+    "Do not use when the question is really about a goal, plan, obligation, or next action rather than liking or wanting.",
+    "Do not use when the question asks which option is best for the group, the listener, or the situation instead of what the character likes."
+  ],
+  "decision_variable": "the character's own preference",
+  "trigger_checklist": [
+    "Ask: whose liking or wanting is being queried?",
+    "Look for direct preference words such as like, want, prefer, choose, favorite, or would rather.",
+    "Check whether the answer comes from the character's internal taste or desire, not from another person's mind.",
+    "Ignore whether the character is correct, informed, polite, or strategic unless that changes the preference itself."
+  ],
+  "workflow": [
+    "Identify the character whose preference is queried.",
+    "Extract the character's expressed or implied liking from the scene.",
+    "If several options are mentioned, choose the one most aligned with that character's own stated desire or repeated choice.",
+    "Do not switch to another unit unless the question becomes about another person's preference, certainty, credibility, or goal priority."
+  ],
+  "special_case": {
+    "title": "Preference expressed through action",
+    "rule": "If the character does not say what they like, infer preference from consistent voluntary choice only when the scene clearly shows that the choice reflects liking rather than convenience, duty, or pressure.",
+    "worked_example": {
+      "scene": "Mina is offered tea and coffee. She smiles and says she always picks tea when both are available.",
+      "question": "What does Mina prefer?",
+      "answer_logic": "Her repeated voluntary choice identifies her own preference, so the answer is tea."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-20 if the question changes from what the character likes to what another person likes.",
+    "Exit to micro-17 or micro-18 if the question is about confidence, rumor, evidence, or source reliability.",
+    "Exit to micro-21 or micro-24 if the answer depends on a goal hierarchy, plan, obligation, or next action rather than preference.",
+    "Exit to micro-40 or micro-41 if the scene asks what is socially wise, polite, or persuasive instead of what the character personally wants."
+  ],
+  "references": {
+    "route_signal": "Route here when the diagnostic question is the character's own liking, wanting, or choice preference.",
+    "hard_boundary": [
+      "Another person's preference belongs to Other Preference, not Self Preference.",
+      "Uncertainty about a preference belongs to Uncertain Belief or Source Credibility.",
+      "Goal ordering and action selection belong to Goal Hierarchy or action-related units, not Self Preference."
+    ],
+    "shortcut_to_avoid": [
+      "Do not treat a polite statement as the true preference unless the scene clearly indicates it reflects genuine liking.",
+      "Do not answer from what would be useful or expected; answer from what the character themselves wants."
+    ],
+    "common_failure_modes": [
+      "Confusing the character's own preference with their guess about someone else's preference.",
+      "Using a goal or practical constraint as if it were a preference.",
+      "Overreading social politeness as hidden desire without evidence."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A character is offered apples and oranges and picks apples every time.",
+        "why_it_matches": "The question is about that character's own stable liking."
+      },
+      {
+        "case": "A character says, 'I think my friend wants apples more than oranges.'",
+        "why_it_matches": "This is not self preference; it is a representation of another person's preference."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the scene asks, 'What does she think he likes?', do not use this unit.",
+      "If the scene asks, 'What does she want right now?' and the answer is based on her own desire, use this unit.",
+      "If the scene asks, 'Which option will she pick because it is required?', do not use this unit unless the required option is also clearly her preference."
+    ],
+    "generalization_note": "This unit generalizes to any stable or immediate self-directed liking, wanting, or choice preference, across food, objects, activities, partners, plans, and options."
+  },
+  "validation_seed": {
+    "positive_pattern": "The question asks what this character personally likes or would choose, and the evidence points to that character's own taste.",
+    "near_miss_pattern": "The scene is about what the character thinks another person likes, or about confidence in a belief about preference.",
+    "boundary_pattern": "The question is about a goal, obligation, next action, or social strategy rather than personal liking."
+  },
+  "notes": [
+    "Keep the answer anchored in the character's own preference, not the observer's interpretation.",
+    "This unit should stay narrow: it diagnoses liking or wanting, not intention, belief, or social reasoning."
+  ],
+  "id": "micro-19",
+  "level": "micro",
+  "layer": "L3",
+  "family": "goal-action",
+  "core_question": "Determine what a character personally likes or wants",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-19",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "At a first interview with a potential employer, Maya is asked to greet the panel before the discussion starts.",
+      "question": "Which greeting best fits the situation?",
+      "options": [
+        "Good morning, and thank you for the opportunity to meet with you.",
+        "Hey guys, what's up?",
+        "I hope this doesn't take too long.",
+        "Before we start, let me explain my whole background."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct first-impression self-presentation: the best answer is the polished, respectful greeting."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A designer emails a hotel after the hotel raises the price for a wedding block of rooms.",
+      "question": "What should the reply mainly do?",
+      "options": [
+        "Keep the tone warm and focus on making a friendly first impression.",
+        "Avoid mentioning price and just sound professional.",
+        "State the requested lower rate and ask whether they can match it.",
+        "Apologize for any inconvenience caused by the hotel's change."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This is a polite-looking negotiation, not impression management. It tests a common false shortcut."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "A manager asks an employee in front of the team why the report is late.",
+      "question": "What is the best response?",
+      "options": [
+        "Give a polished self-introduction to reset the mood.",
+        "Briefly explain the delay and ask for a follow-up discussion if needed.",
+        "Offer a compromise on future project terms.",
+        "Say nothing to avoid making a bad first impression."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is mainly power-gap communication, not self-presentation. A polite but direct explanation fits better than image management."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "After a dinner guest accidentally insults the host's cooking, the guest wants to handle the follow-up.",
+      "question": "What should they do?",
+      "options": [
+        "Act extra charming so the host forgets it.",
+        "Change the subject and avoid the topic.",
+        "Explain that they were tired and say it came out wrong.",
+        "Offer a direct apology for the comment."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "This is apology and repair, which is outside the unit even though the setting is social and formal."
+    }
+  ]
+}

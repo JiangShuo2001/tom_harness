@@ -1,0 +1,99 @@
+{
+  "frontmatter_description": "Micro skill for choosing the communication move that best fits a hierarchy gap, such as when to comply, escalate, ask permission, challenge, or retreat.",
+  "title": "Power Navigation and Hierarchical Communication",
+  "use_when": [
+    "Use when the question is about what communication move fits a power gap.",
+    "Use when a person must choose how to speak, ask, defer, escalate, comply, challenge, or retreat in a hierarchy.",
+    "Use when the main uncertainty is the interaction strategy under unequal status, authority, or rank."
+  ],
+  "do_not_use_when": [
+    "Do not use when the task is only to identify who has what role, title, or status; that is role recognition, not strategy.",
+    "Do not use when the main issue is impression management or self-presentation rather than hierarchy-sensitive action.",
+    "Do not use when the key problem is negotiation between equals or joint compromise; use negotiation instead.",
+    "Do not use when the question is simply about persuasive wording to a listener without a power gap."
+  ],
+  "decision_variable": "the communication move that best fits the power gap",
+  "trigger_checklist": [
+    "Is there a clear hierarchy, rank, authority difference, or gatekeeper?",
+    "Is the answer about how to speak or act toward that higher- or lower-power person?",
+    "Does the scene ask whether to comply, ask permission, defer, challenge, escalate, or withdraw?",
+    "Is the best move determined by relative power rather than by truth, emotion, or shared preference?"
+  ],
+  "workflow": [
+    "Identify the power relation: who has authority, control, or veto power.",
+    "Determine the goal of the speaker: request, resist, report, repair, challenge, or obtain approval.",
+    "Choose the least risky move that still serves the goal under the hierarchy.",
+    "If the move would provoke sanctions or violate protocol, downgrade to a safer form of communication.",
+    "If direct action is blocked, use escalation, mediation, or withdrawal as the strategic alternative."
+  ],
+  "special_case": {
+    "title": "Safe escalation vs direct challenge",
+    "rule": "When the person lacks authority to act directly, prefer a procedural escalation or request for approval over blunt confrontation unless the scene explicitly requires defiance.",
+    "worked_example": {
+      "scene": "An employee notices a serious mistake in a manager's plan during a meeting.",
+      "question": "What is the best communication move?",
+      "answer_logic": "The employee should raise the issue respectfully, possibly ask for a follow-up discussion, or escalate through the proper channel if needed. The answer is determined by the hierarchy and the safest effective move, not by whether the employee is right."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit if the question is about who outranks whom rather than what communication action to take.",
+    "Exit if the scene is mainly about compromise, bargaining, or mutual adjustment between sides.",
+    "Exit if the main judgment is about image, politeness style, or emotional display rather than hierarchy.",
+    "Exit if there is no meaningful power asymmetry and the interaction is simply cooperative or conversational."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when a scene asks how to communicate across a status gap, especially when the choice is among defer, comply, ask, challenge, escalate, or retreat.",
+    "hard_boundary": [
+      "Not role labeling; it is about strategy under hierarchy.",
+      "Not general persuasion; it requires a power asymmetry.",
+      "Not negotiation; it does not require bilateral trade-offs."
+    ],
+    "shortcut_to_avoid": [
+      "Do not answer from fairness alone without checking who has authority.",
+      "Do not confuse respectful wording with strategic deference.",
+      "Do not treat a request to a superior as the same as persuading an equal."
+    ],
+    "common_failure_modes": [
+      "Overusing direct challenge when a deferential or procedural move is safer.",
+      "Confusing rank recognition with communication strategy.",
+      "Missing that escalation is sometimes the best move when direct action is blocked.",
+      "Solving the scene as compromise when the hierarchy constrains the options."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A student asks a professor for an extension because of illness.",
+        "why_it_matches": "The student must choose a hierarchy-appropriate request and tone."
+      },
+      {
+        "case": "A team member and peer disagree on a shared plan and need a compromise.",
+        "why_it_matches": "This is bilateral negotiation, not power-gap communication."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the same message is sent to a boss, a peer, or a subordinate, does the best move change because of power?",
+      "If the scene only asks who is in charge, this unit should not be used.",
+      "If a polite reply would be fine with an equal but not with a superior, the power gap is decisive."
+    ],
+    "generalization_note": "This skill generalizes to workplace, family, institutional, and status-based interactions where the key question is how to communicate strategically under hierarchy."
+  },
+  "validation_seed": {
+    "positive_pattern": "A junior person must decide whether to ask permission, comply, soften the request, or escalate to a higher authority.",
+    "near_miss_pattern": "Two equal partners are trying to find a mutually acceptable plan.",
+    "boundary_pattern": "The question only asks who has authority or what the role is, with no communication choice required."
+  },
+  "notes": [
+    "Keep the unit narrow: it selects the communication move, not the social role itself.",
+    "If the main pressure comes from conflict of interests rather than rank, prefer negotiation skills.",
+    "If the main pressure comes from self-image or presentation, prefer impression management."
+  ],
+  "id": "micro-52",
+  "level": "micro",
+  "layer": "L6",
+  "family": "norms-relationships",
+  "core_question": "Choose communication actions across hierarchy, including escalation, authorization, compliance, challenge, and retreat",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

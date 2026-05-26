@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-39",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "In a team meeting, a colleague says, \"The draft looks solid to me,\" even though it is only average, because the writer is in the room.",
+      "question": "Why did the colleague say it that way?",
+      "options": [
+        "To avoid embarrassing the writer and save face",
+        "To persuade the team to approve the draft",
+        "To make the comment easier for a junior employee to understand",
+        "To hide the fact that the draft has flaws"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct match for a social motive: polite face-saving wording, not truth judgment."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A manager says, \"We need the slides by Friday,\" during a meeting to get the team moving.",
+      "question": "What is the main reason for saying it this way?",
+      "options": [
+        "To be polite and avoid awkwardness",
+        "To push the team to act faster",
+        "To adjust the wording for a child listener",
+        "To make a hidden request without saying it directly"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Near-miss: the core goal is persuasion or behavioral influence, which is outside this unit."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "A tutor tells a seven-year-old student, \"Let's use simple words so this is easier,\" before explaining the lesson.",
+      "question": "Why did the tutor choose that wording?",
+      "options": [
+        "To soften criticism and save face",
+        "To make the message fit the child's level of understanding",
+        "To test whether the child will ask for help",
+        "To avoid saying something false"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Hard boundary: this is audience calibration, not a social motive like politeness or ingratiation."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "At the end of a visit, a host says, \"You might want to take home the last slice,\" while meaning, \"Please take it now.\"",
+      "question": "What is the intended meaning of the sentence?",
+      "options": [
+        "A polite request for the guest to take the slice",
+        "A way to flatter the guest",
+        "A tactic to make the guest feel guilty",
+        "A sign that the host is hiding the truth"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Hard boundary: the question is about the indirect request, so it belongs to indirect language rather than speaker motive."
+    }
+  ]
+}

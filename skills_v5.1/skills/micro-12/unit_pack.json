@@ -1,0 +1,100 @@
+{
+  "frontmatter_description": "Use this unit to diagnose whether a character holds a belief that conflicts with reality.",
+  "title": "False Belief",
+  "use_when": [
+    "Use when the question asks what a specific character believes is true after the world has changed.",
+    "Use when the answer depends on whether one person's mental model is outdated, mistaken, or based on incomplete evidence.",
+    "Use when you must judge a reality-belief mismatch for a particular agent, not merely state the real facts."
+  ],
+  "do_not_use_when": [
+    "Do not use when the character's belief is consistent with reality, even if the character lacks extra background knowledge.",
+    "Do not use when the main issue is who saw what, who noticed what, or what information was available.",
+    "Do not use when the question is about appearance versus reality without asking what any character believes.",
+    "Do not use when the target is one mind modeling another mind; that is second-order belief."
+  ],
+  "decision_variable": "whether the character's belief mismatches the actual state",
+  "trigger_checklist": [
+    "Is there a named character whose belief is being queried?",
+    "Has reality changed, been hidden, or been misrepresented relative to that character's knowledge?",
+    "Would the character answer incorrectly if asked about the current state?",
+    "Is the task about that character's belief, not about what is actually true?",
+    "Is the mismatch direct, not nested inside another person's belief about it?"
+  ],
+  "workflow": [
+    "Identify the target character and the proposition they believe.",
+    "Compare the belief to the actual current state of the world.",
+    "Check whether the character had access to the update or only an older view.",
+    "If belief and reality differ, label it false belief; otherwise route elsewhere.",
+    "If another person's belief about this belief is being asked, escalate to second-order belief."
+  ],
+  "special_case": {
+    "title": "Outdated belief after an unseen change",
+    "rule": "If a character saw the world one way, then the world changed without them noticing, this still counts as false belief only if the question asks for that character's current belief.",
+    "worked_example": {
+      "scene": "Sam puts the key in the drawer, leaves, and Pat moves it to the box while Sam is away.",
+      "question": "Where does Sam think the key is now?",
+      "answer_logic": "Sam's belief is based on the old location, while reality has changed. The mismatch between Sam's belief and the actual state makes this a false belief case."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to knowledge boundary if the issue is missing background competence rather than a mistaken fact about the world.",
+    "Exit to appearance-reality if the question asks what something really is versus what it looks like, with no character belief target.",
+    "Exit to first-order belief if the character's belief is asked but it may be true or false and no reality mismatch is required.",
+    "Exit to second-order belief if the question is about what one person thinks another person believes."
+  ],
+  "references": {
+    "route_signal": "Use when a scene asks for one person's incorrect belief about a changed or hidden state of affairs.",
+    "hard_boundary": [
+      "A false belief requires an explicit belief-reality conflict.",
+      "Do not infer false belief from ignorance alone.",
+      "Do not use for nested belief attribution."
+    ],
+    "shortcut_to_avoid": [
+      "Do not answer from the real-world state alone without checking the character's mental state.",
+      "Do not confuse lack of expertise or background knowledge with believing a false fact.",
+      "Do not use appearance-reality unless a character's belief is actually being queried."
+    ],
+    "common_failure_modes": [
+      "Answering with reality instead of the character's belief.",
+      "Using this when the question only asks what the character saw or knew.",
+      "Treating vague uncertainty as false belief.",
+      "Confusing first-order belief with second-order reasoning."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A character leaves an object in one place, another person moves it, and the character is asked where it is.",
+        "why_it_matches": "The target character holds an outdated belief that conflicts with reality."
+      },
+      {
+        "case": "A character is asked whether a statement is literally true after receiving no misleading update.",
+        "why_it_matches": "This may be a truth judgment or knowledge check, not necessarily a false belief diagnosis."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the character knows the current state, do not call it false belief.",
+      "If the question only asks what the character would say without testing reality mismatch, do not force this unit.",
+      "If a second person is modeling the first person's belief, route away."
+    ],
+    "generalization_note": "This unit generalizes to any direct mismatch between one agent's subjective representation and the actual world state, including hidden moves, concealed changes, and mistaken updates."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character retains an outdated view after an unseen change, and the question asks what that character believes now.",
+    "near_miss_pattern": "A character lacks expertise or context, but the question is about understanding rather than an incorrect belief.",
+    "boundary_pattern": "A question asks what one character thinks another character believes, requiring nested mental-state attribution."
+  },
+  "notes": [
+    "Keep the focus on one agent's belief versus reality.",
+    "Use this only when the mismatch itself is essential.",
+    "Prefer direct mental-state language over scene memorization."
+  ],
+  "id": "micro-12",
+  "level": "micro",
+  "layer": "L2",
+  "family": "belief-models",
+  "core_question": "Determine when X's belief conflicts with reality",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

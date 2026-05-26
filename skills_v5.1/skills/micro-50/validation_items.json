@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-50",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "At a networking event, a job candidate introduces herself by mentioning her volunteer team leadership before her recent job gap.",
+      "question": "What is the main reason for choosing that order?",
+      "options": [
+        "To create a stronger first impression about her competence and leadership",
+        "To keep a private employment detail completely secret",
+        "To apologize for the job gap and repair trust",
+        "To comply with a boss's request for direct answers"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct match: the key variable is the impression formed from disclosure order."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A student tells close friends she does not want to share a medical diagnosis at all, because it feels too personal.",
+      "question": "What skill is most relevant here?",
+      "options": [
+        "Self-presentation and impression management",
+        "Privacy and boundaries",
+        "Repair and apology",
+        "Power navigation"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a close near-miss: the issue is whether the information should be shared, not how to frame it."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "After making a rude comment in a meeting, a manager says sorry and offers to fix the harm with the team member.",
+      "question": "What is the main task in this scene?",
+      "options": [
+        "Shaping a first impression",
+        "Protecting private information",
+        "Repairing the relationship after harm",
+        "Managing rank and authority"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Clear boundary case: apology and repair are not self-presentation."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "A new volunteer says, 'I have managed three community events,' and leaves out a past failure because she wants to sound capable in her introduction.",
+      "question": "Why is this an example of the target unit?",
+      "options": [
+        "Because she is deciding how to frame true self-information to shape others' impressions",
+        "Because she is hiding information that must always remain secret",
+        "Because she is trying to settle a disagreement between two people",
+        "Because she is showing deference to a higher-status person"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This tests the common shortcut that selective disclosure is only secrecy; here it is truthful image management."
+    }
+  ]
+}

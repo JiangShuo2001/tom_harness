@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-21",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Maya saves money each week so she can buy a laptop for her design course.",
+      "question": "Which goal is higher-level in Maya's goal structure?",
+      "options": [
+        "Buying a laptop for her design course is the higher-level goal; saving money is a subordinate goal.",
+        "Saving money each week is the higher-level goal; buying a laptop is a local step.",
+        "Both goals are unrelated because they happen at different times.",
+        "The higher-level goal is whichever one Maya chooses first."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct means-end hierarchy: saving money serves the broader goal of buying the laptop."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Leo wants to go jogging, but he also wants to stay home and finish a movie. He has only one free hour.",
+      "question": "Which goal will Leo choose?",
+      "options": [
+        "Jogging is higher-level because it is healthier.",
+        "Finishing the movie is higher-level because it is more relaxing.",
+        "This asks for a choice between goals, not a goal hierarchy.",
+        "Both goals are local steps toward the same larger aim."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "The scene has competing goals and asks for selection, so it should not be handled as goal hierarchy."
+    },
+    {
+      "id": "case_3",
+      "pattern": "positive",
+      "scene": "Nina opens the app to check the bus schedule so she can arrive at the interview on time.",
+      "question": "How should the goals be classified?",
+      "options": [
+        "Opening the app is the superordinate goal; arriving on time is a local step.",
+        "Checking the bus schedule is a local or short-term goal serving the higher-level goal of arriving on time.",
+        "Arriving on time is lower-level because it happens after checking the schedule.",
+        "The first mentioned goal must be the higher-level goal."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This tests the shortcut of treating the earlier or first-mentioned action as higher-level."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Sara promised to help her brother move, but she also wants to attend a concert that starts at the same time.",
+      "question": "Which goal is more important to Sara?",
+      "options": [
+        "Helping her brother is subordinate to attending the concert.",
+        "Attending the concert is subordinate to helping her brother.",
+        "This is about importance or priority between conflicting goals, not nesting.",
+        "Both are local steps toward the same stated long-term goal."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "The question asks about priority in a conflict, which is outside the unit's scope."
+    }
+  ]
+}

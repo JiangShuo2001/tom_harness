@@ -1,0 +1,117 @@
+{
+  "frontmatter_description": "Direct-route prototype for inferring a person's intended social action or message from nonverbal cues.",
+  "title": "Social Cues and Nonverbal Intention",
+  "use_when": [
+    "Use when the key evidence is a nonverbal cue such as a glance, wink, smile, nod, shrug, gesture, pause, posture, or facial expression.",
+    "Use when the question asks what the cue means, what the sender intended, or what social action the cue performs.",
+    "Use when the scene requires interpreting a signal that is not mainly a spoken statement.",
+    "Use when the core task is to infer communication, invitation, warning, reassurance, disapproval, secrecy, or coordination from bodily or facial behavior."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main task is the literal meaning of spoken language, indirect speech, implicature, lying, or persuasion.",
+    "Do not use when the main task is hidden emotion rather than the social meaning of the cue itself.",
+    "Do not use when the key issue is false belief, appearance-reality conflict, or knowledge boundary rather than cue interpretation.",
+    "Do not use when the cue is only background detail and the answer depends on moral blame, relationship repair, or power hierarchy instead."
+  ],
+  "decision_variable": "what intention or social action a nonverbal cue conveys",
+  "direct_route_rule": "Route immediately when the cue is nonverbal and social inference or sender intention is asked.",
+  "expandable_micro_ids": [
+    "micro-07",
+    "micro-22",
+    "micro-23",
+    "micro-26",
+    "micro-35"
+  ],
+  "trigger_checklist": [
+    "A cue is nonverbal rather than mainly spoken.",
+    "The question is about meaning, intention, or social function of the cue.",
+    "The answer depends on reading gaze, facial expression, gesture, posture, or timing.",
+    "The cue is used for signaling, coordination, warning, teasing, reassurance, refusal, or invitation.",
+    "The scene can be solved without first resolving a language-pragmatics problem."
+  ],
+  "workflow": [
+    "Identify the nonverbal cue and the observer's perspective.",
+    "Ask what social action the cue is performing in context.",
+    "Use relationship, setting, and immediate conversational state to infer sender intent.",
+    "Distinguish between emotion display and communicative signal.",
+    "State the most likely intended message or social act directly."
+  ],
+  "special_case": {
+    "title": "Cue looks emotional but functions as a signal",
+    "rule": "If the outward display could be read as emotion but the scene asks what it is doing socially, prioritize the communicative function over the emotion label.",
+    "worked_example": {
+      "scene": "During a group meeting, Priya raises her eyebrows and glances at Sam without speaking.",
+      "question": "What is Priya probably trying to communicate?",
+      "answer_logic": "Do not stop at 'surprised.' The nonverbal cue is serving as a signal to Sam, so infer the intended social message from the shared context, such as 'pay attention,' 'do you agree,' or 'I want you to notice this.'"
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to macro-07 if the main evidence is a spoken sentence whose indirect meaning must be decoded.",
+    "Exit to macro-05 if the question is primarily about what the person feels rather than what the cue communicates.",
+    "Exit to macro-01 / macro-02 if the main issue is who knows what, who saw what, or where someone will look.",
+    "Exit to macro-08 if the cue accompanies a deceptive utterance and truth status drives the answer.",
+    "Add micro-07 when attentional capture must be diagnosed (who noticed the cue).",
+    "Add micro-22 when the question is the immediate purpose behind the cue.",
+    "Add micro-23 when the cue is mainly a predictor of the next action.",
+    "Add micro-26 when the cue's affective signal must be separated from its communicative function.",
+    "Add micro-35 when the cue substitutes for a speech act (request, refusal, warning)."
+  ],
+  "references": {
+    "route_signal": "The scene centers on a wink, glance, smile, nod, shrug, gesture, posture shift, or pause that carries a social message.",
+    "hard_boundary": [
+      "Not for literal sentence meaning.",
+      "Not for first-order false-belief search questions.",
+      "Not for pure emotion labeling unless the question is specifically about the emotion itself.",
+      "Not for moral judgment, apology, or trust unless the cue is only incidental."
+    ],
+    "shortcut_to_avoid": [
+      "Do not convert every facial expression into an emotion question.",
+      "Do not assume the cue is meaningless decoration if the question asks why it happened.",
+      "Do not use language-pragmatics reasoning to explain a cue that is primarily nonverbal.",
+      "Do not overfit to one gesture; solve by function in context."
+    ],
+    "common_failure_modes": [
+      "Treating a wink or glance as mere emotion instead of intentional signaling.",
+      "Answering with the speaker's literal words when the real signal is nonverbal.",
+      "Confusing hidden emotion with communicated intent.",
+      "Missing that a small cue is a request, warning, joke, or invitation."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A person silently winks at a friend during a tense conversation.",
+        "why_it_matches": "The cue is nonverbal and the task is to infer the social meaning of the wink, such as a private signal or joke."
+      },
+      {
+        "case": "A person says, 'Can you pass the salt?' at the dinner table with no accompanying gesture.",
+        "why_it_matches": "This is a near miss: the social meaning is carried by the spoken indirect speech act, not a nonverbal cue, so it routes to macro-07 instead."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the same cue appears but the question asks what the person feels, switch to an emotion macro.",
+      "If the same cue appears but the answer depends on the wording of a sentence, switch to a language-pragmatics macro.",
+      "If the same cue appears but the key issue is who noticed it, switch to a perception or knowledge macro.",
+      "If the same cue appears but the main issue is offense, embarrassment, or repair, switch to the relevant social-norm macro."
+    ],
+    "generalization_note": "This macro covers reusable social signal interpretation, not memorization of specific gestures. The invariant is that a nonverbal cue is being used as a communicative act whose meaning must be inferred from context."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character gives a glance, nod, wink, shrug, smile, or posture change, and the question asks what that cue means or what the person intends to communicate.",
+    "near_miss_pattern": "A character says something indirect or misleading in words, and the question is really about the sentence meaning or deception rather than the nonverbal cue.",
+    "boundary_pattern": "A character looks upset or amused, but the question asks only what they feel, not what the cue is signaling to others."
+  },
+  "notes": [
+    "Keep the macro focused on nonverbal social meaning, not broad emotion inference.",
+    "Use the micro units for repair, refinement, or explanation when the cue type is ambiguous.",
+    "Direct route is appropriate even if the scene also contains mild belief or emotion content, as long as the main decision variable is cue-to-intent interpretation."
+  ],
+  "id": "macro-04",
+  "level": "macro",
+  "layer": "macro",
+  "family": "social-cues",
+  "core_question": "what intention or social action a nonverbal cue conveys",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

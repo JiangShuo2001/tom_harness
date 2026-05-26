@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-18",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Nina hears that the museum is closed today. The message comes from the museum's official phone recording, which is updated each morning by staff.",
+      "question": "What should Nina most likely believe about the museum?",
+      "options": [
+        "She should believe it is probably closed because the source is official and likely informed.",
+        "She should ignore the message because any report could be wrong.",
+        "She should believe it is open because she wanted to visit.",
+        "She should be unsure only because she has not personally seen the doors."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct source credibility case: the belief update depends on the reliability and access of the information channel."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "Omar saw the blue team win the race. Later, Leo, who is known for making up stories to confuse people, says the red team won instead.",
+      "question": "What should Omar most likely think?",
+      "options": [
+        "He should fully switch to believing the red team won because Leo spoke most recently.",
+        "He should keep believing the blue team won, since he saw it himself and Leo is unreliable.",
+        "He should believe both teams won.",
+        "He should forget the race result because two claims conflict."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This tests the shortcut of believing the most recent statement. Direct perception and a known unreliable source should prevent a full update."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Maya wonders whether the outdoor concert will be canceled. The sky is dark, but no one has told her anything and she has no information about any source.",
+      "question": "Which reasoning best fits Maya's state?",
+      "options": [
+        "She should discount a source because it is biased.",
+        "She is uncertain because the evidence is incomplete, not because a source is unreliable.",
+        "She should trust an expert authority.",
+        "She should assume the concert is canceled because rumors are usually true."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a hard near-miss: the issue is uncertainty without testimony or source-quality cues, so it should exit to uncertain belief rather than source credibility."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Ben needs to choose a snack for Carla. Dana says Carla loves raisins, but Dana admits she only heard it from a class rumor. Ben's close friend Mia says she saw Carla choose raisins yesterday.",
+      "question": "What should Ben most reasonably believe about Carla's preference?",
+      "options": [
+        "He should give more weight to Mia's report because she had direct access, while Dana only repeats a rumor.",
+        "He should give more weight to Dana because rumors are shared by many people.",
+        "He should ignore both reports because preferences cannot be reported.",
+        "He should choose raisins only because Ben likes raisins."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This sits on the preference boundary: the immediate task is whether Ben should believe a report about Carla's preference based on source credibility."
+    }
+  ]
+}

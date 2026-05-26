@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-24",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Noah promised to cover the 4 p.m. shift at the bookstore. At 3:45 p.m., his friend texts asking him to join a movie instead.",
+      "question": "What should Noah prioritize?",
+      "options": [
+        "The bookstore shift he already promised to cover",
+        "The movie invitation because it is more fun",
+        "Whichever option he feels like in the moment",
+        "Neither; he should ignore both plans"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct priority conflict between an existing commitment and a new invitation."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "Lena is already helping her neighbor move boxes. While she is carrying a table, her coworker asks if she can come in early for an extra task.",
+      "question": "Which plan has priority right now?",
+      "options": [
+        "The coworker's extra task because it is new",
+        "The task she is already doing for her neighbor",
+        "The option that sounds most important emotionally",
+        "Neither; both should be treated the same"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "An ongoing task already underway should outrank a new request unless an override is stated."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Eli wants to finish his report or play a video game after work. No one has promised anything, and no deadline has been set.",
+      "question": "Which unit best fits this scene?",
+      "options": [
+        "Commitment Priority",
+        "General goal conflict",
+        "Persuasion or repair",
+        "Intention recognition"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is only a wish-versus-wish choice with no binding commitment structure."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Mina promised to help at the community fair, but later she told the organizer she could not come because of a family emergency.",
+      "question": "Why is this a poor match for Commitment Priority?",
+      "options": [
+        "Because there is no prior commitment at all",
+        "Because the promise was canceled, so the conflict is no longer active",
+        "Because the scene is mainly about what she will do next",
+        "Because the scene only describes a mood"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "The earlier promise has already been explicitly overridden, so priority ranking is not the main issue."
+    }
+  ]
+}

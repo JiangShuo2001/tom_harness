@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-01",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A test item says: 'Is this mainly about what the person believed, wanted, intended, or knew?'",
+      "question": "What is the prompt really asking for?",
+      "options": [
+        "The target mental-state variable",
+        "The final scene outcome",
+        "The best supporting evidence",
+        "A moral judgment"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct routing question; it asks for the variable, not the scene answer."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "A story says a child saw a cookie moved from the red box to the blue box, then asks what kind of question this is.",
+      "question": "Which variable is being targeted?",
+      "options": [
+        "Belief about location",
+        "Physical strength",
+        "Language fluency",
+        "Social status"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Names the mental-state lens before any scene solving."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Mina watched her keys get moved from the drawer to the coat pocket after she left.",
+      "question": "Where will Mina look first?",
+      "options": [
+        "The drawer",
+        "The coat pocket",
+        "The kitchen sink",
+        "Impossible to know"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Looks like a routing item, but it is actually a direct false-belief scene question."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A prompt asks: 'Which explanation best fits why he avoided the call?'",
+      "question": "What kind of task is this?",
+      "options": [
+        "Explanation comparison",
+        "Belief attribution",
+        "Evidence ranking",
+        "Action prediction"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Boundary case with a likely shortcut toward mental-state labeling, but the task is explanation competition."
+    }
+  ]
+}

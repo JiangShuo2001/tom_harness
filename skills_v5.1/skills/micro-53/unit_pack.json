@@ -1,0 +1,106 @@
+{
+  "frontmatter_description": "Interpret the approximate numeric or proportional range implied by vague quantity words before any new evidence is used.",
+  "title": "Vague Quantity Prior",
+  "use_when": [
+    "Use when the task asks what a vague quantifier such as \"some,\" \"many,\" \"most,\" \"few,\" \"almost none,\" \"about half,\" or \"nearly all\" implies.",
+    "Use when the answer depends on the listener's ordinary prior interpretation of a quantity phrase, not on later observations.",
+    "Use when a character's expectation or social interpretation hinges on whether a phrase suggests a small minority, a large minority, a majority, or near-total amount.",
+    "Use when estimating an approximate range is enough and an exact count is not available or not intended."
+  ],
+  "do_not_use_when": [
+    "Do not use when the estimate must be revised after seeing a sample, receiving new counts, or observing outcomes; route to micro-54.",
+    "Do not use when the main question is category likelihood, typicality, or base-rate probability rather than the meaning of a quantity phrase; route to micro-55.",
+    "Do not use when vague quantity language is part of bargaining, concession, or a joint plan; route to micro-51 for the negotiation move.",
+    "Do not use when the issue is how to phrase a message across a hierarchy or power gap; route to micro-52.",
+    "Do not use when an exact arithmetic answer is required and the vague expression is irrelevant."
+  ],
+  "decision_variable": "the approximate range implied by the vague quantifier",
+  "trigger_checklist": [
+    "A vague quantifier or approximate quantity phrase is present.",
+    "The question asks what amount, fraction, or expectation the phrase suggests.",
+    "No new observation needs to update the estimate.",
+    "The answer can be expressed as an approximate range or ordinal quantity category.",
+    "Speaker intention, power, or negotiation is not the primary variable."
+  ],
+  "workflow": [
+    "Identify the vague quantity phrase and the reference set it applies to.",
+    "Decide whether the phrase implies count, proportion, frequency, or intensity.",
+    "Map the phrase to an approximate qualitative range, such as near zero, small minority, moderate minority, about half, majority, large majority, or near all.",
+    "Adjust lightly for context only when the reference set changes the practical meaning, such as \"a few people\" versus \"a few cities.\"",
+    "Keep the answer as a prior interpretation unless the prompt gives later evidence that must update it.",
+    "State the implied range and avoid inventing exact numbers unless the question explicitly requests a rough numeric example."
+  ],
+  "special_case": {
+    "title": "Context-sensitive but not evidence-updated",
+    "rule": "A vague quantifier may shift with the size and stakes of the reference class, but it should not be revised using later sample evidence within this unit.",
+    "worked_example": {
+      "scene": "A teacher says that most students submitted the form before the deadline. No roster count is given.",
+      "question": "What should the listener assume about the number of students who submitted it?",
+      "answer_logic": "The phrase \"most students\" implies more than half and usually a clear majority, not necessarily all. Because no later observation or sample is provided, the answer stays at the prior interpretation of \"most.\""
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-54 if the prompt says someone observed a subset, sample, count, or outcome and asks how the estimate should change.",
+    "Exit to micro-55 if the prompt asks which category is more likely because it is common, typical, or rare, rather than what a quantifier means.",
+    "Exit to micro-51 if the vague quantity is an offer, concession, or compromise term whose social function matters more than its range.",
+    "Exit to micro-52 if the vague quantity is chosen mainly to manage deference, authority, escalation, or compliance.",
+    "Exit if the task requires exact calculation from explicit numbers instead of interpreting a vague phrase."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the central task is to translate a vague quantity expression into its ordinary approximate range before any evidence update.",
+    "hard_boundary": [
+      "This unit is about semantic-pragmatic quantity priors, not Bayesian or sample-based updating.",
+      "This unit does not decide whether a person is reliable, strategic, polite, or deceptive unless that depends only on the implied quantity range.",
+      "This unit does not solve negotiation, authority, or relationship strategy scenes even if they contain words like \"some\" or \"most.\""
+    ],
+    "shortcut_to_avoid": [
+      "Do not convert every vague quantifier into a fixed exact percentage; preserve approximate ranges.",
+      "Do not let later evidence leak backward into the meaning of the original phrase.",
+      "Do not treat \"some\" as necessarily \"only a few\"; it can mean more than one but less than all, with context shaping the expected range."
+    ],
+    "common_failure_modes": [
+      "Answering with an exact number when only an approximate interpretation is licensed.",
+      "Updating the estimate after a sample and incorrectly staying in this unit.",
+      "Confusing typicality judgments, such as whether a bird is likely to fly, with vague quantity interpretation.",
+      "Ignoring the reference class, such as interpreting \"a few errors\" the same way in a one-page note and a million-line database."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A sign says \"Most seats are taken.\" The question asks how full the room probably is.",
+        "why_it_matches": "The task is to interpret the vague quantifier \"most\" as a prior range, likely a clear majority of seats."
+      },
+      {
+        "case": "A sign says \"Most seats are taken,\" but then Sam looks inside and sees only 3 of 20 seats occupied. The question asks what Sam should now believe.",
+        "why_it_matches": "This is a near miss for this unit because the later observation changes the estimate; route to micro-54."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the phrase is \"almost none,\" answer near zero but not necessarily exactly zero.",
+      "If the phrase is \"about half,\" allow a range around half rather than exactly 50%.",
+      "If the phrase is \"some,\" avoid assuming majority unless context strongly supports it.",
+      "If the phrase is \"nearly all,\" distinguish it from \"all\" because exceptions remain possible.",
+      "If explicit sample evidence appears after the phrase, stop using this unit and update through micro-54."
+    ],
+    "generalization_note": "Vague quantifiers encode socially shared approximate expectations; the key is to recover the ordinary range implied by the wording while keeping it separate from later evidence, exact arithmetic, and strategic communication goals."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character hears a vague quantity phrase such as \"few,\" \"many,\" \"most,\" or \"about half\" and the question asks what amount the phrase implies.",
+    "near_miss_pattern": "A character first hears a vague phrase and then observes a sample or count, and the question asks for the revised estimate.",
+    "boundary_pattern": "A vague quantity appears inside a negotiation, hierarchy, or persuasion scene, but the real question is what social move to make rather than what range the words imply."
+  },
+  "notes": [
+    "Keep the output approximate unless the prompt explicitly asks for a rough numeric illustration.",
+    "This unit may support macro-14 when a quantity scene needs diagnosis of the language prior before any probability update.",
+    "Preserve the distinction between the meaning of a quantifier and the truth of the speaker's claim."
+  ],
+  "id": "micro-53",
+  "level": "micro",
+  "layer": "L7",
+  "family": "quantity-probability",
+  "core_question": "Interpret vague quantifiers such as some, most, almost none, or about half",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

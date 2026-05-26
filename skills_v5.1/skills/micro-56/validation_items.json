@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-56",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A vase fell after the shelf was loosened by vibrations from the washing machine.",
+      "question": "What caused the vase to fall?",
+      "options": [
+        "The loosened shelf and vibration",
+        "The vase was expensive",
+        "The homeowner",
+        "A broken window"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct causal attribution: the outcome is explained by a physical condition, not blame."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "The meeting started late because the speaker's laptop would not connect to the projector.",
+      "question": "What caused the late start?",
+      "options": [
+        "The laptop connection failure",
+        "The speaker wanted to delay it",
+        "The audience arrived early",
+        "The projector screen color"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Clear cause is stated in the scene, matching the unit's core question."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "A cyclist swerved and hit a parked car after checking a text message.",
+      "question": "What caused the collision?",
+      "options": [
+        "The cyclist checking the text message",
+        "The parked car was guilty",
+        "The road was closed",
+        "The bike owner apologized"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is close to a blame judgment, but the question still asks for the causal source, not fault."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A child breaks a lamp while playing indoors.",
+      "question": "Who should apologize for the broken lamp?",
+      "options": [
+        "The child",
+        "The lamp",
+        "The room",
+        "No one"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a boundary case because it asks about apology and responsibility, not cause."
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "frontmatter_description": "Diagnose the social action an utterance is performing when the wording is indirect, polite, or conventionally used for hinting, requesting, refusing, reminding, or warning.",
+  "title": "Indirect Speech Act",
+  "use_when": [
+    "Use when the question asks what social act the utterance is performing, not just what it literally says.",
+    "Use when a sentence functions as a request, refusal, warning, reminder, hint, or invitation through indirect wording.",
+    "Use when the key task is to identify the speaker's action in context from the utterance form."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main question is the sentence's explicit semantic content; use Literal Meaning instead.",
+    "Do not use when the main question is what extra implied information is conveyed but the act itself is not in question; use Conversational Implicature instead.",
+    "Do not use when the main question is whether the statement is true, false, or deceptive; use Truth, Lie, and Half-Truth instead.",
+    "Do not use when the scene requires diagnosing emotion, belief, or intention apart from the act performed."
+  ],
+  "decision_variable": "the social action the utterance is performing",
+  "trigger_checklist": [
+    "Is the utterance indirect rather than direct?",
+    "Is the answer a speech act like request, refusal, warning, reminder, hint, or invitation?",
+    "Would the literal sentence mislead if taken as the whole answer?",
+    "Is context needed to identify what the speaker is doing socially?"
+  ],
+  "workflow": [
+    "First identify the literal sentence meaning.",
+    "Then ask what communicative action the speaker is performing in context.",
+    "Map the utterance to the most specific speech act that fits the scene.",
+    "Ignore extra implied content unless it is needed to identify the act itself."
+  ],
+  "special_case": {
+    "title": "Polite indirect request",
+    "rule": "When a statement is phrased as a comment, need, or question but functions as a request, answer with the request act, not the literal content or the implied inconvenience.",
+    "worked_example": {
+      "scene": "A says to B, 'It's getting cold in here.' B is near the window.",
+      "question": "What is A doing socially?",
+      "answer_logic": "The literal content is about temperature, but in context A is performing an indirect request for B to close the window or help fix the draft."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-34 Literal Meaning if the question is about what the sentence explicitly says rather than what it is doing socially.",
+    "Exit to micro-36 Conversational Implicature if the question is about hidden extra meaning conveyed beyond the act being performed.",
+    "Exit to micro-37 Truth, Lie, and Half-Truth or micro-38 Misleading and Selective Expression if truth, deception, or speaker sincerity is the main target.",
+    "Exit to micro-39 Speaker Motivation if the diagnostic target is the social motive for choosing those words rather than the act performed.",
+    "Exit to a belief, desire, or emotion unit if the scene is better described as belief, desire, or emotion inference without an utterance-act focus."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when an utterance must be classified by its social function in context, especially for indirect requests, refusals, reminders, warnings, hints, or invitations.",
+    "hard_boundary": [
+      "Literal Meaning asks what is said, not what act is done.",
+      "Conversational Implicature asks what extra meaning is conveyed, not which speech act is being performed.",
+      "Truth, Lie, and Half-Truth asks whether the content matches facts, not what the utterance is doing socially."
+    ],
+    "shortcut_to_avoid": [
+      "Do not answer with the literal paraphrase if the utterance is clearly serving another social function.",
+      "Do not over-infer hidden motives when the task only asks for the speech act.",
+      "Do not confuse a polite form with a different act if context makes the intended act obvious."
+    ],
+    "common_failure_modes": [
+      "Answering the literal semantic content instead of the speech act.",
+      "Labeling every indirect utterance as implicature even when the target is the action type.",
+      "Treating a warning or reminder as a statement of fact only.",
+      "Missing that a question can function as a request."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A guest, looking at an empty water glass, says to the host, 'I forgot how thirsty I get on hot days.'",
+        "why_it_matches": "The literal sentence is autobiographical, but in context it functions as an indirect request for water, so the diagnostic target is the social act being performed."
+      },
+      {
+        "case": "The host replies, 'I get thirsty on hot days too,' and the question asks what the host literally said.",
+        "why_it_matches": "Form and function align as a plain assertion of personal habit; the answer is the literal content, so the target is micro-34, not an indirect act."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the same words are spoken in a different context, does the social act change?",
+      "Can you name the act without judging truth, motive, or implied extra content?",
+      "If the utterance is stripped of context, do you still need context to identify the act rather than the literal meaning?"
+    ],
+    "generalization_note": "This unit generalizes to any case where form and function diverge and the task is to classify the communicative act, not the proposition itself."
+  },
+  "validation_seed": {
+    "positive_pattern": "An indirect utterance clearly functions as a request, reminder, warning, refusal, or invitation in context.",
+    "near_miss_pattern": "A clue implies extra information, but the question is actually asking for the implied content rather than the speech act.",
+    "boundary_pattern": "A sentence's truth value or literal content is central, with no need to classify its social function."
+  },
+  "notes": [
+    "Keep the answer at the act level, not the content level.",
+    "This unit is about what the utterance is doing socially, not why the speaker feels that way."
+  ],
+  "id": "micro-35",
+  "level": "micro",
+  "layer": "L5",
+  "family": "language-pragmatics",
+  "core_question": "Determine the social action performed by an utterance, such as hinting, requesting, refusing, reminding, or warning",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

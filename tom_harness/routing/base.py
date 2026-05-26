@@ -3,14 +3,16 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
 class RouteDecision:
     """Output of `router.route(...)`. None skill_id means "no skill, raw LLM"."""
     skill_id: str | None
+    skill_ids: list[str] = field(default_factory=list)
     rationale: str = ""
+    n_llm_calls: int = 0
 
 
 class Router(ABC):

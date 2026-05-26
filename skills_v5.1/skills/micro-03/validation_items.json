@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-03",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Mina arrived 20 minutes late, her sleeves were damp, and she gave short answers. She said she got caught in heavy rain.",
+      "question": "Which explanation best fits the evidence?",
+      "options": [
+        "She was delayed by the rain and was rushing to dry off.",
+        "She was upset with the group and did not want to talk.",
+        "She had forgotten the meeting and came only after being reminded.",
+        "She was too tired from work to answer in full sentences."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is the core task: compare multiple plausible explanations and choose the one that fits the clues with the fewest extra assumptions."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A teacher asks why a student missed class. The student was absent, and the desk was empty.",
+      "question": "Which option names the evidence directly shown in the scene?",
+      "options": [
+        "The student was sick.",
+        "The student was absent from class.",
+        "The student wanted to avoid the teacher.",
+        "The student forgot about the lesson."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a near-miss because it asks for direct evidence, not the best explanation among competing interpretations."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "After a meeting, two coworkers both stayed quiet. One person thinks the other is being rude and says so to a manager.",
+      "question": "What is the main issue being checked here?",
+      "options": [
+        "Which explanation best fits the silence.",
+        "Whether the coworker was actually rude.",
+        "Whether the manager agrees with the complaint.",
+        "Whether the speaker is being biased or too judgmental."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "This is a boundary case because the task is about bias and judgment, not choosing the best explanation for the silence."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Jorge smiled after reading a text, then sat down quietly. His friend said he must be happy. Jorge later said the text said his lost passport had been found.",
+      "question": "Which explanation best accounts for the scene?",
+      "options": [
+        "He was happy about the text and stayed quiet because the news was a relief.",
+        "He was embarrassed and smiled to hide it from his friend.",
+        "He was angry at the sender but pretended to be calm.",
+        "He was bored and smiled only because he was tired."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This case includes a likely wrong shortcut: the smile is salient, but the full clue set better fits relief from the lost passport being found."
+    }
+  ]
+}

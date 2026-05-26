@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-02",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "The forecast predicted snow, and Lena grabbed her boots before leaving the house.",
+      "question": "Which detail best supports the conclusion that Lena expected snow?",
+      "options": [
+        "The forecast predicted snow.",
+        "She left the house.",
+        "She expected snow.",
+        "She owned boots."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The question asks for direct support, and the forecast is the stated evidence behind the conclusion."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Jordan found his bike tire flat, checked the repair kit, and later took the bus to work.",
+      "question": "Which explanation best fits why Jordan took the bus?",
+      "options": [
+        "He wanted to avoid traffic.",
+        "His bike tire was flat.",
+        "He prefers buses over bikes.",
+        "He was late on purpose."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is explanation selection, not support tracing, so it is a near miss for the unit."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "A short passage contains a few clues about what happened before the main event.",
+      "question": "What is the main reasoning task here?",
+      "options": [
+        "Identify the skill or question type.",
+        "Choose the best explanation.",
+        "Check whether the reader is biased.",
+        "Give the final answer directly."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The prompt asks for task identification, which is outside evidence-chain construction."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Maya looked outside, saw dark clouds, and carried an umbrella on her way out.",
+      "question": "Which detail is the textual evidence for concluding that Maya expected rain?",
+      "options": [
+        "She saw dark clouds.",
+        "She expected rain.",
+        "It was definitely going to rain.",
+        "She was being careful."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This catches the shortcut of treating a commonsense completion as if it were direct evidence."
+    }
+  ]
+}

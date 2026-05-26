@@ -1,0 +1,98 @@
+{
+  "frontmatter_description": "Diagnose how the arrival of new evidence changes a character's belief, without judging the source itself.",
+  "title": "Evidence-Availability Updating",
+  "use_when": [
+    "Use when the question asks how newly available information changes what someone believes.",
+    "Use when the task is to determine the direction of belief update after new evidence appears, is revealed, or becomes noticed.",
+    "Use when the key issue is whether the character now believes more, believes less, or revises a prior assumption because of fresh evidence."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is whether the evidence source is credible, deceptive, or trustworthy; that is a source-evaluation problem, not an update-direction problem.",
+    "Do not use when the question asks what one person thinks another person thinks; use recursive belief instead.",
+    "Do not use when the task is about common knowledge, certainty level, or appearance versus reality rather than the effect of new evidence.",
+    "Do not use when no new fact, observation, or disclosure has arrived; without a fresh input there is no update direction to compute."
+  ],
+  "decision_variable": "the direction of belief change caused by newly available evidence",
+  "trigger_checklist": [
+    "A new fact, clue, observation, disclosure, or reminder becomes available.",
+    "The question asks what belief changes, not whether the source is honest.",
+    "The answer depends on whether the new evidence supports, weakens, or leaves unchanged a prior belief.",
+    "The scene is about update effect, not deeper reasoning about who knows what."
+  ],
+  "workflow": [
+    "Identify the prior belief before the new evidence appears.",
+    "Identify the new evidence and whether it is now visible, known, or disclosed.",
+    "Compare the evidence to the prior belief and judge the update direction: strengthen, weaken, or no change.",
+    "Ignore source credibility unless the prompt explicitly makes credibility the main issue."
+  ],
+  "special_case": {
+    "title": "New evidence is relevant but not decisive",
+    "rule": "If the new information only weakly supports the prior belief, answer by the direction of partial updating, not by certainty or truth status.",
+    "worked_example": {
+      "scene": "A friend thinks it may rain. She sees dark clouds, but no rain has started yet.",
+      "question": "How should her belief change?",
+      "answer_logic": "The clouds are newly available evidence that increases the probability of rain, so the belief should update in the positive direction even though the conclusion is not certain."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-18 if the question is about whether the information source is reliable, misleading, or lying.",
+    "Exit to micro-13 if the central issue is one mind representing another mind's belief state.",
+    "Exit to micro-16 or micro-17 if the prompt asks about certainty, guessing, or shared/public knowledge rather than update direction.",
+    "Exit to micro-14 if the task is about what is really true in the world, not how belief shifts from new evidence."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when a case asks how a new observation or disclosure changes belief, and the main output is the direction of the update.",
+    "hard_boundary": [
+      "Not source credibility, deception, or trustworthiness.",
+      "Not second-order belief or common knowledge.",
+      "Not appearance-reality as such.",
+      "Not certainty level or doubt level."
+    ],
+    "shortcut_to_avoid": [
+      "Do not jump from 'new information' to 'truth' without checking whether the question is about belief update.",
+      "Do not infer from source trust unless the prompt explicitly asks about credibility.",
+      "Do not confuse 'knowing the evidence' with 'knowing the answer'."
+    ],
+    "common_failure_modes": [
+      "Answering with the true state instead of the changed belief.",
+      "Treating a weak clue as a full conclusion.",
+      "Mixing update direction with source trustworthiness.",
+      "Recasting an update question as a common-knowledge or recursive-belief question."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A child thinks the gift is in the box, then hears the box was moved to the closet.",
+        "why_it_matches": "The new information changes the child's belief about the likely location, so the update direction is the key variable."
+      },
+      {
+        "case": "A person hears a rumor from an unreliable gossip source.",
+        "why_it_matches": "If the question is whether to trust the rumor source, the main issue is credibility, so this micro unit does not apply."
+      }
+    ],
+    "boundary_stress_test": [
+      "A clue appears that is true but only partly informative: ask only for the direction of belief change, not the final certainty.",
+      "A speaker gives evidence while also being suspicious: if credibility is the question, switch away from this unit.",
+      "A character learns something and also learns that others know it: that is no longer pure evidence updating."
+    ],
+    "generalization_note": "This unit covers any case where a belief is revised because new evidence becomes available, regardless of whether the evidence is visual, verbal, remembered, or inferred."
+  },
+  "validation_seed": {
+    "positive_pattern": "A new clue or disclosure becomes available and the correct answer is the direction of belief revision.",
+    "near_miss_pattern": "The case features a questionable speaker, but the real question is whether the speaker is trustworthy.",
+    "boundary_pattern": "The prompt asks who knows what, who believes what, or how sure someone is."
+  },
+  "notes": [
+    "Keep the answer on update direction, not truth value.",
+    "Use this as a narrow diagnostic unit inside larger belief and evidence scenes."
+  ],
+  "id": "micro-15",
+  "level": "micro",
+  "layer": "L2",
+  "family": "belief-models",
+  "core_question": "Determine how newly available evidence changes belief",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

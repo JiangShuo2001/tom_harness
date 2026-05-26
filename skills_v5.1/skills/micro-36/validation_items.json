@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-36",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "At the end of dinner, the host glances at the clock and says, \"It's getting late.\"",
+      "question": "What is the host communicating beyond the literal words?",
+      "options": [
+        "It is time for the guest to leave soon.",
+        "The clock is broken.",
+        "It is exactly 11:00.",
+        "The host is asking about the weather."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Classic conversational implicature: the extra meaning is inferred from context, not stated directly."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "A parent asks, \"Did you finish all the cookies?\" The child says, \"I ate some.\"",
+      "question": "What is implied?",
+      "options": [
+        "Not all of the cookies were eaten.",
+        "The child ate no cookies.",
+        "The child is asking for more cookies.",
+        "The child is lying about eating cookies."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Tests scalar implicature: a weaker term invites the stronger excluded alternative."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "A team lead says, \"Could you send me the draft by noon?\"",
+      "question": "What is the team lead doing?",
+      "options": [
+        "Making a request.",
+        "Implying the draft is already finished.",
+        "Saying noon is a bad time.",
+        "Commenting on the draft's quality."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is indirect speech act, not implicature; the question targets the action performed."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A manager asks whether all four reports are done. An employee replies, \"Some of the reports are done,\" while knowing all four are done.",
+      "question": "What is the main issue with this reply?",
+      "options": [
+        "It is a misleading half-truth that can suggest the reports are incomplete.",
+        "It means exactly only some reports are done.",
+        "It is a polite warning to stop working.",
+        "It is a request for more time."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a boundary case because the key issue is misleading expression, not a clean implicature alone."
+    }
+  ]
+}

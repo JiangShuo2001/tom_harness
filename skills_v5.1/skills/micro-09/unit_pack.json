@@ -1,0 +1,97 @@
+{
+  "frontmatter_description": "Diagnose a character's retained, lost, or distorted memory after prior exposure.",
+  "title": "Memory, Forgetting, and Misremembering",
+  "use_when": [
+    "Use when the question asks what a character remembers, forgets, or misremembers after previously encountering the information.",
+    "Use when the key issue is the character's current memory state, not whether the information was seen, understood, or believed.",
+    "Use when the answer depends on retention, decay, reconstruction, confabulation, or recall error."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is whether the person noticed the information in the first place; that is attention or salience.",
+    "Do not use when the main issue is whether the person has the background needed to understand the information; that is knowledge boundary.",
+    "Do not use when the main issue is what the person believes is true right now independent of prior exposure; that is belief.",
+    "Do not use when the main issue is only event order or updating from one event to the next; that is temporal order."
+  ],
+  "decision_variable": "current memory content and fidelity",
+  "trigger_checklist": [
+    "Did the person encounter the information before?",
+    "Is the question about recall, forgetting, or distortion of that prior information?",
+    "Is the task to tell whether the memory is accurate, partial, absent, or altered?",
+    "Is the answer driven by what remains in memory rather than by perception or background knowledge?"
+  ],
+  "workflow": [
+    "Confirm there was prior exposure to the relevant information.",
+    "Ask whether the current question targets retention, loss, or distortion of that exposure.",
+    "Check whether the person would recall it accurately, incompletely, or incorrectly.",
+    "If the information was never attended to or never understood, exit to the neighboring skill instead of using memory."
+  ],
+  "special_case": {
+    "title": "Recalled but reconstructed",
+    "rule": "Use this skill when a character recalls a past event but fills gaps with a guess, later detail, or mistaken association.",
+    "worked_example": {
+      "scene": "Mina saw a red umbrella on Monday. On Thursday she says she remembers it being blue because she now associates the umbrella with her friend's blue coat.",
+      "question": "What kind of memory error is this?",
+      "answer_logic": "The issue is not whether Mina noticed the umbrella or knows what an umbrella is. She originally had exposure, but her current memory has been distorted by reconstruction, so this is misremembering."
+    }
+  },
+  "boundary_exit_rule": [
+    "If the question is about whether the character ever noticed the cue, switch to attention and salience.",
+    "If the question is about whether the character has the background to make sense of the cue, switch to knowledge boundary.",
+    "If the question is about what the character currently thinks is true regardless of prior exposure, switch to first-order belief.",
+    "If the question is about how one event changes another mental state over time, switch to temporal order and event updating."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when a question asks what survives, fades, or changes in a character's memory after prior exposure.",
+    "hard_boundary": [
+      "Prior exposure must already be established or strongly implied.",
+      "The answer must depend on memory retention, omission, or distortion.",
+      "Do not use if the key uncertainty is perception, comprehension, or belief formation instead of recall."
+    ],
+    "shortcut_to_avoid": [
+      "Do not infer memory loss just because the character gives a wrong answer; check whether the failure could instead be lack of attention or lack of knowledge.",
+      "Do not treat every mistaken statement as a memory problem; some are beliefs, guesses, or lies."
+    ],
+    "common_failure_modes": [
+      "Confusing not seeing with forgetting.",
+      "Confusing not understanding with misremembering.",
+      "Confusing belief revision with memory distortion.",
+      "Treating event order questions as memory questions even when recall is not being tested."
+    ],
+    "minimal_pair": [
+      {
+        "case": "The child heard the code yesterday and cannot repeat it today.",
+        "why_it_matches": "The question is whether the previously heard item is still retained in memory."
+      },
+      {
+        "case": "The child was in the room but never looked at the code card.",
+        "why_it_matches": "The failure is attention or access, not memory retention."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the person never encoded the detail, this is not memory.",
+      "If the person remembers the detail but interprets it with new background knowledge, check whether the question is really about belief or knowledge boundary.",
+      "If the person says something false about a past event, ask whether it is a memory distortion or a deliberate lie."
+    ],
+    "generalization_note": "This skill covers retention, forgetting, partial recall, and false recollection after exposure, but not perception, world knowledge, or current belief formation."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character saw or heard something earlier, and the question asks what they still remember or whether they recall it correctly now.",
+    "near_miss_pattern": "A character failed to notice a cue or lacked the background to understand it, and the answer is wrongly treated as forgetting.",
+    "boundary_pattern": "A character states what they think is true without any prior-memory test, and the answer is wrongly treated as misremembering."
+  },
+  "notes": [
+    "Preserve the distinction between memory fidelity and belief content.",
+    "Prior exposure is required for a positive match.",
+    "Use as a narrow diagnostic unit, not as a general reasoning bucket."
+  ],
+  "id": "micro-09",
+  "level": "micro",
+  "layer": "L1",
+  "family": "perception-memory-knowledge",
+  "core_question": "Determine what a character knows, remembers, forgets, or misremembers",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

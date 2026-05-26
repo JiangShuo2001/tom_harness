@@ -1,0 +1,100 @@
+{
+  "frontmatter_description": "Diagnose who caused harm and whether blame is justified from intent, causation, and responsibility.",
+  "title": "Harm and Responsibility",
+  "use_when": [
+    "Use when the question asks who caused harm and whether that person is blameworthy.",
+    "Use when intent, negligence, or causal responsibility for an injury, loss, or damage is the key issue.",
+    "Use when the task is to assign responsibility rather than judge politeness, fairness, or trust.",
+    "Use when the scene asks whether blame is appropriate after a harmful outcome."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is social tact, embarrassment, or offense without responsibility for harm.",
+    "Do not use when the question is about fairness of outcomes or reciprocity rather than blame for harm.",
+    "Do not use when the task is about whether someone is reliable or trustworthy over time.",
+    "Do not use when the question is about apology, repair, or reconciliation after harm rather than responsibility itself."
+  ],
+  "decision_variable": "blameworthy responsibility for harm",
+  "trigger_checklist": [
+    "Was there actual harm, damage, injury, loss, or wrongful consequence?",
+    "Did the person cause it directly or through negligent action?",
+    "Was the harm intentional, reckless, or accidental?",
+    "Is the question asking who deserves blame rather than who was rude or awkward?",
+    "Would changing the cause or intent change the answer?"
+  ],
+  "workflow": [
+    "Identify the harmful outcome.",
+    "Trace who caused it and whether the causation is direct or indirect.",
+    "Check intent: intentional, reckless, negligent, or accidental.",
+    "Assign blame only if responsibility is supported by cause plus culpability.",
+    "Ignore pure etiquette violations unless they also caused harm."
+  ],
+  "special_case": {
+    "title": "Accident versus culpable harm",
+    "rule": "An accidental outcome is not automatically blameworthy; blame depends on whether the person could reasonably have prevented the harm or acted carelessly.",
+    "worked_example": {
+      "scene": "A child drops a vase while running; no one told them the area was off-limits, and they did not see it was fragile.",
+      "question": "Should the child be blamed for the broken vase?",
+      "answer_logic": "The vase was broken, but the child did not intend the harm and lacked clear responsibility cues. The correct judgment is low or no blame unless there was evidence of recklessness."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to faux pas/offense if the issue is mainly social appropriateness, embarrassment, or tact with no real harm judgment.",
+    "Exit to fairness/reciprocity if the issue is unequal treatment, repayment, or taking advantage rather than causing harm.",
+    "Exit to trust/reputation if the question is about whether someone is generally reliable, not whether they are blameworthy for this harm.",
+    "Exit to apology/repair if the main task is how to respond after the harm, not who caused it."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the prompt asks who caused harm, whether the harm was intentional, or whether blame is justified.",
+    "hard_boundary": [
+      "Do not route here for mere awkwardness, rude wording, or norm violation without harmful consequence.",
+      "Do not route here for fairness, trust, or repair unless blame for harm is the central variable."
+    ],
+    "shortcut_to_avoid": [
+      "Do not confuse harm responsibility with offense: a rude remark can be a faux pas even if nobody is harmed.",
+      "Do not assume intent from outcome alone: harm happened does not mean the actor is blameworthy."
+    ],
+    "common_failure_modes": [
+      "Mistaking a social embarrassment question for a blame question.",
+      "Assigning blame when the person only caused inconvenience, not harm.",
+      "Ignoring negligence and treating only intentional harm as blameworthy.",
+      "Using trust history to answer a one-time responsibility question."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Someone spills coffee on a laptop while rushing and had been warned to be careful.",
+        "why_it_matches": "The key question is whether the person is responsible for the damage and deserves blame."
+      },
+      {
+        "case": "Someone says an awkward comment at dinner that embarrasses a guest, but no one is harmed.",
+        "why_it_matches": "This is social tact/offense, not responsibility for harm."
+      }
+    ],
+    "boundary_stress_test": [
+      "If there is no actual harm, do not use this unit.",
+      "If the prompt asks whether a remark was rude, embarrassing, or inappropriate, route to faux pas instead.",
+      "If the prompt asks who should pay, repay, or share resources, route to fairness instead.",
+      "If the prompt asks whether the person is usually dependable, route to trust and reputation instead."
+    ],
+    "generalization_note": "This unit isolates blameworthy responsibility for harm across accidents, negligence, and intentional injury, while staying separate from tact, fairness, trust, and repair."
+  },
+  "validation_seed": {
+    "positive_pattern": "A person's action caused damage, and the question is whether they are blameworthy because they acted carelessly or intentionally.",
+    "near_miss_pattern": "Someone said something awkward that embarrassed others, but no harm or blame for injury is being judged.",
+    "boundary_pattern": "The scene asks whether resources were shared fairly or whether someone took advantage, not who caused harm."
+  },
+  "notes": [
+    "Keep the focus on causal responsibility plus culpability.",
+    "Do not expand into apology, punishment, or reconciliation.",
+    "Use this as a diagnosis unit inside larger moral or relationship scenes."
+  ],
+  "id": "micro-43",
+  "level": "micro",
+  "layer": "L6",
+  "family": "norms-relationships",
+  "core_question": "Determine who caused harm, whether it was intentional, and whether blame is appropriate",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

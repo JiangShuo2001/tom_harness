@@ -1,0 +1,99 @@
+{
+  "frontmatter_description": "Use this micro unit to determine whether a character actually noticed a cue, not merely whether the cue was available to the senses.",
+  "title": "Attention and Salience",
+  "use_when": [
+    "Use when the question asks who noticed, paid attention to, or ignored a specific cue.",
+    "Use when the answer depends on whether information entered the character's attentional focus.",
+    "Use when one person saw or heard something but only some characters actually registered it.",
+    "Use when the task is to diagnose salience, not perception, memory, or belief."
+  ],
+  "do_not_use_when": [
+    "Do not use when the only issue is whether the cue was visible, audible, or otherwise perceptually available.",
+    "Do not use when the main issue is viewpoint, spatial perspective, or what someone could see from their position.",
+    "Do not use when the main issue is whether the character later remembered, forgot, or misremembered the cue.",
+    "Do not use when the task is about interpreting what the cue meant, inferring belief, or predicting action from it."
+  ],
+  "decision_variable": "whether the cue entered the character's attentional focus",
+  "trigger_checklist": [
+    "Is the question asking who noticed the cue rather than who could perceive it?",
+    "Is there a visible or audible event that some characters may have missed despite sensory access?",
+    "Does the scene contrast attended versus unattended information?",
+    "Is the answer determined by whether the cue was mentally registered at the moment it occurred?"
+  ],
+  "workflow": [
+    "Identify the key cue and the target character.",
+    "Check whether the scene explicitly shows attention: looking toward it, turning, reacting, pausing, commenting, or being distracted.",
+    "Separate noticing from mere exposure: sensory access is not enough.",
+    "If attention is uncertain, use only cues of actual registration, not later inference from behavior unless the behavior directly shows noticing.",
+    "Return the character who truly attended to the cue, or state that no one did if the cue was missed."
+  ],
+  "special_case": {
+    "title": "Seen but not noticed",
+    "rule": "If a character had perceptual access but was distracted, focused elsewhere, or never registered the cue, count that as not noticed.",
+    "worked_example": {
+      "scene": "Two people are talking. A phone lights up on the table. One person is watching the speaker closely. The other is reading a text message on a tablet.",
+      "question": "Who noticed the phone light?",
+      "answer_logic": "The phone was visible to both, but only the person whose attention was on the table is likely to have registered it. The distracted tablet reader did not notice it."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to sensory access if the question is only about whether the cue could be seen or heard.",
+    "Exit to spatial perspective if the question is about what is visible from a viewpoint.",
+    "Exit to memory if the question asks who later remembers the cue.",
+    "Exit to belief or inference if the question asks what the character concluded from the cue."
+  ],
+  "references": {
+    "route_signal": "Use when the diagnostic question is whether a character actually noticed a cue, not whether the cue was present or meaningful.",
+    "hard_boundary": [
+      "Perceptual availability alone is not attention.",
+      "Later recall does not prove initial noticing.",
+      "Interpretation of the cue is outside this unit."
+    ],
+    "shortcut_to_avoid": [
+      "Do not assume noticing just because the cue was obvious to the reader.",
+      "Do not infer attention from a later reaction unless the reaction clearly shows initial registration."
+    ],
+    "common_failure_modes": [
+      "Confusing seeing with noticing.",
+      "Confusing attention with memory.",
+      "Confusing attention with inference about intention or belief.",
+      "Using viewpoint rules when the real issue is distraction."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Two people sit at a desk; a phone in front of them lights up. One glances over and remarks on it; the other is absorbed in a loud argument and never reacts.",
+        "why_it_matches": "Identical sensory access for both, so the decisive variable is which person's attention captured the cue."
+      },
+      {
+        "case": "The same two people are at the desk, but the phone lights up behind a closed laptop screen so neither could see it light.",
+        "why_it_matches": "Near miss: the deciding variable is now whether the cue was perceptually available at all, which routes to Sensory Access."
+      }
+    ],
+    "boundary_stress_test": [
+      "Several characters can see the same event, but only one mentions it immediately.",
+      "A cue is fully visible in the room, yet the target character is focused on a different task.",
+      "A later statement reveals the character noticed something, but the scene never showed attention at the moment."
+    ],
+    "generalization_note": "This skill isolates attentional selection: whether a cue became mentally foregrounded, not whether it was present, interpreted, remembered, or acted on."
+  },
+  "validation_seed": {
+    "positive_pattern": "A cue is available to multiple characters, but only one is shown orienting to it or mentioning it right away.",
+    "near_miss_pattern": "The question asks who could see or hear the cue from their position, with no attention contrast.",
+    "boundary_pattern": "The scene asks what someone later remembers or believes after the cue, not whether they noticed it initially."
+  },
+  "notes": [
+    "Keep the unit narrow: attention only, not perception, memory, or inference.",
+    "Treat explicit distraction as strong evidence of non-noticing.",
+    "Use this unit when the scene hinges on salience and registration, even if the cue is physically obvious."
+  ],
+  "id": "micro-07",
+  "level": "micro",
+  "layer": "L1",
+  "family": "perception-memory-knowledge",
+  "core_question": "Determine who noticed a key cue and who ignored it",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

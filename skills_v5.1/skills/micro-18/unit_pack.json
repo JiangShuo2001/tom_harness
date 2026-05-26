@@ -1,0 +1,108 @@
+{
+  "frontmatter_description": "Determine how the credibility of an information source changes what a character believes or how much weight they give a report.",
+  "title": "Source Credibility",
+  "use_when": [
+    "Use when a character's belief depends on who provided the information, such as a rumor, eyewitness, expert, authority, friend, enemy, or known liar.",
+    "Use when the question asks whether a character should believe, doubt, discount, or update based on the source's reliability.",
+    "Use when two sources give conflicting claims and the answer depends on which source is more trustworthy, informed, biased, or deceptive.",
+    "Use when the key issue is not merely what was said, but whether the speaker or channel is credible."
+  ],
+  "do_not_use_when": [
+    "Do not use when the only issue is how certain the character feels without any evidence about the source's reliability; use uncertain belief instead.",
+    "Do not use when the question asks whether information is openly shared by both parties; use common knowledge instead.",
+    "Do not use when the question asks what someone likes or wants, unless credibility of a report about that preference is the central variable.",
+    "Do not use when the answer follows directly from what the character personally saw, with no evaluation of testimony, rumor, authority, or deception.",
+    "Do not use for general lying analysis unless the main task is how the listener's belief changes because the speaker is or is not credible."
+  ],
+  "decision_variable": "source reliability",
+  "trigger_checklist": [
+    "Is a belief based on testimony, rumor, report, advice, warning, review, accusation, or authority?",
+    "Is there information about the source's accuracy, expertise, access, honesty, bias, or motive to deceive?",
+    "Would the character believe something different if the same statement came from a different source?",
+    "Are there competing sources with different credibility levels?",
+    "Is the question asking why confidence changes rather than simply whether the character is confident?"
+  ],
+  "workflow": [
+    "Identify the claim being transmitted to the character.",
+    "Identify the source or channel of the claim, including whether it is direct eyewitness, hearsay, expert judgment, rumor, authority, advertisement, enemy, friend, or known deceiver.",
+    "Assess source reliability using available cues: access to facts, past accuracy, expertise, honesty, bias, incentives, and possible deception.",
+    "Separate source credibility from the content's plausibility; a plausible claim from an unreliable source may still be discounted.",
+    "Infer the character's belief update: accept, reject, doubt, seek confirmation, or hold a weaker belief.",
+    "If the question asks another mental state, use source credibility only as an input and route to the target unit if credibility is no longer central."
+  ],
+  "special_case": {
+    "title": "Reliable source versus direct perception",
+    "rule": "If a character directly perceived the relevant fact, direct perception usually overrides later testimony unless the testimony gives a reason to doubt the perception.",
+    "worked_example": {
+      "scene": "Maya saw Leo put the keys in the drawer. Later, Sam, who often makes up stories, says Leo put the keys in the backpack.",
+      "question": "Where will Maya think the keys are?",
+      "answer_logic": "Maya has direct perceptual evidence for the drawer and Sam is an unreliable source. She should keep the drawer belief or at most doubt slightly, rather than fully updating to the backpack."
+    }
+  },
+  "boundary_exit_rule": [
+    "If the problem is only about confidence level with no source-quality cue, exit to micro-17 Uncertain Belief.",
+    "If the problem is about whether both people know and know that the other knows, exit to micro-16 Common Knowledge.",
+    "If the problem is about a character's own desire, liking, or choice, exit to micro-19 Self Preference.",
+    "If the problem is about whether one character understands another person's desire, exit to micro-20 Other Preference.",
+    "If the problem asks where someone will search after an unseen move and the source of information is not evaluated, exit to the relevant belief or false-belief route."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when a belief update turns on the trustworthiness, expertise, access, bias, or honesty of the person or channel providing information.",
+    "hard_boundary": [
+      "Source credibility is about why a report is trusted or distrusted, not merely whether the character is unsure.",
+      "It does not decide preferences, intentions, or actions unless those depend on whether a report is believed.",
+      "It does not replace common knowledge; public sharedness is a different variable from source reliability.",
+      "It does not require the source to be objectively true or false; it models how the character should weight that source from their perspective."
+    ],
+    "shortcut_to_avoid": [
+      "Do not assume a character believes the most recent statement; check whether the speaker is credible to that character.",
+      "Do not treat all uncertainty as source credibility; if no source-quality evidence exists, route to uncertain belief.",
+      "Do not assume authority is always credible; authority can be uninformed, biased, deceptive, or outside its expertise."
+    ],
+    "common_failure_modes": [
+      "Ignoring a known liar or biased source and updating as if the report were neutral.",
+      "Overweighting a rumor despite the scene marking it as hearsay.",
+      "Confusing the narrator's truth with the character's evidence about the source.",
+      "Routing to preference reasoning when the actual issue is whether a report about a preference is trustworthy.",
+      "Failing to distinguish eyewitness access from secondhand repetition."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A child hears from a teacher who saw the event that the class trip is canceled.",
+        "why_it_matches": "The child's belief depends on a credible authority with likely access to the fact."
+      },
+      {
+        "case": "A child is unsure whether the class trip is canceled because no one has told them and the weather looks bad.",
+        "why_it_matches": "This is a near miss for micro-17 Uncertain Belief: the issue is subjective doubt, not reliability of a source."
+      }
+    ],
+    "boundary_stress_test": [
+      "A trusted friend repeats a rumor but did not witness it; distinguish trust in the friend from weak access to the original fact.",
+      "An expert gives advice outside their area of expertise; do not grant full credibility just because they are an expert in something.",
+      "A known liar tells the truth this time; model whether the listener would believe them, not whether the statement is objectively true.",
+      "Two witnesses disagree, but one had a clear view and the other was guessing; weight access and reliability separately.",
+      "A character wants a claim to be true; do not confuse motivated desire with credible evidence."
+    ],
+    "generalization_note": "This unit generalizes to rumors, testimony, reviews, accusations, warnings, expert advice, institutional announcements, and deceptive communication whenever the operative social-cognitive variable is how much a mind trusts the source."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character receives a report from a source with clear reliability cues, and the answer depends on whether that source should be trusted.",
+    "near_miss_pattern": "A character is unsure because evidence is incomplete, but no source's credibility is evaluated.",
+    "boundary_pattern": "A character learns another person's preference from a questionable source; use this unit only for whether the report is believed, then route to preference reasoning if the believed preference drives action."
+  },
+  "notes": [
+    "Preserves the core variable: source reliability.",
+    "Useful inside macro routes involving common knowledge, appearance-reality, lies, trust, and long-term relationships when belief strength depends on who supplied the information.",
+    "Keep analysis character-centered: evaluate credibility as available to the character, not only as known to the outside reader."
+  ],
+  "id": "micro-18",
+  "level": "micro",
+  "layer": "L2",
+  "family": "belief-models",
+  "core_question": "Determine how rumors, eyewitness reports, authority, or deceptive sources affect belief",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "frontmatter_description": "Diagnose which of several plausible interpretations best fits the available evidence.",
+  "title": "Multiple-Explanation Competition",
+  "use_when": [
+    "Use when the task asks you to compare more than one plausible explanation for the same evidence.",
+    "Use when the answer depends on which interpretation best accounts for the observed facts, not on judging good or bad."
+  ],
+  "do_not_use_when": [
+    "Do not use when the task is only to identify the social or mental variable the question is asking for.",
+    "Do not use when the task is only to separate evidence from inference or to list what supports a conclusion.",
+    "Do not use when the task is mainly checking for perspective bias, outcome bias, or a moral-intuition shortcut.",
+    "Do not use when there is only one plausible interpretation and the question is about factual recall, belief attribution, or action prediction."
+  ],
+  "decision_variable": "which explanation best accounts for the available evidence",
+  "trigger_checklist": [
+    "Are there two or more plausible explanations?",
+    "Is the task asking which interpretation is best, most likely, or most supported?",
+    "Does the question require holding multiple readings in mind before choosing one?",
+    "Is the choice based on explanatory fit rather than moral judgment, confidence style, or direct observation?"
+  ],
+  "workflow": [
+    "List the plausible explanations that remain open.",
+    "Check each explanation against every available clue.",
+    "Prefer the explanation that explains more clues with fewer assumptions.",
+    "Reject explanations that require unsupported leaps or ignore key evidence.",
+    "Return the best-fitting explanation, not the one that feels most familiar."
+  ],
+  "special_case": {
+    "title": "Same evidence, different stories",
+    "rule": "Use this skill when the scene provides one set of clues that could support multiple stories, and the task is to choose the strongest story rather than to judge the people involved.",
+    "worked_example": {
+      "scene": "A friend arrives late, looks tired, and gives a short answer. Possible explanations include being busy, being upset, or being sick.",
+      "question": "Which explanation best fits the evidence?",
+      "answer_logic": "Compare how well each explanation accounts for lateness, tiredness, and brevity together. Choose the explanation that covers the most clues with the fewest extra assumptions."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit if the task shifts from choosing among explanations to identifying what evidence exists or where it came from.",
+    "Exit if the task becomes a bias check, moral evaluation, or blame assignment.",
+    "Exit if the question asks for a mental-state fact such as belief, desire, or intention rather than an explanation ranking.",
+    "Exit if the scene is really about one person's perspective, not competing interpretations."
+  ],
+  "references": {
+    "route_signal": "Use when the question explicitly asks which explanation, interpretation, reading, or account best fits the evidence.",
+    "hard_boundary": [
+      "Not a value judgment skill.",
+      "Not an evidence-tagging skill.",
+      "Not a bias-correction skill.",
+      "Not a belief-attribution skill."
+    ],
+    "shortcut_to_avoid": [
+      "Do not pick the explanation that matches the most salient detail while ignoring the rest.",
+      "Do not confuse the solver's confidence with explanatory quality.",
+      "Do not collapse multiple plausible readings into the first obvious one."
+    ],
+    "common_failure_modes": [
+      "Choosing the most emotionally vivid explanation instead of the best-supported one.",
+      "Answering with a belief or intention when the question asks for explanation comparison.",
+      "Using outside world knowledge to override the stated clues.",
+      "Treating ambiguity itself as proof of one interpretation."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Two explanations fit the same action, and the question asks which best explains the clues.",
+        "why_it_matches": "The unit compares competing interpretations and selects the one with the best evidence fit."
+      },
+      {
+        "case": "A question asks whether a person saw something, remembered it, or believes it happened.",
+        "why_it_matches": "This is about perceptual access or belief state, not explanation competition."
+      }
+    ],
+    "boundary_stress_test": [
+      "If only one clue is given, can you still justify two distinct interpretations?",
+      "If a moral reaction is removed, does the core question still ask which explanation fits best?",
+      "If you must name a belief or desire instead of a story, this is the wrong unit."
+    ],
+    "generalization_note": "This skill generalizes to any case where several interpretations remain viable and the task is to preserve, compare, and choose the best explanatory account."
+  },
+  "validation_seed": {
+    "positive_pattern": "The prompt gives several plausible explanations for the same evidence and asks which one best fits.",
+    "near_miss_pattern": "The prompt asks you to identify what evidence matters, who saw what, or what someone believes.",
+    "boundary_pattern": "The prompt asks whether the solver is being biased or too judgmental rather than which explanation is best."
+  },
+  "notes": [
+    "Keep the unit narrow: it selects among explanations, not among people, values, or actions.",
+    "Use as a diagnosis step inside larger social reasoning when multiple interpretations are live.",
+    "Do not expand into evidence extraction, anti-bias, or belief inference."
+  ],
+  "id": "micro-03",
+  "level": "micro",
+  "layer": "L0",
+  "family": "meta-control",
+  "core_question": "Preserve and compare several plausible interpretations",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

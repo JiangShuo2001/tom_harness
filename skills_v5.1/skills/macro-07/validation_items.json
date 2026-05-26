@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-07",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "At a friend's apartment, Mina glances at the closed window and says, 'It is getting a bit warm in here.'",
+      "question": "What does Mina really want the listener to understand?",
+      "options": [
+        "Open the window or cool the room",
+        "She is reporting the exact temperature",
+        "She is refusing to stay any longer",
+        "She is asking what temperature it is outside"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "A polite indirect request should be interpreted by intended social meaning, not literal wording."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "As someone walks toward a wet floor, Jordan says, 'Careful, that area is slippery.'",
+      "question": "What is Jordan really doing?",
+      "options": [
+        "Making a factual comment about flooring materials",
+        "Warning the person to avoid the wet area",
+        "Complaining about poor cleaning",
+        "Inviting the person to come closer"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a direct warning expressed through ordinary speech."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "After a meeting, Lee says, 'I was in the office all morning,' even though the security log shows Lee was elsewhere.",
+      "question": "What is the main issue here?",
+      "options": [
+        "Whether Lee is being truthful",
+        "Whether Lee is making a polite request",
+        "Whether Lee is giving a reminder",
+        "Whether Lee is inviting someone to meet later"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a near-miss because the core task is truthfulness, not indirect conversational meaning."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A coworker asks, 'How should I phrase this so my manager agrees?'",
+      "question": "What reasoning is most relevant?",
+      "options": [
+        "Inferring an indirect request or warning from the words",
+        "Choosing a persuasive way to tailor the message",
+        "Deciding whether the statement is factually true",
+        "Reading hidden emotion from facial expression"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a boundary case because the task is persuasion and audience adaptation, not indirect meaning."
+    }
+  ]
+}

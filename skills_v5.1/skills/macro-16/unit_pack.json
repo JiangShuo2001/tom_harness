@@ -1,0 +1,113 @@
+{
+  "frontmatter_description": "Route here when a live conversational misunderstanding must be clarified on the spot.",
+  "title": "Dialogue Misunderstanding Repair and Clarification",
+  "use_when": [
+    "Use when two speakers are in an active conversation and one utterance has been misunderstood, misread, or ambiguously interpreted.",
+    "Use when the best move is immediate clarification, restatement, or a check for shared meaning.",
+    "Use when the scene is about resolving what was meant right now, not repairing relationship damage later.",
+    "Use when the key task is to detect a mismatch between intended meaning and received meaning in real time."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is apology, compensation, or relationship repair after offense or harm.",
+    "Do not use when the scene is mainly about persuasion, negotiation, or audience calibration rather than misunderstanding.",
+    "Do not use when the question is about truth, lying, or concealment instead of live clarification.",
+    "Do not use when the problem is a long-term trust or identity judgment rather than a momentary conversational mismatch."
+  ],
+  "decision_variable": "how to detect and clarify a live misunderstanding in conversation",
+  "direct_route_rule": "Route immediately when the scene is a live conversational misunderstanding that can be clarified on the spot.",
+  "expandable_micro_ids": [
+    "micro-36",
+    "micro-40",
+    "micro-48"
+  ],
+  "trigger_checklist": [
+    "A speaker says something that is taken the wrong way, or the listener shows confusion.",
+    "The scene includes a repair move such as 'What do you mean?', 'I meant...', 'No, I said...', or a restatement.",
+    "The correct answer depends on what the speaker intended versus what the listener heard.",
+    "The misunderstanding can be fixed immediately through clarification, not by apology or mediation.",
+    "The key uncertainty is conversational meaning, reference, or interpretation in the moment."
+  ],
+  "workflow": [
+    "Identify the utterance or gesture that caused the mismatch.",
+    "Determine whether the problem is ambiguity, wrong reference, wrong implication, or wrong assumption.",
+    "Infer the most likely intended meaning from context and conversational goals.",
+    "Choose the clarifying response: ask a clarifying question, restate the meaning, or correct the misread.",
+    "Confirm the shared interpretation and stop once the conversation is aligned.",
+    "If the scene has harm, embarrassment, or offense beyond simple confusion, exit to apology or social repair skills."
+  ],
+  "special_case": {
+    "title": "Ambiguous reference with no damage",
+    "rule": "If the misunderstanding is only about who, what, where, or which item was meant, resolve it with a neutral clarifying question or precise restatement; do not add apology or moral interpretation unless the scene explicitly includes harm.",
+    "worked_example": {
+      "scene": "One person says, 'Put it on the table,' and the listener is not sure whether 'it' means the keys, the box, or the bag. The speaker is still present and can clarify immediately.",
+      "question": "What should the listener do?",
+      "answer_logic": "This is a live ambiguity, so the correct move is to ask for clarification or use surrounding context to identify the referent. The scene is about shared meaning, not apology, offense, or persuasion."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to macro-17 if the scene shifts from clarification to apology after hurt, embarrassment, or offense.",
+    "Exit to macro-09 / macro-18 if the main task becomes strategic persuasion, negotiation, or audience adaptation.",
+    "Exit to macro-08 if the core question is whether a statement is true, deceptive, or ironic rather than simply misunderstood.",
+    "Exit to macro-07 if the misunderstood content is an indirect speech act and the issue is what the utterance was performing.",
+    "Add micro-36 when conversational implicature is the source of the mismatch.",
+    "Add micro-40 when audience calibration must be repaired (level, identity, stance).",
+    "Add micro-48 when the misread involves a private or sensitive disclosure."
+  ],
+  "references": {
+    "route_signal": "The conversation contains an immediate sign of confusion, correction, or repair: 'What do you mean?', 'No, I meant...', 'I thought you said...', or a direct restatement to align meaning.",
+    "hard_boundary": [
+      "Real-time clarification only, not aftermath repair.",
+      "No primary focus on apology, compensation, or reconciliation.",
+      "No primary focus on persuasion or negotiation.",
+      "No primary focus on deception detection."
+    ],
+    "shortcut_to_avoid": [
+      "Do not treat every correction as an insult.",
+      "Do not convert a simple misunderstanding into a relationship rupture.",
+      "Do not answer the literal content without resolving the mismatch in meaning.",
+      "Do not jump to trust or morality unless the scene explicitly requires it."
+    ],
+    "common_failure_modes": [
+      "Overcalling offense when the scene is only confused communication.",
+      "Missing the intended meaning because the listener fixates on literal wording.",
+      "Answering the underlying topic instead of the repair move.",
+      "Using apology logic where clarification logic is enough."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A person says, 'I need the report by Friday,' and the listener asks, 'Do you mean this Friday or next Friday?'",
+        "why_it_matches": "This is a live misunderstanding that can be fixed immediately by clarifying the intended referent."
+      },
+      {
+        "case": "A person says something that embarrasses or hurts the other, who later asks for an apology and repair.",
+        "why_it_matches": "This is not just misunderstanding; the main issue is relationship damage and belongs outside this macro."
+      }
+    ],
+    "boundary_stress_test": [
+      "The wording is identical, but one version is only ambiguous and another version has caused offense; route only the ambiguous version here.",
+      "The listener already understood correctly but asks for rhetorical effect; do not overroute.",
+      "A third party is confused, but the original speaker and listener already share meaning; do not overroute unless the live repair is central."
+    ],
+    "generalization_note": "This macro covers any in-the-moment conversational repair where the task is to recover shared meaning from ambiguity, mishearing, or wrong inference, using the lightest effective clarification move."
+  },
+  "validation_seed": {
+    "positive_pattern": "Two people are speaking, one message is misread, and a quick clarifying question or restatement resolves the mismatch.",
+    "near_miss_pattern": "A remark causes hurt, awkwardness, or blame, and the scene is really about apology or reconciliation rather than simple clarification.",
+    "boundary_pattern": "The listener is confused about what was meant, but there is no offense, no lasting damage, and the answer is a direct clarification."
+  },
+  "notes": [
+    "Keep the scene prior compact: live misunderstanding first, repair move second, shared meaning restored third.",
+    "Use the micro expansions only for diagnosis, boundary repair, or explanation when the exact misunderstanding type matters.",
+    "The macro should resolve directly when the scene clearly calls for on-the-spot clarification."
+  ],
+  "id": "macro-16",
+  "level": "macro",
+  "layer": "macro",
+  "family": "dialogue-misunderstanding-repair-and-clarification",
+  "core_question": "how to detect and clarify a live misunderstanding in conversation",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

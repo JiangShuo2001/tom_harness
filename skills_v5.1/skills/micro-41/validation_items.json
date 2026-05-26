@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-41",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A city health worker wants hesitant residents to sign up for free flu shots. Residents distrust official announcements but often follow what their neighbors do.",
+      "question": "Which influence strategy is most likely to change residents' behavior?",
+      "options": [
+        "Emphasize that many local neighbors have already safely received the shot",
+        "Use more technical medical terminology in the flyer",
+        "Ask residents why they dislike government programs",
+        "Offer to negotiate each person's appointment time individually"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct persuasion case: the answer names a one-way tactic, social proof, aimed at changing behavior."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A museum guide is explaining an exhibit to a group of eight-year-olds. The goal is not to change their opinion, only to make the explanation understandable.",
+      "question": "What is the best diagnosis of the communication task?",
+      "options": [
+        "Use emotional appeal to persuade the children to like the exhibit",
+        "Adapt the explanation to the children's age and vocabulary",
+        "Use expert authority to make the children accept the guide's view",
+        "Frame the exhibit as a choice between two positions"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a near miss: the task is audience calibration, not changing belief, attitude, or behavior."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Two roommates disagree about cleaning. One offers to cook twice a week if the other handles vacuuming. The other counters by asking for weekend laundry help too.",
+      "question": "Why should this not be treated as persuasion strategy?",
+      "options": [
+        "Because both sides are trading concessions to reach a shared arrangement",
+        "Because one roommate is using social proof to influence the other",
+        "Because the issue is whether the first roommate caused harm",
+        "Because the main task is choosing simpler wording"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a hard boundary: reciprocal offers and concessions make it negotiation, not one-way influence."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "A teacher wants a student to stop skipping homework. The student thinks homework is pointless but cares about joining the basketball team, which requires passing grades.",
+      "question": "Which persuasive strategy best targets the student's attitude and behavior?",
+      "options": [
+        "Explain how completing homework helps maintain eligibility for basketball",
+        "Infer that the teacher is speaking because she feels frustrated",
+        "Make the instructions shorter and easier to read",
+        "Decide whether the student's behavior deserves blame"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This counters a common shortcut: the answer is the tactic aimed at the listener, not the speaker's motive, wording fit, or blame."
+    }
+  ]
+}

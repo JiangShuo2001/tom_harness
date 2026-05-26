@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-45",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Maya has worked with Jordan for two years. Jordan returns borrowed equipment on time, admits mistakes, keeps private information private, and follows through on tasks even when inconvenient.",
+      "question": "Should Maya trust Jordan with a sensitive team responsibility?",
+      "options": [
+        "Yes, because Jordan has a consistent history of reliable and honest behavior.",
+        "No, because one future task could still go badly.",
+        "Yes, because Jordan sounds confident in meetings.",
+        "No, because trust should never be based on past behavior."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This directly tests judging future reliability from repeated interpersonal history."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A speaker gives a polished presentation about a new medicine. The facts sound plausible, the slides look professional, and the speaker seems calm, but no one in the room knows the speaker personally.",
+      "question": "What is the main issue to evaluate?",
+      "options": [
+        "The speaker's long-term loyalty as a relationship partner.",
+        "Whether the claims and evidence in the presentation are credible.",
+        "Whether the speaker deserves forgiveness for past harm.",
+        "Whether the speaker has high social status."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a boundary case: confidence and plausibility concern source credibility, not interpersonal trust from relationship history."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Lena has often missed deadlines, shared secrets after promising not to, and failed to return borrowed money. Yesterday she helped Sam carry boxes after work.",
+      "question": "Should Sam now trust Lena with an important secret?",
+      "options": [
+        "Yes, because the most recent action was helpful.",
+        "Yes, because helping with boxes proves loyalty.",
+        "No, because one helpful act does not outweigh a long pattern of unreliability.",
+        "No, because helpful people are usually dishonest."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This targets the shortcut of letting one good deed erase a repeated reputation for unreliability."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Ravi texts that the meeting has moved to 3 p.m. He has lied once before in a message, but the current task is to determine whether the meeting time is actually correct by checking the calendar.",
+      "question": "Which judgment is most appropriate?",
+      "options": [
+        "Judge Ravi's entire character from the one past lie.",
+        "Focus on verifying whether the meeting time claim is accurate.",
+        "Trust the message because Ravi used a clear tone.",
+        "Decide whether Ravi should apologize for lying before."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This marks a hard boundary: the main question is factual accuracy of a claim, not long-term interpersonal reliability."
+    }
+  ]
+}

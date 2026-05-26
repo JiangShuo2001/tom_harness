@@ -1,0 +1,98 @@
+{
+  "frontmatter_description": "Sensory Access decides whether a character could perceptually obtain information through a channel such as sight, hearing, touch, smell, or taste.",
+  "title": "Sensory Access",
+  "use_when": [
+    "Use when the question is whether a character could see, hear, touch, smell, taste, or otherwise directly perceive something.",
+    "Use when the key issue is whether information was physically available to a sensory channel, regardless of whether the character paid attention.",
+    "Use when you need to determine access before any inference, belief, or noticing judgment."
+  ],
+  "do_not_use_when": [
+    "Do not use when the question is whether the character noticed, remembered, interpreted, or believed the information.",
+    "Do not use when the issue is viewpoint transformation, left-right mapping, or what another person sees from a position.",
+    "Do not use when the main question is attention, salience, or whether a cue entered awareness.",
+    "Do not use when the scene is really about inference from partial evidence rather than direct perceptual access."
+  ],
+  "decision_variable": "whether the character can directly perceive the information through a sensory channel",
+  "trigger_checklist": [
+    "Is there a usable sensory channel for the target information?",
+    "Is the channel physically blocked, absent, or out of range?",
+    "Is the information directly available, not merely implied or reported?",
+    "Ignore whether the character noticed it, understood it, or later remembered it."
+  ],
+  "workflow": [
+    "Identify the target information and the relevant sensory channel.",
+    "Check whether that channel is open, unobstructed, and within range.",
+    "Decide access yes or no based only on direct perceptual availability.",
+    "Do not upgrade the answer based on attention, belief, or interpretation."
+  ],
+  "special_case": {
+    "title": "Direct access versus report",
+    "rule": "A report, rumor, or someone else’s statement does not count as sensory access to the original fact.",
+    "worked_example": {
+      "scene": "A child is in another room. A parent says, 'The cookie jar is empty.'",
+      "question": "Did the child directly perceive the jar's contents?",
+      "answer_logic": "No. The child only received verbal information, not direct sensory access to the jar itself."
+    }
+  },
+  "boundary_exit_rule": [
+    "If the question becomes whether the character noticed, switch to Attention and Salience.",
+    "If the question becomes what the character thinks or believes, switch to a belief or knowledge unit.",
+    "If the question is about what is visible from another person's position, switch to Spatial Perspective Transformation.",
+    "If the question requires interpreting a cue, switch to a higher-level inference or pragmatics unit."
+  ],
+  "references": {
+    "route_signal": "Use this unit when the scene asks whether information was perceptually available through a sensory channel.",
+    "hard_boundary": [
+      "This unit does not judge awareness, interpretation, or memory.",
+      "This unit does not solve viewpoint or belief questions.",
+      "This unit only asks whether direct sensory contact was possible."
+    ],
+    "shortcut_to_avoid": [
+      "Do not treat seeing as the same as noticing.",
+      "Do not treat hearing a sound as understanding its meaning.",
+      "Do not treat being told something as direct perceptual access to the fact itself."
+    ],
+    "common_failure_modes": [
+      "Confusing access with attention",
+      "Confusing access with belief update",
+      "Confusing sensory availability with spatial perspective",
+      "Using this unit for inference from clues instead of direct perception"
+    ],
+    "minimal_pair": [
+      {
+        "case": "A person can see the red mug on the table but is reading a phone and never looks up.",
+        "why_it_matches": "The mug is perceptually available through vision, so sensory access is yes even if it is not noticed."
+      },
+      {
+        "case": "A person is sitting next to the same mug, glanced briefly at the table, and is now asked whether they noticed it.",
+        "why_it_matches": "Near miss: sensory access is clearly present, so the deciding variable is attentional registration, which routes to Attention and Salience."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the character could have seen it but was distracted, still count access as yes.",
+      "If the character inferred it from a clue without directly perceiving it, count access as no.",
+      "If a second person described the object, do not count that as direct access to the object itself."
+    ],
+    "generalization_note": "This unit applies across all sensory modalities and all content types as long as the question is only about direct perceptual availability."
+  },
+  "validation_seed": {
+    "positive_pattern": "The object, sound, or cue is physically available to the character's senses even if they do not attend to it.",
+    "near_miss_pattern": "The character notices, infers, or remembers something, but the question is not about direct perception.",
+    "boundary_pattern": "The character learns the fact from a report, guess, or inference rather than from direct sensory contact."
+  },
+  "notes": [
+    "Keep this unit narrow: access only, not noticing or belief.",
+    "A person can have sensory access without attending to the stimulus.",
+    "Use as a low-level diagnostic step before higher social-cognitive judgments."
+  ],
+  "id": "micro-05",
+  "level": "micro",
+  "layer": "L1",
+  "family": "perception-memory-knowledge",
+  "core_question": "Determine who can see, hear, touch, smell, or otherwise perceptually access what",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

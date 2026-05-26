@@ -1,0 +1,106 @@
+{
+  "frontmatter_description": "Predicts the character's next likely behavior by combining their current belief state with their active goal.",
+  "title": "Action Prediction",
+  "use_when": [
+    "Use when the question asks what a character will most likely do next.",
+    "Use when the answer depends on the character's belief about the situation, not only on the real situation.",
+    "Use when the character has an identifiable goal and the task is to predict the next outward behavior that would serve that goal.",
+    "Use inside larger false-belief, social-cue, preference, or commitment scenes when the final diagnostic variable is the next action."
+  ],
+  "do_not_use_when": [
+    "Do not use when the question asks why the character is currently acting, looking, gesturing, or speaking; use intention recognition instead.",
+    "Do not use when the main task is to rank commitments, obligations, or prior plans; use commitment priority instead.",
+    "Do not use when the main task is to explain the hierarchy among long-term, short-term, and local goals; use goal hierarchy instead.",
+    "Do not use when the key problem is how the character weighs competing goals in general rather than which concrete next action follows from one active goal.",
+    "Do not use when the answer is about what the character knows, believes, wants, or feels without predicting an observable next behavior."
+  ],
+  "decision_variable": "the character's next likely action",
+  "trigger_checklist": [
+    "The prompt asks what the character will do, where they will go, what they will choose, or what they will try next.",
+    "A current belief state can be identified for the character.",
+    "An active goal, desire, or task can be identified.",
+    "The predicted action should be from the character's perspective, even if their belief is false.",
+    "The output is an observable behavior, not an internal motive or emotion."
+  ],
+  "workflow": [
+    "Identify the target character whose next action must be predicted.",
+    "Separate reality from the character's belief state, including what they saw, missed, misunderstood, or falsely believe.",
+    "Identify the active goal the character is trying to satisfy at this moment.",
+    "List the available actions the character could take in the scene.",
+    "Select the action that best advances the active goal given the character's own belief state.",
+    "If several actions are plausible, prefer the most immediate, low-friction action unless the prompt gives a stronger constraint.",
+    "State the predicted action and, if needed, briefly justify it using belief plus goal."
+  ],
+  "special_case": {
+    "title": "False-belief action",
+    "rule": "When the character has a false belief, predict the action that would make sense if that false belief were true, not the action that would work in reality.",
+    "worked_example": {
+      "scene": "Maya puts her keys in the blue bowl and leaves. While she is away, Leo moves the keys to the drawer. Maya returns wanting to drive home.",
+      "question": "Where will Maya look first?",
+      "answer_logic": "Maya wants her keys and believes they are still in the blue bowl, so her next likely action is to look in the blue bowl first."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-22 if the prompt asks for the purpose behind a current action or cue rather than the next action.",
+    "Exit to micro-24 if the prompt requires deciding whether an existing commitment, deadline, promise, or scheduled plan overrides a new option.",
+    "Exit to micro-25 if the prompt focuses on how conflicting goals are weighted, not on the immediate behavior that follows.",
+    "Exit to micro-21 if the prompt asks how local actions relate to broader goals rather than what action happens next.",
+    "Exit to belief-focused units if the only required answer is what the character thinks or knows, with no behavioral prediction."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the answer must be an observable next behavior derived from the character's belief state and active goal.",
+    "hard_boundary": [
+      "Action prediction is future-facing; intention recognition is explanation of a current or past behavior.",
+      "Action prediction outputs behavior; desire or goal units output internal preference or objective structure.",
+      "Action prediction can use commitments as evidence, but if the central variable is priority among commitments, route away.",
+      "Action prediction should not replace false-belief reasoning; it uses the belief result to predict behavior."
+    ],
+    "shortcut_to_avoid": [
+      "Do not predict from the real state of the world when the character has a different belief.",
+      "Do not answer with a motive such as 'to help' when the question asks what the character will physically do next."
+    ],
+    "common_failure_modes": [
+      "Reality leak: using information the character did not observe.",
+      "Motive-action swap: giving the purpose instead of the next behavior.",
+      "Overplanning: inventing a complex plan when the immediate next step is enough.",
+      "Commitment confusion: treating all competing tasks as simple action prediction when a prior obligation is decisive."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Nora sees a cup fall under the sofa and wants to pick it up. The question asks, 'What will Nora do next?'",
+        "why_it_matches": "The task is to predict the next observable action from Nora's belief and goal: she will look or reach under the sofa."
+      },
+      {
+        "case": "Nora points under the sofa and smiles. The question asks, 'Why is Nora pointing there?'",
+        "why_it_matches": "This does not match action prediction; it asks for the purpose behind a current cue, so it belongs to intention recognition."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the character wants an object but falsely believes it is in the old location, predict search at the old location.",
+      "If the character has two possible next actions but only one serves the active goal under their belief, choose that action.",
+      "If the prompt asks whether the character will keep a promise or accept a new invitation, check whether commitment priority is the better route.",
+      "If the prompt asks what the character is trying to accomplish by knocking, waving, or glancing, do not use this unit."
+    ],
+    "generalization_note": "This unit generalizes across benchmark false-belief tasks and real-world scenes by applying the same belief-plus-goal rule to predict the next observable action."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character has a goal, holds a belief about where or how to achieve it, and the question asks what they will do next.",
+    "near_miss_pattern": "A character performs a gesture or action and the question asks what the gesture or action means.",
+    "boundary_pattern": "A character must choose between a prior promise and a new attractive option, making commitment priority more central than simple next-action prediction."
+  },
+  "notes": [
+    "Keep the answer anchored to the character's perspective.",
+    "The output should be a concrete next behavior, not a full plan unless the prompt explicitly asks for one.",
+    "This micro unit may be called after belief, desire, or goal units have established the inputs needed for prediction."
+  ],
+  "id": "micro-23",
+  "level": "micro",
+  "layer": "L3",
+  "family": "goal-action",
+  "core_question": "Predict the next likely action from belief and goal",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

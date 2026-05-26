@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-40",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A developer explains two-factor authentication to a new hire who has never used it before.",
+      "question": "Which option is best calibrated to the listener?",
+      "options": [
+        "You enter your password and then type the code sent to your phone.",
+        "The flow uses TOTP, device binding, and session rotation.",
+        "You should already know this, so I will skip it.",
+        "Let me persuade you to care about account security."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct fit to a novice listener by lowering jargon and giving a clear basic example."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A volunteer explains a tax proposal to skeptical voters.",
+      "question": "Which option is best calibrated to the listener?",
+      "options": [
+        "This plan will definitely make you support us, because it is the smart choice.",
+        "Here is how the proposal changes deductions, in plain terms, so you can judge it.",
+        "I will hint at the benefits without explaining the details.",
+        "You are probably too biased to understand the policy."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Tests the shortcut of mistaking persuasion for audience fit; the plain explanation is calibrated, while the persuasive framing is not."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "A manager speaks to a new colleague from another country about a holiday schedule.",
+      "question": "Which option is best calibrated to the listener?",
+      "options": [
+        "If you do not celebrate this holiday, I can explain the schedule without assuming shared customs.",
+        "I will avoid mentioning the holiday at all so I do not offend you.",
+        "You people probably do not understand our customs.",
+        "I need you to agree with our holiday plan."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Close to the boundary with tact, but the key issue is identity-aware explanation, not offense avoidance."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "A doctor explains a treatment to a patient's parent who has no medical training.",
+      "question": "Which option is best calibrated to the listener?",
+      "options": [
+        "The regimen includes BID dosing and monitoring for adverse events.",
+        "It is a way to help, and I will not explain the details.",
+        "It is a medicine taken twice a day, and I will explain the side effects in everyday language.",
+        "You should trust me and not ask questions."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Checks listener-fit by matching explanation depth to a novice's knowledge level."
+    }
+  ]
+}

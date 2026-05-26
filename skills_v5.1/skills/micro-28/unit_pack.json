@@ -1,0 +1,106 @@
+{
+  "frontmatter_description": "Detects when a character's outward emotional expression differs from their privately felt emotion.",
+  "title": "Hidden Emotion",
+  "use_when": [
+    "Use when the question asks what a character really feels despite a different facial expression, tone, posture, or statement.",
+    "Use when the scene gives evidence for both an internal appraisal and an external display, and they conflict.",
+    "Use when the answer depends on separating private affect from public expression rather than explaining the social rule for the display.",
+    "Use when a character smiles, laughs, says they are fine, stays calm, or acts pleased while the situation suggests sadness, anger, fear, disappointment, embarrassment, or worry."
+  ],
+  "do_not_use_when": [
+    "Do not use when the task only asks what emotion naturally follows from an event and there is no conflicting outward display; use Basic Emotion Appraisal instead.",
+    "Do not use when the true emotion itself is surprising or nonstandard, with no masking or mismatch; use Atypical Emotion instead.",
+    "Do not use when the main question is why a character hides emotion because of politeness, professionalism, role, culture, or etiquette; use Emotional Disguise and Display Rules instead.",
+    "Do not use when guilt, shame, pride, gratitude, blame, or responsibility appraisal is the core issue; use Moral Emotion instead.",
+    "Do not use when the question is about whether the display is socially appropriate, harmful, or offensive rather than whether it mismatches private feeling."
+  ],
+  "decision_variable": "internal emotion versus external expression",
+  "trigger_checklist": [
+    "A private emotional cause is present, such as loss, rejection, disappointment, threat, humiliation, or frustration.",
+    "An outward display is described, such as smiling, laughing, staying calm, saying 'I'm fine,' congratulating someone, or acting cheerful.",
+    "The outward display is not the emotion that the private situation would normally produce.",
+    "The question asks for the real feeling, hidden feeling, inner reaction, or mismatch between appearance and emotion.",
+    "The social reason for masking may be present, but it is not the main variable needed to answer."
+  ],
+  "workflow": [
+    "Identify the event or information that affects the character privately.",
+    "Infer the likely internal emotion from that private appraisal.",
+    "Identify the character's observable expression, words, or behavior.",
+    "Compare the internal emotion with the external display.",
+    "If they diverge, answer with the private emotion and note that the display is not reliable evidence of the true feeling.",
+    "Keep the explanation focused on the mismatch; do not turn the answer into a full account of etiquette, moral responsibility, or persuasion."
+  ],
+  "special_case": {
+    "title": "Polite smile with private disappointment",
+    "rule": "When a character outwardly responds positively to avoid exposing disappointment, treat the real emotion as the one supported by the private outcome, not by the smile.",
+    "worked_example": {
+      "scene": "Maya wanted the lead role in the play. Her friend got the role instead. When the cast list was announced, Maya smiled and said, 'That's wonderful, congratulations.' Later she sat alone looking upset.",
+      "question": "How does Maya really feel when she congratulates her friend?",
+      "answer_logic": "The role outcome frustrates Maya's goal, so her private emotion is disappointment or sadness. The smile and congratulations are the outward display. Because the private appraisal and public expression conflict, this is hidden emotion."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to Basic Emotion Appraisal if there is only an event-to-emotion inference and no conflicting display.",
+    "Exit to Atypical Emotion if the character's actual emotion is unusual but openly shown.",
+    "Exit to Emotional Disguise and Display Rules if the key question is the norm, role, or strategy that explains why the character controls the display.",
+    "Exit to Moral Emotion if the hidden feeling is mainly produced by responsibility, blame, guilt, shame, pride, or gratitude.",
+    "Exit to a pragmatics or deception unit if the central issue is whether a spoken claim is true or intended to mislead, rather than what emotion is privately felt."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when a scene contrasts a character's private emotional state with a different outward expression or statement.",
+    "hard_boundary": [
+      "This unit detects the mismatch; it does not explain the social rule that caused the masking.",
+      "This unit does not decide whether the character should have hidden the emotion.",
+      "This unit does not classify lies or strategic misdirection unless the lie is only evidence of an emotional display.",
+      "This unit does not infer moral emotions unless the central variable is still the hidden-versus-shown emotion contrast."
+    ],
+    "shortcut_to_avoid": [
+      "Do not trust the visible smile, calm tone, or verbal 'I'm fine' as the true emotion when private evidence points the other way.",
+      "Do not assume every hidden emotion is sadness; infer the private feeling from the character's goal, threat, loss, or concern."
+    ],
+    "common_failure_modes": [
+      "Answering with the displayed emotion instead of the private emotion.",
+      "Explaining politeness rules when the question only asks what the character really feels.",
+      "Treating an unusual but openly expressed emotion as hidden emotion.",
+      "Ignoring later private behavior that reveals the internal state.",
+      "Over-reading concealment when the scene provides no evidence of a mismatch."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Leo loses a contest he cared about, smiles at the winner, and later tells his brother he feels crushed.",
+        "why_it_matches": "The outward smile conflicts with private disappointment, so the answer depends on hidden emotion."
+      },
+      {
+        "case": "Leo loses a contest he cared about and openly cries in front of everyone.",
+        "why_it_matches": "This does not match Hidden Emotion; the internal feeling and external expression align, so Basic Emotion Appraisal is sufficient."
+      }
+    ],
+    "boundary_stress_test": [
+      "A nurse stays calm during an emergency but is privately scared: use Hidden Emotion if the question asks what she feels; use Display Rules if the question asks why she stays calm.",
+      "A child laughs after losing a toy because she thinks the loss is funny: use Atypical Emotion, not Hidden Emotion, if the laughter reflects the true feeling.",
+      "A student says 'I'm happy for you' after a rival wins, while clenching fists and avoiding eye contact: use Hidden Emotion if the target is the student's real feeling.",
+      "A person hides guilt after breaking a promise: use Moral Emotion if responsibility and guilt are the core inference; use Hidden Emotion only if the main task is contrasting guilt with a neutral display."
+    ],
+    "generalization_note": "Across benchmark and real-world cases, separate the evidence for private appraisal from evidence for public display, then answer the diagnostic question by comparing the two."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character experiences a goal loss or threat but outwardly smiles, says they are fine, or acts pleased; the question asks what they really feel.",
+    "near_miss_pattern": "A character experiences a goal loss and openly shows the expected sadness, anger, or fear; no expression mismatch is present.",
+    "boundary_pattern": "A character hides disappointment because politeness requires it; route here only if the question asks for the real emotion, and route to display rules if it asks why the emotion was hidden."
+  },
+  "notes": [
+    "Atomic focus: mismatch between internal emotion and external expression.",
+    "This unit may be called inside broader hidden-emotion or social-cue macros, but it should not solve the whole scene.",
+    "Preserve the distinction between detecting concealment and explaining the norm or strategy behind concealment."
+  ],
+  "id": "micro-28",
+  "level": "micro",
+  "layer": "L4",
+  "family": "emotion-appraisal",
+  "core_question": "Detect a mismatch between true feeling and outward display",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

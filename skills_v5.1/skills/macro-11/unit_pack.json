@@ -1,0 +1,117 @@
+{
+  "frontmatter_description": "Direct-route macro for deciding what a character does next when a standing commitment, plan, or obligation competes with a new opportunity.",
+  "title": "Commitments, Plans, and Next Action",
+  "use_when": [
+    "Use when the scene asks what the character does next after a prior commitment, plan, promise, duty, or ongoing task already exists.",
+    "Use when a new invitation, request, interruption, or opportunity competes with an existing obligation or scheduled action.",
+    "Use when priority depends on continuation, cancellation, deferral, task load, or commitment strength rather than on liking or persuasion.",
+    "Use when the correct answer is the next move in a live plan, not a general preference judgment."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is whose preference should win in a joint choice; use preference conflict instead.",
+    "Do not use when the main issue is how to persuade a listener; use audience calibration or persuasion instead.",
+    "Do not use when the key question is whether something was rude, embarrassing, or offensive; use faux pas and offense instead.",
+    "Do not use when the scene is mainly about visibility, viewpoint, or spatial perspective rather than action priority."
+  ],
+  "decision_variable": "what the character does next when existing commitments compete with a new opportunity",
+  "direct_route_rule": "Route immediately when multiple actions compete and priority must be resolved by commitment, continuation, invitation, or task load.",
+  "expandable_micro_ids": [
+    "micro-08",
+    "micro-21",
+    "micro-23",
+    "micro-24",
+    "micro-25"
+  ],
+  "trigger_checklist": [
+    "A prior commitment, plan, promise, appointment, or ongoing task is already in place.",
+    "A new invitation, request, interruption, or opportunity appears before the planned action is finished.",
+    "The question is about the next action, not about general preference or abstract intention.",
+    "The correct answer depends on whether the character continues, switches, delays, declines, or coordinates.",
+    "Task load, urgency, commitment priority, or follow-through matters more than simple desire."
+  ],
+  "workflow": [
+    "Identify the standing commitment or current plan.",
+    "Identify the competing new opportunity or interruption.",
+    "Compare priority: obligation, urgency, continuation pressure, and whether the current task is already underway.",
+    "Choose the next action that best preserves the stronger commitment or most urgent constraint.",
+    "If the scene is ambiguous because of hidden preference, invitation meaning, or social nuance, use the relevant micro expansion for repair."
+  ],
+  "special_case": {
+    "title": "Already-in-motion commitment",
+    "rule": "If the character has already started a task or is under a clear obligation, default to continuation unless the new event is clearly more urgent or overrides the commitment.",
+    "worked_example": {
+      "scene": "Maya is halfway through preparing slides for a meeting she promised to lead. A friend texts asking if she wants to grab coffee now.",
+      "question": "What does Maya do next?",
+      "answer_logic": "Because the meeting prep is an active commitment and the coffee invite is only a new opportunity, the direct answer is that she keeps preparing the slides or defers the coffee."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to macro-10 if the main task is to infer a preference conflict between people rather than a next-action priority under one agent's commitments.",
+    "Exit to macro-07 if the key issue is whether a speaker is persuading, warning, refusing, or implying something indirectly.",
+    "Exit to macro-12 if the scene is primarily about embarrassment, offense, repair, or social face threat.",
+    "Exit to macro-13 if the puzzle is which spatial viewpoint or visibility relation determines the answer.",
+    "Add micro-08 when temporal order or event-update bookkeeping is needed.",
+    "Add micro-21 when the goal hierarchy (long-term vs immediate) controls the choice.",
+    "Add micro-23 when the question is the next concrete action prediction.",
+    "Add micro-24 when commitment priority rules must be applied directly.",
+    "Add micro-25 when goal-conflict arbitration without a binding commitment is the issue."
+  ],
+  "references": {
+    "route_signal": "The scene says the character already has plans, obligations, or an ongoing task, and a new option appears that could interrupt or redirect them.",
+    "hard_boundary": [
+      "General goal conflict without a specific existing commitment",
+      "Two-person preference negotiation or shared decision making",
+      "Indirect speech, persuasion, or audience adaptation",
+      "Embarrassment, apology, or social offense"
+    ],
+    "shortcut_to_avoid": [
+      "Do not solve by asking only what the character wants in general.",
+      "Do not over-focus on the new opportunity and ignore the standing obligation.",
+      "Do not confuse a polite invitation with a direct order or with a plan override.",
+      "Do not route to belief or emotion unless the question is explicitly about those variables."
+    ],
+    "common_failure_modes": [
+      "Answering the most appealing option instead of the most committed one",
+      "Ignoring an already-started action",
+      "Treating a scheduling question as a preference question",
+      "Mistaking task completion priority for social persuasion"
+    ],
+    "minimal_pair": [
+      {
+        "case": "A student promised to help set up an event, then gets invited to lunch right before setup starts.",
+        "why_it_matches": "The core variable is which action comes next under a standing commitment versus a new opportunity."
+      },
+      {
+        "case": "Two friends must decide together whether to go hiking or to the beach, with no prior plan in place.",
+        "why_it_matches": "This is a near miss: there is no standing commitment, only a fresh joint preference choice, so it routes to macro-10 instead."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the new opportunity is socially tempting but the old commitment is explicit, this macro still applies.",
+      "If the question asks what the listener feels about the interruption, leave this macro.",
+      "If the question asks whether the invitation is a hint, use the communication macro instead.",
+      "If the question asks who should decide in a conflict of preferences, use the joint decision macro instead."
+    ],
+    "generalization_note": "This macro covers real-world planning behavior: people often follow promises, schedules, and in-progress tasks unless a new event clearly overrides them."
+  },
+  "validation_seed": {
+    "positive_pattern": "The character has an active plan or obligation, and the answer is the next action after a competing invitation or interruption appears.",
+    "near_miss_pattern": "The scene involves two people's preferences about what to do, but no standing commitment is present.",
+    "boundary_pattern": "The scene is about how to phrase a response to a request, not about which action should happen next."
+  },
+  "notes": [
+    "Keep the answer focused on priority resolution, not on broad motivation analysis.",
+    "Use the micro ids only for repair when a scene exposes a narrower subcase of commitment, continuation, or invitation handling.",
+    "This macro should remain routable for direct next-action questions even when the scene also contains mild social nuance."
+  ],
+  "id": "macro-11",
+  "level": "macro",
+  "layer": "macro",
+  "family": "commitments-plans-and-next-action",
+  "core_question": "what a character does next when existing commitments compete with a new opportunity",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

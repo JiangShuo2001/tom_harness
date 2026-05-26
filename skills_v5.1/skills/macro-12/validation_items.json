@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-12",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "At dinner, Tom casually mentions that Maya is being treated for depression in front of her new coworkers.",
+      "question": "Was this socially inappropriate?",
+      "options": [
+        "Yes, it exposed private information and could embarrass her.",
+        "No, because the information was true.",
+        "No, because Tom meant well.",
+        "Yes, but only because it was said in a loud voice."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct privacy violation in the wrong audience creates face threat."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "After making a rude joke about a coworker, Dana later apologizes and asks how to make it right.",
+      "question": "What is the main issue now?",
+      "options": [
+        "Whether the joke was false.",
+        "Whether the joke was indirect.",
+        "How to repair the relationship.",
+        "Whether the coworker should feel embarrassed."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This is a repair-after-harm case, not a pure faux pas judgment."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "A witness says, \"He left at 9 p.m.,\" and the investigator asks whether the witness is lying.",
+      "question": "Is this mainly a faux pas question?",
+      "options": [
+        "Yes, because it might embarrass the witness.",
+        "No, because it is mainly about whether the statement is false.",
+        "No, because it is mainly about rank and deference.",
+        "Yes, because it was said in front of others."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Hard boundary: truth and deception are the main issue, not social offense."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "At a family gathering, Priya accidentally mentions that her brother recently got laid off, even though he had not told the rest of the family yet.",
+      "question": "Was this socially inappropriate even though it was unintentional?",
+      "options": [
+        "Yes, because the accidental disclosure still exposed private information.",
+        "No, because there was no intent to harm.",
+        "No, because family members can say anything to each other.",
+        "Yes, but only if the brother had already apologized."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Tests the shortcut that lack of intent removes offense; social harm still matters."
+    }
+  ]
+}

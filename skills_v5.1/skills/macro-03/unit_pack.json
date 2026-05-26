@@ -1,0 +1,121 @@
+{
+  "frontmatter_description": "Directly route here when a scene asks how apparent identity, real identity, and a character's available knowledge jointly determine what the character thinks, says, or understands.",
+  "title": "Appearance-Reality and Knowledge Boundary",
+  "use_when": [
+    "Use when an object, situation, person, label, container, or event looks like one thing but is actually another.",
+    "Use when the answer depends on whether a character knows the hidden reality or only has access to the appearance.",
+    "Use when world knowledge, prior experience, labels, disguises, deceptive packaging, or restricted information creates a boundary between what is true and what a character can know.",
+    "Use when the main question is what something really is, what a character thinks it is, or what it means inside that character's information state."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main question is where a character will search after an unseen object transfer; route to macro-01 instead.",
+    "Do not use when the main question is what one character thinks another character knows or believes; route to macro-02 unless the appearance-reality conflict remains the main driver.",
+    "Do not use when the main evidence is a wink, glance, smile, gesture, or other nonverbal cue conveying intention; route to macro-04.",
+    "Do not use when the central task is to infer a hidden or atypical emotion rather than to separate appearance, truth, and knowledge access; route to macro-05.",
+    "Do not use when a single narrower micro skill can answer a non-scene diagnostic question without the appearance-reality prototype."
+  ],
+  "decision_variable": "how appearance, reality, and a character's knowledge boundary jointly determine the answer",
+  "direct_route_rule": "Route immediately when appearance conflicts with reality or world knowledge is fenced off.",
+  "expandable_micro_ids": [
+    "micro-10",
+    "micro-14",
+    "micro-15",
+    "micro-18"
+  ],
+  "trigger_checklist": [
+    "There is a visible or surface appearance that suggests one interpretation.",
+    "There is a hidden or actual reality that differs from that appearance.",
+    "At least one character has limited, partial, outdated, or privileged access to the reality.",
+    "The question asks what the character thinks, says, identifies, expects, or understands rather than simply asking the objective truth.",
+    "Solving requires keeping separate the narrator's knowledge, the object's real state, and the character's knowledge boundary."
+  ],
+  "workflow": [
+    "Identify the apparent state: what the item, event, label, container, disguise, or situation seems to be from the relevant character's perspective.",
+    "Identify the real state: what is actually true according to the scene.",
+    "Map knowledge access for each relevant character: who saw the reveal, who was told, who has background knowledge, and who only saw the surface appearance.",
+    "Answer from the requested standpoint, not from omniscient knowledge: if the question asks what a character thinks, use only that character's accessible evidence.",
+    "If the character lacks the reveal, preserve the appearance-based belief even if the reader knows it is false.",
+    "If the character has the reveal or necessary background knowledge, let the reality override the misleading appearance.",
+    "If the question asks for the objective fact, answer with the reality, then optionally contrast it with the character's belief.",
+    "Check that the answer is about appearance, reality, and knowledge boundary rather than action prediction, nested belief, nonverbal intention, or emotion."
+  ],
+  "special_case": {
+    "title": "Deceptive container or misleading label",
+    "rule": "When a familiar container, label, costume, or outward form suggests a normal content but the actual content is different, characters who did not see the substitution should infer the normal content, while characters who saw the substitution should know the real content.",
+    "worked_example": {
+      "scene": "A candy box is on the table. Mia sees her brother remove the candy and put pencils inside. Later, Noah enters and only sees the closed candy box.",
+      "question": "What will Noah think is inside the box?",
+      "answer_logic": "Noah only has access to the appearance and ordinary meaning of the candy box, not the hidden substitution. He will think candy is inside, even though the real content is pencils."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to macro-01 if the scene's main answer is a search or action location based on a first-order false belief after an unseen move.",
+    "Exit to macro-02 if the main variable is one character's model of another character's belief, knowledge, or ignorance.",
+    "Exit to macro-04 if the main inference comes from a nonverbal social cue rather than from appearance versus reality.",
+    "Exit to macro-05 if the key mismatch is between outward emotional display and true feeling.",
+    "Add micro-10 when the case requires basic appearance-reality separation.",
+    "Add micro-14 when the case turns on a knowledge boundary or information being fenced off.",
+    "Add micro-15 when world knowledge, object identity, labels, disguises, or category knowledge determines what a character can infer.",
+    "Add micro-18 when shared versus private knowledge must be tracked to repair the answer."
+  ],
+  "references": {
+    "route_signal": "A character must interpret something that looks one way but is actually another, and the correct answer depends on what that character could know.",
+    "hard_boundary": [
+      "The macro is not ordinary false-belief action prediction; it is about the conflict among appearance, truth, and knowledge access.",
+      "The macro is not second-order belief unless the question explicitly asks what one mind thinks about another mind's knowledge.",
+      "The macro is not hidden emotion unless the relevant hidden state is a feeling rather than an object's or situation's reality.",
+      "The macro is not social-cue interpretation unless a gesture or expression is the primary evidence."
+    ],
+    "shortcut_to_avoid": [
+      "Do not answer with the narrator's known reality when the question asks what an uninformed character thinks.",
+      "Do not assume every character shares the same knowledge just because the reader knows the reveal.",
+      "Do not treat a misleading appearance as deception unless the scene gives an agentive misleading act.",
+      "Do not over-route to false belief whenever a character is wrong; check whether the core is identity/content/meaning rather than search or action."
+    ],
+    "common_failure_modes": [
+      "Reality leak: using the hidden truth in the answer for a character who never learned it.",
+      "Appearance collapse: ignoring the actual reality and answering only from surface appearance when the character did receive the reveal.",
+      "Perspective mixing: combining what two different characters know into one impossible belief state.",
+      "Benchmark memorization: treating a familiar container story as a fixed item instead of applying the general appearance-reality rule.",
+      "Boundary drift: routing to emotion, nonverbal intention, or action prediction when the central variable is knowledge access to reality."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A child sees a sponge painted to look like a rock and is asked what it really is and what a friend who has not touched it will think it is.",
+        "why_it_matches": "The surface appearance conflicts with the real identity, and the friend's answer depends on lacking access to the reveal."
+      },
+      {
+        "case": "A toy is moved from a basket to a box while Sam is outside, and the question asks where Sam will look.",
+        "why_it_matches": "This is a near miss: it involves ignorance, but the core is search-location action under false belief, so it should route to macro-01 rather than this macro."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the question asks 'What is really inside?' answer from reality, not from appearance.",
+      "If the question asks 'What will the uninformed character think is inside?' answer from the character's appearance-based evidence.",
+      "If the character saw the reveal but another character did not, keep their answers different.",
+      "If a label is misleading but the character has expert knowledge contradicting the label, use the character's knowledge boundary rather than the label alone.",
+      "If the scene includes both a misleading container and a later search action, route by the asked question: identity/contents goes here; search location goes to macro-01."
+    ],
+    "generalization_note": "This macro generalizes from classic appearance-reality and deceptive-container tasks to real-world cases involving disguises, packaging, labels, staged situations, hidden context, expertise gaps, and private reveals. The reusable prior is to maintain separate tracks for appearance, actual truth, and each character's access to truth."
+  },
+  "validation_seed": {
+    "positive_pattern": "An item looks like A but is really B; one character has not seen the reveal; ask what that character thinks, says, or identifies it as.",
+    "near_miss_pattern": "An item is moved while a character is absent; ask where the character will search next.",
+    "boundary_pattern": "A character sees a misleading facial expression and must infer the sender's intention or emotion."
+  },
+  "notes": [
+    "This is a direct scene prototype, not just a bundle of micro skills.",
+    "Micro expansions are optional tools for diagnosis, explanation, or boundary repair.",
+    "Preserve the distinction between objective reality and character-relative knowledge throughout the answer."
+  ],
+  "id": "macro-03",
+  "level": "macro",
+  "layer": "macro",
+  "family": "appearance-reality",
+  "core_question": "how appearance, reality, and a character's knowledge boundary jointly determine the answer",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

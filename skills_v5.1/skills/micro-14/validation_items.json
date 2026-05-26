@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-14",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A sponge is painted to look rough and gray like a small rock.",
+      "question": "What does it look like?",
+      "options": [
+        "A rock",
+        "A sponge",
+        "A coin",
+        "A piece of cloth"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct appearance-versus-reality split; the correct answer follows the surface look, not the true material."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "A cookie tin is being used to store sewing needles. The lid still shows pictures of cookies.",
+      "question": "What is actually inside the tin?",
+      "options": [
+        "Cookies",
+        "Sewing needles",
+        "Buttons",
+        "Marbles"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Classic mislabeled container case; the label is appearance and the stored item is reality."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "A child sees only the cookie pictures on a tin. The child has not opened it.",
+      "question": "What will the child think is inside?",
+      "options": [
+        "Sewing needles",
+        "Cookies",
+        "Sand",
+        "Nothing"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Near-miss: the right answer depends on the child's belief from limited access, not just the appearance-reality split."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "Two people both watch a box get relabeled from 'tea' to 'crayons,' and each sees that the other is watching too.",
+      "question": "What reasoning issue is central here?",
+      "options": [
+        "Appearance versus reality",
+        "False belief",
+        "Common knowledge",
+        "Evidence updating"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Boundary case: shared observation and mutual awareness make this a common-knowledge problem rather than a pure appearance-reality case."
+    }
+  ]
+}

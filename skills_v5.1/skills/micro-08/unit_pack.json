@@ -1,0 +1,106 @@
+{
+  "frontmatter_description": "Determine how the order of events changes what a character is now able to know, believe, expect, or do.",
+  "title": "Temporal Order and Event Updating",
+  "use_when": [
+    "Use when the answer depends on which event happened first, next, or last.",
+    "Use when a character's mental state changes because they received, missed, or acted on information at a particular time.",
+    "Use when the question asks whether a later event updates, cancels, confirms, or makes obsolete an earlier mental state.",
+    "Use inside false-belief, commitment, or next-action scenes when the key diagnostic issue is the event sequence rather than the final belief content."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is whether the character noticed a cue that was present; use attention and salience instead.",
+    "Do not use when the main issue is whether the character remembers or forgets something after previously knowing it; use memory, forgetting, and misremembering instead.",
+    "Do not use when the main issue is whether the character has background expertise or cultural knowledge; use knowledge boundary instead.",
+    "Do not use when the main issue is what is visible from a spatial position; use spatial perspective transformation instead.",
+    "Do not use to judge moral blame, emotion, intention, or truthfulness unless the only unresolved variable is event order."
+  ],
+  "decision_variable": "the event sequence and its updating effect",
+  "trigger_checklist": [
+    "Does the scene contain at least two ordered events?",
+    "Did one event change the information available to a character?",
+    "Is the character's current mental state different depending on whether an update occurred before or after another event?",
+    "Would reversing the order of events change the answer?",
+    "Is the question about the current result of the sequence, not about long-term memory retention?"
+  ],
+  "workflow": [
+    "List the relevant events in chronological order, including who was present or informed at each step.",
+    "Mark the character's mental state before the first relevant event.",
+    "Apply each event as an update only if it occurred before the target question time and was accessible to the character.",
+    "Ignore events that happened after the target decision point, even if they are mentioned later in the story.",
+    "State the character's current mental state or likely action as the result of the final applicable update.",
+    "If the answer requires deciding whether the character noticed, remembered, or had background knowledge, exit to the appropriate neighboring unit."
+  ],
+  "special_case": {
+    "title": "Later correction overrides earlier expectation",
+    "rule": "When a character receives a later correction before acting, the later correction updates the earlier belief; when the correction occurs after acting, it does not affect that action.",
+    "worked_example": {
+      "scene": "Maya is told the meeting is in Room A. Before she leaves, her manager texts that it has moved to Room B. Maya reads the text and then walks to the meeting.",
+      "question": "Where will Maya go?",
+      "answer_logic": "The Room A belief is updated before Maya acts. Because the correction happened and was accessible before the target action, the current event-updated state points to Room B."
+    }
+  },
+  "boundary_exit_rule": [
+    "If the key uncertainty is whether the character visually or physically had access to the information, exit to sensory access or spatial perspective rather than using event order alone.",
+    "If the key uncertainty is whether the character noticed a visible cue, exit to attention and salience.",
+    "If the key uncertainty is whether the character still remembers a prior event, exit to memory, forgetting, and misremembering.",
+    "If the key uncertainty is whether the character could understand the information because of expertise, culture, or concepts, exit to knowledge boundary.",
+    "If chronological order is only background and the real question is belief content, emotion, intention, deception, or norm judgment, route to that more specific unit."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when reversing the order of two or more events would change the character's current mental state or predicted action.",
+    "hard_boundary": [
+      "Temporal updating is not memory retention: it assumes the relevant update remains available unless forgetting is explicitly at issue.",
+      "Temporal updating is not attention: it assumes an accessible update is processed unless noticing is explicitly contested.",
+      "Temporal updating is not background knowledge: it does not decide whether the character understands a concept or domain.",
+      "Temporal updating is not final belief modeling by itself: it only supplies the chronology-based update needed by a belief or action route."
+    ],
+    "shortcut_to_avoid": [
+      "Do not answer from the latest fact known to the reader; answer from the latest fact available to the character before the target time.",
+      "Do not let narrative mention order replace story event order; a flashback or late sentence may describe an earlier event.",
+      "Do not assume an earlier instruction still controls if a later accessible correction occurred before action."
+    ],
+    "common_failure_modes": [
+      "Using the real final location instead of the character's last accessible update.",
+      "Ignoring that a message, warning, or correction happened after the character already acted.",
+      "Treating failure to notice as an event-order problem when the cue was present but attention is the issue.",
+      "Treating forgetting as simple chronology when the story explicitly says the character forgot or misremembered."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Sam hears that the package is at the front desk, then later receives a message that it was moved to the mailroom before he goes to pick it up.",
+        "why_it_matches": "The answer depends on a later event updating an earlier mental state before the target action."
+      },
+      {
+        "case": "Sam was told last week that the package was at the front desk, but today he cannot remember where it is.",
+        "why_it_matches": "This is a near miss: the key variable is memory retention, so route to memory rather than temporal order."
+      }
+    ],
+    "boundary_stress_test": [
+      "A correction is sent before the character acts, but the character does not read it: event order alone is insufficient; check sensory access or attention.",
+      "A character acts, then receives the correction: the correction cannot update the action already taken.",
+      "A story reveals late that an event occurred earlier: use actual event chronology, not sentence order.",
+      "A character hears an update in technical language they cannot understand: exit to knowledge boundary."
+    ],
+    "generalization_note": "This unit generalizes to any social-cognitive scene where mental state is computed by ordered updates: instructions, corrections, discoveries, warnings, schedule changes, moved objects, changing commitments, or new evidence."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character receives an initial piece of information, then a later accessible update before the target question; the answer follows the later update.",
+    "near_miss_pattern": "A character once knew information but now may have forgotten it; the decisive variable is retention, not event order.",
+    "boundary_pattern": "A later update exists in the world but was not seen, noticed, read, or understood by the character; route out to the relevant access, attention, or knowledge unit."
+  },
+  "notes": [
+    "Preserves the narrow variable: sequence of events and its updating effect.",
+    "Use this as a diagnostic subroutine inside broader false-belief, next-action, or commitment-priority scenes.",
+    "Keep the target time explicit: mental state is evaluated at a specific moment after some events and before others."
+  ],
+  "id": "micro-08",
+  "level": "micro",
+  "layer": "L1",
+  "family": "perception-memory-knowledge",
+  "core_question": "Determine how event order changes mental states",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

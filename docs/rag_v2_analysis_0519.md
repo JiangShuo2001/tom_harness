@@ -290,10 +290,29 @@ commit `b24235b` 中 SYSTEM_TAIL 从 `"First give a brief reason (2-3 sentences)
 
 | 实验 | 准确率 | vs Baseline | 净翻转（gain-loss） |
 |------|-------:|----------:|-------------------:|
-| Baseline（无 RAG） | 77.73% | — | — |
+| 上周Baseline（无 RAG） | 77.73% | — | — |
 | +RAG（无过滤） | 74.62% | -3.11pp | -89 |
 | +RAG（category filter） | 75.66% | -2.07pp | -59 |
-| +RAG（category filter + 黑名单） | 待验证 | 预期接近 0 或正 | — |
+| +RAG（category filter + 黑名单） | 74.37% | -3.36pp | — |
+| 新baseline | 73.64%/74.72% | -4.09pp |  |
+
+
+
+**rag_new** **的** **thinking** **长度明显增加了**（False Belief 164→177，Strange Story 195→221，Faux-pas 189→220），而 ablation 和
+
+ test_0519 之间是一致的。
+
+
+
+ 这说明 rag_new 跑的时候 system prompt 有差异。让我确认——rag_new 有 RAG 开启，即使黑名单 task 不注入 RAG 内容，**system**
+
+ **prompt** **里是否仍然包含了** **RAG** **hint？**
+
+
+
+ 那差异在哪？看 elapsed time：ablation 平均 5.85s，test_0519 平均 2.94s，rag_new 3.50s。**ablation** **比后面两次慢了一倍**——而
+
+  thinking 长度差不多。
 
 ### 7.6 后续方向
 
@@ -301,3 +320,30 @@ commit `b24235b` 中 SYSTEM_TAIL 从 `"First give a brief reason (2-3 sentences)
 2. **L2 阈值门控**：当前 gain/loss 的 FAISS L2 分数分布高度重叠（中位数差仅 0.02），暂不设阈值，需更大规模数据分析
 3. **规则库扩充**：当前 13 个类别 294 条规则，RAG 正向 task（Faux-pas +3.7pp、Knowledge-Pretend Play +16.7pp、Persuasion +5.0pp）可定向补充规则
 4. **映射关系优化**：部分映射语义偏差较大（如 `Discrepant Emotions → Emotion Regulation`），可考虑为这些 task 新建专属规则类别
+
+
+
+
+
+Faux-pas Recognition（+3.7~5.2pp，560 样本，可信）
+
+ \- Knowledge-Pretend Play Links（+13~17pp，30 样本，小但稳定）
+
+ \- Persuasion Story Task（+1~5pp，不稳定）
+
+**但这些收益被更多** **task** **上的负作用抵消了**，即使加了黑名单和 category filter，仍然有 Scalar Implicature、Unexpected Outcome、Strange Story 等 task 在持续小幅亏损。
+
+
+
+ 根本原因有两个：
+
+ **1.** **规则库的内容太抽象，跟具体题目脱节。** 294 条规则写的是类似"When flattery accompanies an immediate request, true intent rapidly becomes explicit"这种高度概括的理论表述，不是解题需要的具体推理模式。模型看到这些规则后，反而增加了认知负担——要先理解规则在说什么，再判断跟当前题目有没有关系，然后才能推理。这个过程中很容易被误导。
+
+ **2.** **向量检索的粒度不够。** FAISS 基于语义相似度检索，但"语义接近"不等于"对解题有帮助"。一个关于 emotion regulation的规则和一个关于 hidden emotions 的题目在向量空间里可能很近，但规则内容实际上跟解题无关。
+
+
+
+ 如果要让 RAG真正带来正向收益，方向不是继续调门控，而是需要改变规则库本身——从抽象理论改成**具体的推理模式和典型错误提示**，类似few-shot 的 worked example，而不是通用知识条目。不过这基本上就是 memory playbook 在做的事情了。
+
+
+

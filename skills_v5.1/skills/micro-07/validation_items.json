@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-07",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "During the meeting, Mia's phone screen flashed on the table. Sam was watching the table and said, 'Your phone just lit up.' Leo was staring at the whiteboard, and Mia was speaking.",
+      "question": "Who noticed the phone screen flash?",
+      "options": [
+        "Sam",
+        "Leo",
+        "Mia",
+        "No one"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Sam is explicitly oriented to the cue, so this is a direct attention match."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A pager buzzed on the counter while Dana and Priya argued loudly across the room. The pager was in plain view, but neither person looked at it or reacted.",
+      "question": "Who noticed the pager buzz?",
+      "options": [
+        "Dana",
+        "Priya",
+        "Both of them",
+        "No one"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "The cue was available to both, but the scene shows no attentional registration."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "At the end of the day, Ben said, 'Now I remember hearing the alarm earlier.' The story never showed whether he looked up, paused, or reacted when it happened.",
+      "question": "Does this scene establish that Ben noticed the alarm when it rang?",
+      "options": [
+        "Yes, definitely",
+        "No, it only shows later recall",
+        "Yes, because the alarm was audible",
+        "No, because he forgot it"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a boundary case: later memory does not prove initial noticing."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "A text message arrived while Carlos was reading silently. He glanced down at the vibration, smiled, and immediately picked up the phone. Nora was looking out the window.",
+      "question": "Who actually noticed the message arriving?",
+      "options": [
+        "Carlos",
+        "Nora",
+        "Both of them",
+        "Neither of them"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This tests the shortcut that an obvious cue is noticed by everyone; only Carlos is shown registering it."
+    }
+  ]
+}

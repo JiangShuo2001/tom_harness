@@ -1,0 +1,100 @@
+{
+  "frontmatter_description": "Identify the psychological or social variable the prompt is actually asking for, without solving the substantive scene.",
+  "title": "Task Routing",
+  "use_when": [
+    "Use when the prompt is asking what kind of mental, social, or pragmatic variable must be identified before solving.",
+    "Use when you need to name the entry point such as belief, desire, intention, emotion, norm, trust, privacy, audience, or evidence type.",
+    "Use when the task is to route the question to the right capability rather than answer the scene directly.",
+    "Use when the stem asks 'what is being tested' or 'which capability applies' rather than asking for a scene answer."
+  ],
+  "do_not_use_when": [
+    "Do not use when the prompt asks for the actual answer to the scene, such as what someone believes, feels, wants, says, knows, or will do.",
+    "Do not use when the task is to weigh evidence, support a conclusion, or separate text from inference; use evidence-chain work instead.",
+    "Do not use when the task is to compare several plausible explanations; use explanation competition instead.",
+    "Do not use when the question is already clearly inside a specific micro skill and no routing decision is needed."
+  ],
+  "decision_variable": "the target psychological or social variable the question asks about",
+  "trigger_checklist": [
+    "The prompt is asking what kind of thing is being tested, not what happened.",
+    "You can name the answer as a variable category before any scene reasoning.",
+    "More than one substantive skill could apply, so the first job is to choose the right lens.",
+    "The key choice is the capability entry point, not the scene outcome."
+  ],
+  "workflow": [
+    "Read the question stem and identify the requested output type.",
+    "Strip away story details and ask what variable would make the answer possible.",
+    "Label the target variable at the right abstraction level, such as belief, desire, intention, emotion, norm, trust, or pragmatic meaning.",
+    "If the prompt is actually asking for evidence, competing explanations, or scene resolution, exit to the neighboring skill instead of continuing here."
+  ],
+  "special_case": {
+    "title": "Meta-question about the task itself",
+    "rule": "If the prompt asks what the question is asking, answer only with the target variable category and do not infer the scene content.",
+    "worked_example": {
+      "scene": "A story describes two people arguing, and the question asks whether this is mainly about what one person knew, what one person wanted, or what one person intended.",
+      "question": "What is the question really asking for?",
+      "answer_logic": "Do not solve the argument. Identify the target variable as the mental-state type being tested, then route to the matching substantive skill."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit immediately once the target variable is named.",
+    "If the next step is to judge truth, belief, emotion, intention, evidence, or outcome, hand off to the relevant substantive micro skill.",
+    "If the task asks which evidence supports a conclusion, use evidence-chain construction instead.",
+    "If the task asks which explanation best fits, use multiple-explanation competition instead."
+  ],
+  "references": {
+    "route_signal": "Use when the question is about selecting the right social-cognitive lens or capability entry point, not solving the underlying scene.",
+    "hard_boundary": [
+      "No scene solving.",
+      "No evidence ranking.",
+      "No explanation comparison.",
+      "No final belief, emotion, intention, or action inference."
+    ],
+    "shortcut_to_avoid": [
+      "Do not jump straight to the story outcome.",
+      "Do not confuse variable selection with answer generation.",
+      "Do not overfit to a benchmark-style label when the prompt only asks for the relevant mental or social factor."
+    ],
+    "common_failure_modes": [
+      "Answering the substantive question instead of naming the variable.",
+      "Picking too broad a label like social reasoning when the prompt asks for a specific mental-state type.",
+      "Treating evidence evaluation as routing.",
+      "Confusing this with explanation comparison."
+    ],
+    "minimal_pair": [
+      {
+        "case": "The prompt asks whether a story is about belief, desire, or intention.",
+        "why_it_matches": "The task is to identify the variable being tested before any scene reasoning."
+      },
+      {
+        "case": "The prompt asks where a character will search after an object was moved.",
+        "why_it_matches": "This is a substantive false-belief question, so the answer is not routing but direct scene solving."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the prompt contains clear social content but asks only what kind of inference is needed, stay here.",
+      "If the prompt asks who knows what, who wants what, or what happened, do not stay here.",
+      "If two different skills seem plausible, identify the variable first and then exit."
+    ],
+    "generalization_note": "This skill generalizes across benchmark items and real-world scenes by selecting the correct mental or social variable before any deeper inference."
+  },
+  "validation_seed": {
+    "positive_pattern": "A prompt asks what kind of mental-state or social variable a question is testing.",
+    "near_miss_pattern": "A prompt gives a story and asks for the belief, emotion, intention, or action itself.",
+    "boundary_pattern": "A prompt asks which evidence supports an interpretation or which explanation is best."
+  },
+  "notes": [
+    "Keep the output at the routing level only.",
+    "The unit is diagnostic and should stay narrow.",
+    "Prefer explicit variable naming over broad labels."
+  ],
+  "id": "micro-01",
+  "level": "micro",
+  "layer": "L0",
+  "family": "meta-control",
+  "core_question": "Identify the mental or social variable that the question is really asking for",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

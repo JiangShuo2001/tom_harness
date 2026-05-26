@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-49",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Mina forgets her friend's birthday dinner and later sees that the friend is distant and hurt.",
+      "question": "What should Mina do next to repair the relationship?",
+      "options": [
+        "Acknowledge the mistake, apologize, and make a small amends",
+        "Decide whether forgetting the dinner was socially rude",
+        "Keep the issue private and say nothing",
+        "Negotiate a new dinner date without mentioning the hurt"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The damage already happened, so the task is to judge the needed repair level."
+    },
+    {
+      "id": "case_2",
+      "pattern": "boundary",
+      "scene": "After a meeting, Omar wonders if his joke about a coworker sounded rude, but no one has reacted yet.",
+      "question": "Which unit best fits this case?",
+      "options": [
+        "Relationship Repair and Apology",
+        "Faux Pas or Offense Judgment",
+        "Privacy or Disclosure Timing",
+        "Negotiation and Compromise"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a likely shortcut trap: it asks whether the original joke was inappropriate, not how to repair damage."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Lena is deciding whether to tell her sister a private family secret that was shared in confidence.",
+      "question": "Which unit best fits this case?",
+      "options": [
+        "Relationship Repair and Apology",
+        "Faux Pas or Offense Judgment",
+        "Privacy or Disclosure Timing",
+        "Relationship Reassurance After Hurt"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "The issue is whether information should be disclosed, not what repair is needed after harm."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "A friend feels excluded after being left out of a group photo, and the other person notices the tension.",
+      "question": "What is the best follow-up?",
+      "options": [
+        "Ignore it because no apology was requested",
+        "Offer a quick acknowledgment and reassurance that it was not intentional",
+        "Argue that the exclusion was not technically rude",
+        "Ask the friend to choose a compromise for future photos"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This tests silent repair: a small softening move can be needed even without a direct request."
+    }
+  ]
+}

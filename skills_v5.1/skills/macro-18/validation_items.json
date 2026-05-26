@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-18",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Two roommates want the only quiet study room on Saturday. One has an online exam from 9 to 12. The other wants the room all day to finish a presentation.",
+      "question": "What is the best plan?",
+      "options": [
+        "Give the room to the exam-taker from 9 to 12, then let the other roommate use it afterward.",
+        "Tell the exam-taker to study elsewhere so the presentation gets the room all day.",
+        "Split the day exactly in half, even though the exam has a fixed start time.",
+        "Ignore both requests and choose whoever asked first."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct compromise with fixed and flexible needs; both sides adjust around a shared plan."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A supervisor tells an employee, 'The report must be in by Friday.' The employee says they are confused about one requirement in the template.",
+      "question": "What should happen next?",
+      "options": [
+        "Negotiate a new deadline and trade tasks between them.",
+        "Clarify the template requirement first, since the issue is understanding the instruction.",
+        "Offer a compromise where each side gives up part of the deadline.",
+        "Ask the employee to persuade the supervisor to change the deadline."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is mostly clarification, not a mutual-adjustment bargaining scene."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "A neighbor accidentally breaks another neighbor's lamp during a move. The owner is upset and asks what should be said next.",
+      "question": "What is the best response?",
+      "options": [
+        "Apologize and offer to replace or pay for the lamp.",
+        "Try to negotiate a long-term shared plan for future moving days.",
+        "Explain that both sides should compromise equally on the damage.",
+        "Ask the owner to forget it without any repair."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "The main task is apology and repair, not bargaining over a joint future plan."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "Two coworkers both want Friday off. One has a family event that cannot move. The other wants a long weekend and is flexible about which Friday they take.",
+      "question": "Which agreement best fits the situation?",
+      "options": [
+        "Give both people Friday off and leave the team short-staffed.",
+        "Make them split the day evenly, even though one need is fixed all day.",
+        "Deny both requests because only one person can ever be absent.",
+        "Let the person with the family event take this Friday, and offer the other coworker a different Friday or shift swap."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "D",
+      "why_this_case_matters": "Tests the common wrong shortcut of equal splitting when one side has a fixed constraint and the other is flexible."
+    }
+  ]
+}

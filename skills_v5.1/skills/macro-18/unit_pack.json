@@ -1,0 +1,124 @@
+{
+  "frontmatter_description": "Direct-route macro for scenes where conflicting sides must reach a mutually acceptable plan through offers, concessions, trade-offs, or shared adjustment.",
+  "title": "Negotiation, Compromise, and Joint Plan",
+  "use_when": [
+    "Use when two or more sides have partly conflicting goals and the answer depends on finding a mutually acceptable plan.",
+    "Use when both sides must adjust, concede, trade, prioritize, or coordinate rather than one side simply winning.",
+    "Use when the question asks what offer, compromise, joint plan, or next negotiation move would work best.",
+    "Use when preferences, obligations, fairness, relationship preservation, or long-term cooperation shape the agreement."
+  ],
+  "do_not_use_when": [
+    "Do not use for one-way persuasion where only one person must change and no reciprocal adjustment is expected.",
+    "Do not use for live misunderstanding repair unless the main problem is negotiating a plan after clarification.",
+    "Do not use for apology or reconciliation unless the answer turns on a concrete negotiated remedy or compensation.",
+    "Do not use for self-presentation or formal impression management unless the core task is reaching agreement.",
+    "Do not use for hierarchy-only communication unless the power gap determines how concessions or escalation should be negotiated."
+  ],
+  "decision_variable": "how conflicting sides can reach a mutually acceptable plan through concessions",
+  "direct_route_rule": "Route immediately when the case requires offers, concessions, trade-offs, or a shared solution under conflict.",
+  "expandable_micro_ids": [
+    "micro-19",
+    "micro-20",
+    "micro-25",
+    "micro-44",
+    "micro-51"
+  ],
+  "trigger_checklist": [
+    "At least two parties want different outcomes or have competing priorities.",
+    "A successful answer requires mutual adjustment, not unilateral compliance.",
+    "There is room for an offer, concession, trade-off, split, rotation, compensation, timing change, or shared plan.",
+    "The scene asks what they should agree to, what would be fair, what offer would work, or how to resolve the conflict.",
+    "Each side has interests that can be separated from its initial stated demand.",
+    "Maintaining cooperation, fairness, trust, or future interaction matters."
+  ],
+  "workflow": [
+    "Name each party and state their surface position: what each side says it wants.",
+    "Infer the underlying interests: needs, constraints, values, deadlines, relationships, or non-negotiables behind each position.",
+    "Separate fixed constraints from flexible preferences; do not assume all demands have equal priority.",
+    "Look for trade space: items one side values highly that cost the other side less, timing swaps, partial sharing, rotation, compensation, bundling, or conditional agreement.",
+    "Generate a plan where both sides give something and gain something important enough to accept.",
+    "Check fairness and feasibility: the plan should be specific, implementable, and not secretly impose the whole burden on one side.",
+    "If trust or future cooperation matters, include a clear follow-up, accountability step, or respectful explanation.",
+    "Answer with the recommended agreement and briefly explain why each side would accept it."
+  ],
+  "special_case": {
+    "title": "Position conflict with hidden compatible interests",
+    "rule": "When the stated demands appear incompatible, test whether the underlying interests can be satisfied by a different package instead of splitting the visible object or choosing one winner.",
+    "worked_example": {
+      "scene": "Two roommates both want the only quiet room on Saturday. One needs it from 9 to 12 for an online exam; the other wants it all day to prepare a presentation due Monday.",
+      "question": "What compromise should they make?",
+      "answer_logic": "Do not treat the conflict as an all-day winner-takes-room dispute. The exam has a fixed time constraint, while the presentation preparation is more flexible. A good plan gives the exam-taker the room from 9 to 12, gives the presenter the room afterward, and may add quiet rules or a backup workspace. Both sides adjust while protecting their highest-priority need."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to macro-16 when the obstacle is mainly that the parties misunderstood each other and no substantive trade-off is needed after clarification.",
+    "Exit to macro-17 when the main task is apology, acknowledgment, compensation for harm, or relationship repair rather than bargaining over a future plan.",
+    "Exit to macro-19 when the main question is how someone should appear, introduce themselves, or manage formality, not how to reach agreement.",
+    "Exit to macro-20 when the central variable is appropriate communication across hierarchy, escalation, or deference, and negotiation is secondary.",
+    "Add micro-19 when individual preferences or desire conflicts need diagnosis.",
+    "Add micro-20 when the issue is shared versus divergent goals.",
+    "Add micro-25 when action choice depends on competing commitments or priorities.",
+    "Add micro-44 when trust, loyalty, or relational history affects what offer is acceptable.",
+    "Add micro-51 when role obligations, fairness expectations, or social position shape the acceptable bargain."
+  ],
+  "references": {
+    "route_signal": "A conflict scene asks for a workable agreement: both sides have interests, both sides can adjust, and the answer should be a concession-based or trade-off-based joint plan.",
+    "hard_boundary": [
+      "Not one-way persuasion: if only one listener must be convinced and the speaker gives up nothing, route elsewhere.",
+      "Not pure misunderstanding: if simply clarifying facts solves the problem, use the misunderstanding repair macro.",
+      "Not pure apology: if the main answer is remorse and repair after offense, use the apology and reconciliation macro.",
+      "Not pure power communication: if hierarchy determines permission, escalation, or deference more than bargaining, use the power-gap macro."
+    ],
+    "shortcut_to_avoid": [
+      "Do not pick the loudest, highest-status, or first-mentioned party as the winner.",
+      "Do not split the difference automatically when one side has a fixed constraint and the other has a flexible preference.",
+      "Do not confuse a compromise with both sides being equally unhappy; a good compromise protects each side's most important interest.",
+      "Do not propose vague cooperation without a concrete allocation, concession, or next step."
+    ],
+    "common_failure_modes": [
+      "Treating negotiation as persuasion and making only one side change.",
+      "Ignoring hidden interests behind stated positions.",
+      "Assuming fairness means equal division even when needs, costs, or obligations differ.",
+      "Forgetting relationship or trust costs of an aggressive bargain.",
+      "Offering a plan that is emotionally appealing but not implementable.",
+      "Failing to identify what each side gives up and what each side receives."
+    ],
+    "minimal_pair": [
+      {
+        "case": "Two coworkers both want Friday off; one has a family event and the other wants a long weekend. They discuss swapping shifts, covering different hours, or choosing different Fridays.",
+        "why_it_matches": "Both sides have conflicting preferences and must reach a mutually acceptable schedule through concessions or trade-offs."
+      },
+      {
+        "case": "A manager tells an employee, 'You must submit the report by Friday,' and the employee only needs to understand the instruction.",
+        "why_it_matches": "This does not match; there is no mutual adjustment or negotiated agreement, only a directive or clarification."
+      }
+    ],
+    "boundary_stress_test": [
+      "If one side apologizes and offers to pay for damage, ask whether the core answer is emotional repair or the negotiated remedy; use this macro only when the remedy terms are the main issue.",
+      "If one side tries to convince another to accept a plan, ask whether the persuader also changes terms; if not, route to persuasion rather than negotiation.",
+      "If a supervisor and employee bargain over deadlines, keep this macro only if trade-offs are central; add or route to power-gap handling if hierarchy governs the appropriate move.",
+      "If the parties argue because they interpreted a statement differently, first resolve whether clarification alone removes the conflict."
+    ],
+    "generalization_note": "This macro generalizes across family decisions, workplace scheduling, roommate conflicts, resource allocation, team planning, service disputes, and diplomatic-style trade-offs whenever the solution requires reciprocal adjustment around underlying interests."
+  },
+  "validation_seed": {
+    "positive_pattern": "Two parties want incompatible plans, each has negotiable and non-negotiable interests, and the correct answer proposes a specific trade-off or concession that both can accept.",
+    "near_miss_pattern": "One person wants another to change their mind, but the speaker offers no concession and the task is mainly persuasion or advice.",
+    "boundary_pattern": "A conflict follows an insult or mistake; route here only if the question asks what concrete terms or compensation they should agree on, not merely how to apologize."
+  },
+  "notes": [
+    "This is a direct scene prototype, not a bundle of micro skills.",
+    "The optional micro expansions support diagnosis of preferences, shared goals, commitments, trust, and role-based fairness.",
+    "The core boundary is that negotiation requires both sides to adjust."
+  ],
+  "id": "macro-18",
+  "level": "macro",
+  "layer": "macro",
+  "family": "decision-conflict",
+  "core_question": "how conflicting sides can reach a mutually acceptable plan through concessions",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

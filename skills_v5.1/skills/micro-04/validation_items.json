@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-04",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A report was late, and the reviewer says the writer must have been careless because the delay caused problems.",
+      "question": "Is this a case for Anti-Bias Check?",
+      "options": [
+        "Yes. The bad outcome may be pushing the judgment beyond the scene facts.",
+        "No. The task is to find new evidence about the writer.",
+        "No. The task is to compare two explanations for the delay.",
+        "No. The task is to decide what the reviewer saw."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct outcome-bias trigger: the conclusion looks stronger because the result was bad."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A box was moved, and the solver asks whether Sam or Lee most likely moved it based on the clues.",
+      "question": "Does Anti-Bias Check apply here?",
+      "options": [
+        "Yes, because there is uncertainty.",
+        "No, this is explanation comparison, not bias auditing.",
+        "Yes, because the outcome already looks bad.",
+        "No, because this is only about who saw the box."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Near miss: the task is selecting the best explanation, which is outside this unit."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "Mia stood behind a closed door and asked where the key was placed. The question is whether she could have seen it from her position.",
+      "question": "Which unit fits best?",
+      "options": [
+        "Anti-Bias Check",
+        "Perception or spatial-perspective",
+        "Evidence-chain",
+        "Multiple-explanation"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Hard boundary: the issue is visibility and viewpoint, not bias in judgment."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "After learning that a driver crashed, the solver says the driver must have been reckless and feels the harm makes that obvious.",
+      "question": "Should that reaction be trusted as proof?",
+      "options": [
+        "Yes. A bad result shows reckless behavior.",
+        "Yes. A strong moral feeling is enough here.",
+        "No. Check whether hindsight or blame is distorting the judgment.",
+        "No. This is about what the driver believed."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "Tests the moral-intuition shortcut: a blame reaction should not replace evidence."
+    }
+  ]
+}

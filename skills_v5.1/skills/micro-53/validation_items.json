@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-53",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A teacher says, \"Most students submitted the consent form before Friday.\" No roster count or later observation is given.",
+      "question": "What should a listener ordinarily infer from \"most students\"?",
+      "options": [
+        "More than half, usually a clear majority, but not necessarily all students.",
+        "Exactly 50 percent of the students.",
+        "Only one or two students.",
+        "Every student without exception."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a direct match: the task is to translate the vague quantifier \"most\" into an approximate prior range without updating from new evidence."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "A product manager says, \"A few users reported trouble with the new login screen.\" The team has no exact ticket count yet.",
+      "question": "What range does \"a few users\" most naturally suggest before any count is checked?",
+      "options": [
+        "A small number or small minority, not zero and not a majority.",
+        "Nearly all users.",
+        "Exactly three users in every context.",
+        "About half of all users."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This tests the shortcut of converting a vague phrase into an exact number; \"a few\" suggests a small amount but not a fixed count."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "A sign says, \"Most seats are taken.\" Dana then looks inside and sees only 3 of 20 seats occupied.",
+      "question": "Which approach fits the question if Dana is asked what to believe now about how full the room is?",
+      "options": [
+        "Use the original phrase alone and assume a clear majority are taken.",
+        "Update using the new observation, because the later count changes the estimate.",
+        "Treat \"most\" as exactly 75 percent regardless of what Dana saw.",
+        "Ignore both the sign and the observation because vague language has no meaning."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a near-miss: the phrase \"most\" appears, but the question asks for a revised belief after direct observation, so it exits this unit."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "During salary negotiations, a manager says, \"We can offer some flexibility on the start date.\" The candidate asks how to respond strategically.",
+      "question": "Why is this not mainly a vague-quantity-prior case?",
+      "options": [
+        "Because the key issue is the negotiation move, not the approximate range implied by \"some.\"",
+        "Because \"some\" always means exactly half.",
+        "Because vague words cannot appear in negotiation scenes.",
+        "Because the phrase must be updated using a random sample."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a hard boundary: a vague quantifier is present, but the central task is strategic negotiation rather than interpreting the ordinary quantity range."
+    }
+  ]
+}

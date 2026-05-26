@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-44",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "Sam drives Lee to work every day. Lee never offers gas money, never takes a turn driving, and only asks for more rides.",
+      "question": "Is Lee being fair in this exchange?",
+      "options": [
+        "No. Lee keeps receiving help without giving back.",
+        "Yes. Lee is still being nice.",
+        "It is mainly about who is at fault for a problem.",
+        "It is mainly about how to split a new deal."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Direct reciprocity check: one side repeatedly benefits without a comparable return."
+    },
+    {
+      "id": "case_2",
+      "pattern": "positive",
+      "scene": "Nina pays the full fee for a shared conference ticket because she is the invited speaker, while the others attend for free under the event plan.",
+      "question": "Is this exchange unfair?",
+      "options": [
+        "No. The uneven payment is justified by the event roles and plan.",
+        "Yes. Any unequal payment is unfair.",
+        "It is mainly about apologizing for hurt feelings.",
+        "It is mainly about deciding a better bargain."
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "Tests the shortcut that any imbalance is unfair; here the asymmetry is justified."
+    },
+    {
+      "id": "case_3",
+      "pattern": "near_miss",
+      "scene": "Two roommates disagree about how to split a new internet bill and are choosing between 60/40 or 50/50.",
+      "question": "What kind of issue is this?",
+      "options": [
+        "Fairness and reciprocity",
+        "Negotiation over a new split",
+        "Blame for harm",
+        "Social embarrassment"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a deal-design problem, not a fairness judgment about an existing exchange."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A cyclist damages a parked car, and the owner asks who caused it and whether an apology is owed.",
+      "question": "What is the main issue here?",
+      "options": [
+        "Fairness and reciprocity",
+        "Negotiation over a new split",
+        "Responsibility for harm",
+        "Whether someone is being ungrateful"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "This is about fault and repair, which is outside fairness reciprocity."
+    }
+  ]
+}

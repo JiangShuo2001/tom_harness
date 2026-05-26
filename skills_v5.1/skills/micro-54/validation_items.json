@@ -1,0 +1,85 @@
+{
+  "unit_id": "micro-54",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A worker checks 10 boxes from a shipment of 100 and finds 7 damaged.",
+      "question": "What should she estimate about the whole shipment?",
+      "options": [
+        "About 7 boxes are damaged",
+        "About 10 boxes are damaged",
+        "About 70 boxes are damaged",
+        "About 97 boxes are damaged"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "C",
+      "why_this_case_matters": "A small observed sample should revise the estimate for the larger unseen set."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "A manager says, \"Most of the cafe's cups are usually clean.\" No cups have been checked today.",
+      "question": "What should she conclude about today's cups?",
+      "options": [
+        "They must almost all be clean",
+        "The phrase is only a general expectation; she still needs actual observation",
+        "They are exactly half dirty",
+        "The phrase alone gives a precise count"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is about a vague prior, not a new sample-based update."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "A company usually ships reliable products. Today, nobody has opened any boxes yet, but someone asks how many are likely damaged.",
+      "question": "Which factor should mainly drive the estimate?",
+      "options": [
+        "The company's usual reliability",
+        "The few boxes just inspected",
+        "Who would be blamed if there is a complaint",
+        "The exact wording of the question"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This relies on a background base rate, not on a newly observed sample."
+    },
+    {
+      "id": "case_4",
+      "pattern": "positive",
+      "scene": "A teacher asks three students sitting in the front row whether they finished homework, and all three say yes.",
+      "question": "Should she now think almost everyone finished?",
+      "options": [
+        "Yes, definitely almost everyone",
+        "No, the sample is tiny and possibly biased, so the estimate should rise only a little",
+        "Yes, because three yes answers prove the whole class did it",
+        "No, the answers prove nobody else finished"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This uses partial observation, but the sample is small and biased, so the update should be weak."
+    }
+  ]
+}

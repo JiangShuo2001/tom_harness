@@ -1,0 +1,97 @@
+{
+  "frontmatter_description": "Diagnostic unit for cases where a true or selective expression steers the listener toward a false inference.",
+  "title": "Misleading and Selective Expression",
+  "use_when": [
+    "Use when the question is whether a true expression causes the listener to draw the wrong conclusion.",
+    "Use when the key issue is selective disclosure, framing, or emphasis that makes the audience infer something false.",
+    "Use when the stated content may be accurate but the communicative effect is deceptive."
+  ],
+  "do_not_use_when": [
+    "Do not use when the question is simply whether the utterance is true or false; use truth/lie judgment instead.",
+    "Do not use when the main task is to infer an unstated conversational implication; use implicature instead.",
+    "Do not use when the main task is the speaker's motive for speaking that way; use speaker motivation instead.",
+    "Do not use when the issue is adapting language to the audience rather than misleading them."
+  ],
+  "decision_variable": "whether the expression leads the listener to a false inference",
+  "trigger_checklist": [
+    "The literal statement can be true.",
+    "The listener is likely to infer more than the sentence strictly states.",
+    "The wrong answer depends on whether the audience is misled, not on factual truth alone.",
+    "A hidden omission, framing choice, or partial disclosure changes the listener's belief."
+  ],
+  "workflow": [
+    "Check whether the utterance content is itself true.",
+    "Check what inference a reasonable listener would make from the wording and context.",
+    "Compare that inferred meaning with the actual situation.",
+    "If the listener is pushed toward a false belief, classify it here; otherwise exit to truth, implicature, or motive."
+  ],
+  "special_case": {
+    "title": "True but strategically incomplete",
+    "rule": "A statement still belongs here if it is factually correct yet leaves out the key detail that would prevent a false belief.",
+    "worked_example": {
+      "scene": "A says, 'The apartment is in a great neighborhood,' but leaves out that it is next to a noisy nightclub.",
+      "question": "Is A misleading the listener?",
+      "answer_logic": "Yes. The sentence may be true, but the selective omission steers the listener toward an overly positive and false impression."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit to micro-37 Truth, Lie, and Half-Truth if the task asks whether the words are factually true or false rather than whether the listener is misled.",
+    "Exit to micro-36 Conversational Implicature if the task asks what extra meaning was conveyed beyond the words without the inference being false.",
+    "Exit to micro-39 Speaker Motivation if the task asks why the speaker chose that wording rather than whether it misleads.",
+    "Exit to micro-40 Audience Calibration if the main issue is adapting the message to the listener's level rather than producing a false impression."
+  ],
+  "references": {
+    "route_signal": "Route here when a true statement, partial statement, or framing choice is judged by whether it misleads the listener into a false belief.",
+    "hard_boundary": [
+      "The decision is whether the listener is led to a false belief, not whether the words are factually true (that is micro-37).",
+      "Cooperative implicatures the listener is meant to recover do not count; this unit fires only when the recovered inference is false (contrast with micro-36).",
+      "The unit judges communicative effect on the listener, not the speaker's strategic motive for choosing those words (that is micro-39)."
+    ],
+    "shortcut_to_avoid": [
+      "Do not assume 'true sentence' means 'not misleading'.",
+      "Do not over-focus on what was said; check what a normal listener would infer.",
+      "Do not collapse selective omission into simple lying."
+    ],
+    "common_failure_modes": [
+      "Answering truth/lie instead of misleading effect.",
+      "Treating any hidden meaning as implicature even when the target is false inference.",
+      "Ignoring omitted context that changes the listener's belief.",
+      "Blaming intent when the unit only asks about communicative effect."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A says, 'I was with a doctor last night,' while the doctor was actually a veterinarian; the listener assumes a medical doctor.",
+        "why_it_matches": "The wording is true in one sense but drives a wrong inference in the listener."
+      },
+      {
+        "case": "A says, 'The report is finished,' but the appendix is still missing and the listener thinks the full package is complete.",
+        "why_it_matches": "The statement can be factually true in a limited sense while still misleading through omission."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the sentence is true and the listener still would not reasonably infer anything false, do not use this unit.",
+      "If the question is 'Did the speaker lie?', route away unless the task explicitly asks about misleading effect.",
+      "If the wrong answer depends on hidden context rather than the expression itself, check whether the issue is implicature or motivation instead."
+    ],
+    "generalization_note": "This unit covers deceptive framing, selective disclosure, and truth-preserving misleading communication across social, professional, and everyday contexts."
+  },
+  "validation_seed": {
+    "positive_pattern": "A truthful or partially truthful statement causes the listener to form a false belief.",
+    "near_miss_pattern": "The statement is false, so the case is plain lying rather than misleading truth.",
+    "boundary_pattern": "The listener correctly infers the intended meaning without being misled."
+  },
+  "notes": [
+    "Keep the focus on listener inference, not speaker morality.",
+    "Use only when the main diagnostic question is whether truth-compatible wording misleads."
+  ],
+  "id": "micro-38",
+  "level": "micro",
+  "layer": "L5",
+  "family": "language-pragmatics",
+  "core_question": "Determine whether a true statement induces a false understanding",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

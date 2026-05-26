@@ -1,0 +1,85 @@
+{
+  "unit_id": "macro-20",
+  "items": [
+    {
+      "id": "case_1",
+      "pattern": "positive",
+      "scene": "A junior employee sees a safety violation in a meeting. The manager dismisses it and cuts them off before they can explain.",
+      "question": "What is the most appropriate next communication move?",
+      "options": [
+        "Keep arguing publicly until the manager agrees",
+        "Escalate through a formal reporting channel",
+        "Say nothing and wait for the next meeting",
+        "Send a casual message to a peer about it"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "This is a direct hierarchy and escalation case: the first listener cannot or will not fix the issue, so the correct move is to escalate."
+    },
+    {
+      "id": "case_2",
+      "pattern": "near_miss",
+      "scene": "Two project leads of equal rank disagree about the launch plan and both have room to adjust deadlines and scope.",
+      "question": "What kind of communication action is most appropriate?",
+      "options": [
+        "Negotiate a compromise",
+        "Report the issue to a higher manager immediately",
+        "Use formal deference and avoid disagreement",
+        "Ask a judge-like authority to decide"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a peer-level bargaining situation, not a power-gap communication problem, so negotiation is the right route."
+    },
+    {
+      "id": "case_3",
+      "pattern": "boundary",
+      "scene": "A student wants to ask a professor to extend a deadline. The main concern is sounding polite and well written in the email.",
+      "question": "What is the best unit to use?",
+      "options": [
+        "Power Gap, Escalation, and Hierarchical Communication",
+        "Self-presentation and first impression",
+        "Emotion inference from tone",
+        "Literal meaning and paraphrase"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "B",
+      "why_this_case_matters": "Although there is a status difference, the main task is style and impression management, not choosing a power-based communication move."
+    },
+    {
+      "id": "case_4",
+      "pattern": "boundary",
+      "scene": "A junior doctor knows a senior doctor made a mistake and wonders whether to correct it immediately in front of others or wait until after the shift.",
+      "question": "What is the key decision dimension?",
+      "options": [
+        "How to choose the safest and most effective communication move across rank",
+        "Whether the senior doctor secretly meant the opposite",
+        "How to bargain over responsibilities as equals",
+        "How to make the doctor look more impressive"
+      ],
+      "labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "gold_answer": "A",
+      "why_this_case_matters": "This is a close positive boundary case: the hierarchy changes whether to challenge, defer, or escalate, which is the core of the unit."
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "frontmatter_description": "Explains why a character has a real emotion that is unexpected because of their unusual appraisal, values, knowledge, history, or perspective.",
+  "title": "Atypical Emotion",
+  "use_when": [
+    "Use when the character's actual emotion is surprising, counter-normative, or not the emotion most people would predict from the event.",
+    "Use when the question asks why someone feels glad, relieved, proud, amused, calm, sad, or angry in a situation where the ordinary expectation points elsewhere.",
+    "Use when the key task is to identify the character-specific appraisal that makes the unusual emotion make sense.",
+    "Use when the emotion is genuinely felt, not merely performed or concealed."
+  ],
+  "do_not_use_when": [
+    "Do not use when the emotion follows ordinary success, failure, threat, loss, or gain; route to Basic Emotion Appraisal instead.",
+    "Do not use when the person feels one thing internally but shows another externally; route to Hidden Emotion.",
+    "Do not use when the main issue is a social rule for managing expression, such as politeness, professionalism, or saving face; route to Emotional Disguise and Display Rules.",
+    "Do not use when the answer depends mainly on choosing among competing goals or actions rather than explaining an unusual feeling.",
+    "Do not use when the emotion is unusual only to the observer because the observer lacks factual context; first resolve the character's belief or knowledge boundary."
+  ],
+  "decision_variable": "the character-specific appraisal that reverses or alters the expected emotion",
+  "trigger_checklist": [
+    "An event has an obvious ordinary emotional prediction.",
+    "The character's actual emotion differs from that ordinary prediction.",
+    "The character is not merely pretending, masking, or following a display rule.",
+    "There is evidence for a special value, desire, belief, past experience, identity concern, or social meaning.",
+    "The question asks why the unusual feeling occurs, not just what the face or behavior displays."
+  ],
+  "workflow": [
+    "State the ordinary expected emotion for the event.",
+    "Identify the character's actual or implied emotion.",
+    "Find the appraisal feature that differs for this character: goal relevance, personal value, belief, memory, comparison point, relationship meaning, or identity meaning.",
+    "Explain how that appraisal makes the unusual emotion coherent from the character's perspective.",
+    "Check that the explanation concerns the true feeling itself, not a hidden feeling or managed display."
+  ],
+  "special_case": {
+    "title": "Positive emotion after an apparently negative event",
+    "rule": "If a person feels happy, relieved, proud, or amused after an event that normally causes sadness, fear, or embarrassment, explain the hidden benefit, avoided worse outcome, personal value, or preferred alternative that changes the appraisal.",
+    "worked_example": {
+      "scene": "Maya is not chosen for a weekend work trip. Most people on her team would be disappointed, but Maya smiles and says she is glad because it means she can attend her sister's concert.",
+      "question": "Why is Maya happy instead of disappointed?",
+      "answer_logic": "The ordinary expectation is disappointment at missing a work opportunity. Maya's appraisal is different because staying home serves a more important personal goal. Her happiness is genuine and atypical because the event is good relative to her own priorities."
+    }
+  },
+  "boundary_exit_rule": [
+    "If the main contrast is internal feeling versus outward expression, exit to micro-28 Hidden Emotion.",
+    "If the main explanation is a norm about what emotion should be shown in public, exit to micro-29 Emotional Disguise and Display Rules.",
+    "If the emotion is ordinary once the success, failure, threat, loss, or gain is identified, exit to micro-26 Basic Emotion Appraisal.",
+    "If the question asks what action the person chooses among competing motives, exit to micro-25 Goal-Conflict Arbitration.",
+    "If the unusual answer depends on what the character knows or falsely believes, resolve that belief unit before using this emotion unit."
+  ],
+  "references": {
+    "route_signal": "Use this micro unit when the target is a genuine but nonstandard emotion and the answer depends on the character's idiosyncratic appraisal rather than on concealment or display management.",
+    "hard_boundary": [
+      "Atypical Emotion is about unusual internal appraisal, not misleading external expression.",
+      "It does not handle polite smiling, forced laughter, professional calm, or strategic emotional performance unless the true felt emotion itself is also unusual.",
+      "It does not replace basic emotion inference when the emotion is the standard result of goal success, loss, threat, or relief."
+    ],
+    "shortcut_to_avoid": [
+      "Do not answer with the socially typical emotion if the character's stated goals, values, or history point to a different appraisal.",
+      "Do not assume a smile or calm behavior means the person is hiding sadness; first decide whether the positive or calm emotion is genuinely felt."
+    ],
+    "common_failure_modes": [
+      "Treating atypical emotion as hidden emotion and inventing a concealed standard feeling.",
+      "Ignoring a character-specific goal that reverses the emotional meaning of the event.",
+      "Explaining only the event's objective outcome rather than how the character appraises it.",
+      "Overgeneralizing from what most people would feel and missing personal values, past experiences, or comparison points."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A student laughs after receiving a low grade because she expected to fail the course but the grade is high enough to pass.",
+        "why_it_matches": "The positive emotion is genuinely felt and becomes coherent because her comparison point is avoiding failure, not achieving a high score."
+      },
+      {
+        "case": "A student smiles after receiving a low grade because the teacher is watching, but later cries alone.",
+        "why_it_matches": "This does not match Atypical Emotion; the true feeling is ordinary disappointment while the smile is a managed display, so route to Hidden Emotion or Display Rules."
+      }
+    ],
+    "boundary_stress_test": [
+      "If someone is calm during danger because they are trained to appear calm but feel afraid, do not use this unit.",
+      "If someone is calm during danger because they accurately believe the danger is harmless, resolve belief or knowledge first; then use basic appraisal if the calmness is ordinary under that belief.",
+      "If someone is proud of being criticized because criticism from a respected expert signals they are being taken seriously, this unit applies.",
+      "If someone is pleased by another person's success because they love that person, the emotion may be ordinary relational joy unless the scene emphasizes that the expected emotion was envy or resentment."
+    ],
+    "generalization_note": "Atypical emotions become predictable when the model uses the character's own appraisal frame rather than the observer's default emotional script."
+  },
+  "validation_seed": {
+    "positive_pattern": "A character feels an unexpected emotion after an event, and the scene provides a personal goal, value, belief, memory, or comparison point that makes the feeling genuine.",
+    "near_miss_pattern": "A character shows an unexpected expression but later evidence reveals a different internal emotion.",
+    "boundary_pattern": "A character's emotion seems odd only because the reader lacks the character's factual belief or because the task is really about action choice."
+  },
+  "notes": [
+    "This unit is diagnostic: it explains the appraisal behind the unusual feeling, not the whole social scene.",
+    "Use inside hidden-emotion or atypical-emotion macro routes only after deciding that the true internal emotion is nonstandard.",
+    "Keep the explanation anchored to the character's perspective and avoid memorized benchmark-specific story patterns."
+  ],
+  "id": "micro-27",
+  "level": "micro",
+  "layer": "L4",
+  "family": "emotion-appraisal",
+  "core_question": "Explain why an unexpected or nonstandard emotion appears",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}

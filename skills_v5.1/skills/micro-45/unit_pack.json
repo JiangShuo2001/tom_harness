@@ -1,0 +1,99 @@
+{
+  "frontmatter_description": "Use this unit to judge a person's trustworthiness from their repeated behavior and relationship history, not the credibility of a message or source.",
+  "title": "Trust and Reputation",
+  "use_when": [
+    "Use when the question asks how reliable a person is based on what they have done before.",
+    "Use when past promises, follow-through, honesty, loyalty, or consistency across interactions determine the answer.",
+    "Use when the task is to infer whether someone deserves trust in future dealings from interpersonal history.",
+    "Use when the person's reputation is built from repeated social behavior, not from a single claim."
+  ],
+  "do_not_use_when": [
+    "Do not use when the main issue is whether a statement, rumor, or document is true; that is source credibility or factual accuracy, not interpersonal trust.",
+    "Do not use when the question is about blame for harm, fairness, role, identity, or group membership instead of reliability.",
+    "Do not use when the scene is about apology, repair, or offense management rather than whether the person is trustworthy.",
+    "Do not use when there is no prior interaction history and the answer must be based on immediate evidence only."
+  ],
+  "decision_variable": "long-term reliability",
+  "trigger_checklist": [
+    "Is the question asking whether this person can be counted on in the future?",
+    "Is there prior behavior that shows keeping promises, lying, helping, betraying, or staying consistent?",
+    "Would a repeated pattern matter more than one isolated act?",
+    "Is the judgment about the person as a relationship partner rather than about a single statement?"
+  ],
+  "workflow": [
+    "Identify the person being judged.",
+    "Collect the relevant interaction history: promises kept, lies, betrayals, help, consistency, or follow-through.",
+    "Weigh repeated pattern over isolated exception.",
+    "Judge whether the history supports future reliability in this relationship.",
+    "If the question is really about whether information is true, exit to source credibility instead."
+  ],
+  "special_case": {
+    "title": "Single good act does not erase reputation",
+    "rule": "A one-time helpful act does not override a long pattern of unreliability unless the question explicitly asks for change in reputation over time.",
+    "worked_example": {
+      "scene": "A classmate has broken several promises, but once returned a lost wallet.",
+      "question": "Should you trust them with an important secret?",
+      "answer_logic": "The decision variable is long-term reliability. One good act is weaker than repeated broken promises, so the trust judgment should still be low unless there is clear new evidence of sustained change."
+    }
+  },
+  "boundary_exit_rule": [
+    "Exit this unit if the prompt asks whether a claim is accurate, because that is source credibility rather than trust history.",
+    "Exit this unit if the main issue is harm, blame, or apology, because those belong to responsibility and repair.",
+    "Exit this unit if the main issue is who has status, power, or group membership, because those are different social variables."
+  ],
+  "references": {
+    "route_signal": "Use when the answer depends on whether a person is dependable, loyal, honest, or consistent across past interactions.",
+    "hard_boundary": [
+      "Interpersonal history is required.",
+      "The target is the person's reliability, not the truth of a claim.",
+      "A repeated pattern must matter more than one isolated event."
+    ],
+    "shortcut_to_avoid": [
+      "Do not treat a believable speaker as a trustworthy person.",
+      "Do not confuse one good deed with a repaired reputation.",
+      "Do not infer trust from politeness, status, or confidence alone."
+    ],
+    "common_failure_modes": [
+      "Confusing trust in a person with belief in a statement.",
+      "Overweighting the most recent action and ignoring the longer pattern.",
+      "Using moral approval instead of reliability.",
+      "Importing fairness or blame judgments into a trust decision."
+    ],
+    "minimal_pair": [
+      {
+        "case": "A friend has repeatedly kept secrets and arrived when they said they would.",
+        "why_it_matches": "The question is about whether their past behavior predicts future reliability."
+      },
+      {
+        "case": "A news article has been accurate in the past.",
+        "why_it_matches": "This is about the trustworthiness of a source or claim, which is outside interpersonal reputation."
+      }
+    ],
+    "boundary_stress_test": [
+      "If the person is nice but frequently lies, lower trust.",
+      "If the person is rude but consistently keeps commitments, reliability can still be high.",
+      "If the prompt asks whether to believe a message, do not score reputation unless the interpersonal history is the key evidence."
+    ],
+    "generalization_note": "Generalize from repeated relationship behavior, not from single events, and keep the judgment anchored to future dependability in social interaction."
+  },
+  "validation_seed": {
+    "positive_pattern": "A partner has a long record of keeping promises, returning borrowed items, and telling the truth in private.",
+    "near_miss_pattern": "A speaker sounds confident and gives facts that seem plausible, but there is no relationship history.",
+    "boundary_pattern": "Someone lied once in a message, but the real question is whether the statement itself is true."
+  },
+  "notes": [
+    "Keep the unit narrow: judge the person's reliability, not their honesty in one isolated statement.",
+    "Use this for reputation in ongoing relationships, workplace reliability, friendship trust, and loyalty over time.",
+    "If the scene adds harm or apology, let those variables take over unless reliability is still the main question."
+  ],
+  "id": "micro-45",
+  "level": "micro",
+  "layer": "L6",
+  "family": "norms-relationships",
+  "core_question": "Evaluate reliability from past behavior and interpersonal history",
+  "source_mix": [
+    "benchmark",
+    "psychology",
+    "real-world"
+  ]
+}
